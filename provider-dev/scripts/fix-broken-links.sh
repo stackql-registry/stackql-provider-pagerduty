@@ -1,0 +1,1 @@
+find provider-dev/openapi/src/pagerduty/v00.00.00000/services -type f -exec sed -i 's|../../api-reference/ZG9jOjI3NDc5Nzc-api-concepts\([^)]*\)|https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts\1|g' {} \;
