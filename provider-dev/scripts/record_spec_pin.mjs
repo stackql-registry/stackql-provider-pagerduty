@@ -6,7 +6,8 @@
 //
 // - Validation failure: fail without writing anything.
 // - No pin recorded: record it (first fetch).
-// - Pin matches: refresh the fetched date only.
+// - Pin matches: write nothing (the committed pin and snapshot stay
+//   byte-identical, so CI's generation-drift check passes on any day).
 // - Pin mismatch: fail without writing anything, unless UPDATE=true, in
 //   which case the new hash is recorded (a reviewed spec refresh).
 //
@@ -73,6 +74,14 @@ if (existing && existing.sha256 !== sha256 && !update) {
 }
 
 const status = !existing ? 'pinned' : existing.sha256 === sha256 ? 'unchanged' : 'updated';
+if (status === 'unchanged') {
+  // An unchanged spec must leave the committed artifacts byte-identical:
+  // CI runs fetch-spec before its generation-drift check, and rewriting
+  // the pin's `fetched` date on every run would fail that check on any
+  // later day. Report and stop.
+  console.log(`  ${specFile}: unchanged (sha256 ${sha256.slice(0, 12)}..., pinned ${existing.fetched}) - pin and snapshot left as committed`);
+  process.exit(0);
+}
 fs.writeFileSync(path.join(downloadDir, specFile), content);
 pin.specs[key] = {
   url: specUrl,
