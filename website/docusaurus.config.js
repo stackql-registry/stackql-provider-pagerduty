@@ -37,4 +37,13 @@ config.themeConfig.footer.logo = { ...registryLogo };
 // with their last regeneration date.
 config.presets[0][1].docs.showLastUpdateTime = true;
 
+// URL form. The shared config sets trailingSlash: false, which makes
+// Docusaurus emit `services/incidents/incidents.html`; GitHub Pages then
+// serves /services/incidents/incidents but returns 404 for the same URL
+// with a trailing slash. Dropping the setting restores the Docusaurus
+// default: `services/incidents/incidents/index.html`, which GitHub Pages
+// serves for both forms (the slash-less URL redirects to the slash form).
+// Internal links are unchanged.
+delete config.trailingSlash;
+
 export default config;
