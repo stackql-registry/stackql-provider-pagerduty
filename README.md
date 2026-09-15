@@ -167,7 +167,7 @@ then `make smoke-live`.
 
 ## 7. Generate web docs
 
-The microsite (`website/`) is Docusaurus 3.10 on the shared architecture used by the other provider microsites: navbar / footer / theme / plugin configuration lives in [`stackql/docusaurus-config`](https://github.com/stackql/docusaurus-config), vendored into `.shared-config/` at build time. Site-local files are the provider identity (`website/provider.js`), thin config wrappers (with `showLastUpdateTime` enabled so every page carries a "Last updated on" stamp from git history), shared components and theme under `src/`, and static assets including `static/CNAME` (`pagerduty-provider.stackql.io`).
+The microsite (`website/`) is Docusaurus 3.10 on the shared architecture used by the other provider microsites: navbar / footer / theme / plugin configuration lives in [`stackql/docusaurus-config`](https://github.com/stackql/docusaurus-config), vendored into `.shared-config/` at build time. Site-local files are the provider identity (`website/provider.js`), thin config wrappers (with `showLastUpdateTime` enabled so every page carries a "Last updated on" stamp from git history, and the shared `trailingSlash: false` dropped so pages are emitted as `.../index.html` and GitHub Pages serves both `/services/incidents/incidents` and `/services/incidents/incidents/`), shared components and theme under `src/`, and static assets including `static/CNAME` (`pagerduty-provider.stackql.io`).
 
 ```bash
 make docs          # generate-docs + website/scripts/sanitize-docs.mjs (MDX escaping, "From" rewrite)
