@@ -4,16 +4,18 @@ hide_title: false
 hide_table_of_contents: false
 keywords:
   - pagerduty
+  - incident management
+  - on-call
   - stackql
   - infrastructure-as-code
   - configuration-as-data
   - cloud inventory
-description: Query, manage, and integrate PagerDuty resources using SQL
+description: Query, provision and manage PagerDuty incidents, services, escalation policies, schedules, teams, users, event orchestrations and more using SQL
 custom_edit_url: null
-image: /img/providers/pagerduty/stackql-pagerduty-provider-featured-image.png
+image: /img/stackql-pagerduty-provider-featured-image.png
 id: 'provider-intro'
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
 
-Incident management platform for real-time operations and response workflows.
+Query, provision and operate PagerDuty using SQL - incidents (with their alerts, notes, log entries, status updates and responder requests), services and their integrations, escalation policies, schedules and on-calls, teams and users, maintenance windows, business services, event orchestrations, incident workflows, automation actions, tags, webhooks, status pages, audit records and analytics. The full REST API v2 surface (44 services, 162 resources, 463 methods) generated from the vendor's published OpenAPI description.

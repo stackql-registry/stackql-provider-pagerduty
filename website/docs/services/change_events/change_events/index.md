@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>change_events</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>change_events</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="change_events" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.change_events.change_events" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>change_events</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_change_event"
+    defaultValue="get"
     values={[
-        { label: 'get_change_event', value: 'get_change_event' },
-        { label: 'list_change_events', value: 'list_change_events' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_change_event">
+<TabItem value="get">
 
 The Change Event requested.
 
@@ -58,8 +59,8 @@ The Change Event requested.
 </tr>
 <tr>
     <td><CopyableCode code="custom_details" /></td>
-    <td><code>object</code></td>
-    <td>Additional details about the change event. (title: Custom Details)</td>
+    <td><code>string</code></td>
+    <td>Additional details about the change event. (opaque JSON object) (title: Custom Details)</td>
 </tr>
 <tr>
     <td><CopyableCode code="html_url" /></td>
@@ -74,7 +75,7 @@ The Change Event requested.
 <tr>
     <td><CopyableCode code="integration" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="links" /></td>
@@ -104,7 +105,7 @@ The Change Event requested.
 <tr>
     <td><CopyableCode code="summary" /></td>
     <td><code>string</code></td>
-    <td>A brief text summary of the event. Displayed in PagerDuty to provide information about the change. The maximum permitted length of this property is 1024 characters.</td>
+    <td>A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.</td>
 </tr>
 <tr>
     <td><CopyableCode code="timestamp" /></td>
@@ -114,12 +115,12 @@ The Change Event requested.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of object being created. (default: change_event)</td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 </tbody>
 </table>
 </TabItem>
-<TabItem value="list_change_events">
+<TabItem value="list">
 
 The array of Change Events returned by the query.
 
@@ -139,8 +140,8 @@ The array of Change Events returned by the query.
 </tr>
 <tr>
     <td><CopyableCode code="custom_details" /></td>
-    <td><code>object</code></td>
-    <td>Additional details about the change event. (title: Custom Details)</td>
+    <td><code>string</code></td>
+    <td>Additional details about the change event. (opaque JSON object) (title: Custom Details)</td>
 </tr>
 <tr>
     <td><CopyableCode code="html_url" /></td>
@@ -155,7 +156,7 @@ The array of Change Events returned by the query.
 <tr>
     <td><CopyableCode code="integration" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="links" /></td>
@@ -185,7 +186,7 @@ The array of Change Events returned by the query.
 <tr>
     <td><CopyableCode code="summary" /></td>
     <td><code>string</code></td>
-    <td>A brief text summary of the event. Displayed in PagerDuty to provide information about the change. The maximum permitted length of this property is 1024 characters.</td>
+    <td>A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.</td>
 </tr>
 <tr>
     <td><CopyableCode code="timestamp" /></td>
@@ -195,7 +196,7 @@ The array of Change Events returned by the query.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of object being created. (default: change_event)</td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 </tbody>
 </table>
@@ -218,46 +219,32 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_change_event"><CopyableCode code="get_change_event" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get details about an existing Change Event.<br /><br />Scoped OAuth requires: `change_events.read`<br /></td>
+    <td></td>
+    <td>Get details about an existing Change Event.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `change_events.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#list_change_events"><CopyableCode code="list_change_events" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-team_ids[]"><code>team_ids[]</code></a>, <a href="#parameter-integration_ids[]"><code>integration_ids[]</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a></td>
-    <td>List all of the existing Change Events.<br /><br />Scoped OAuth requires: `change_events.read`<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-team_ids[]"><code>team_ids[]</code></a>, <a href="#parameter-integration_ids[]"><code>integration_ids[]</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a></td>
+    <td>List all of the existing Change Events.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `change_events.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_change_event"><CopyableCode code="create_change_event" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Sending Change Events is documented as part of the V2 Events API. See [`Send Change Event`](https://developer.pagerduty.com/api-reference/b3A6Mjc0ODI2Ng-send-change-events-to-the-pager-duty-events-api).<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_change_events"><CopyableCode code="_list_change_events" /></a></td>
-    <td><CopyableCode code="exec" /></td>
     <td></td>
-    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-team_ids[]"><code>team_ids[]</code></a>, <a href="#parameter-integration_ids[]"><code>integration_ids[]</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a></td>
-    <td>List all of the existing Change Events.<br /><br />Scoped OAuth requires: `change_events.read`<br /></td>
+    <td>Sending Change Events is documented as part of the V2 Events API. See &#91;`Send Change Event`&#93;(https:​//developer.pagerduty.com/api-reference/b3A6Mjc0ODI2Ng-send-change-events-to-the-pager-duty-events-api).&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#_get_change_event"><CopyableCode code="_get_change_event" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get details about an existing Change Event.<br /><br />Scoped OAuth requires: `change_events.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#update_change_event"><CopyableCode code="update_change_event" /></a></td>
-    <td><CopyableCode code="exec" /></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
     <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-change_event"><code>change_event</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Update an existing Change Event<br /><br />Scoped OAuth requires: `change_events.write`<br /></td>
+    <td></td>
+    <td>Update an existing Change Event&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `change_events.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -279,16 +266,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><CopyableCode code="id" /></td>
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
-</tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
 </tr>
 <tr id="parameter-integration_ids[]">
     <td><CopyableCode code="integration_ids[]" /></td>
@@ -318,7 +295,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-total">
     <td><CopyableCode code="total" /></td>
     <td><code>boolean</code></td>
-    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
+    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our &#91;Pagination Docs&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
 </tr>
 <tr id="parameter-until">
     <td><CopyableCode code="until" /></td>
@@ -331,15 +308,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_change_event"
+    defaultValue="get"
     values={[
-        { label: 'get_change_event', value: 'get_change_event' },
-        { label: 'list_change_events', value: 'list_change_events' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_change_event">
+<TabItem value="get">
 
-Get details about an existing Change Event.<br /><br />Scoped OAuth requires: `change_events.read`<br />
+Get details about an existing Change Event.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `change_events.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -358,14 +335,12 @@ timestamp,
 type
 FROM pagerduty.change_events.change_events
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
-<TabItem value="list_change_events">
+<TabItem value="list">
 
-List all of the existing Change Events.<br /><br />Scoped OAuth requires: `change_events.read`<br />
+List all of the existing Change Events.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `change_events.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -386,8 +361,6 @@ FROM pagerduty.change_events.change_events
 WHERE limit = '{{ limit }}'
 AND offset = '{{ offset }}'
 AND total = '{{ total }}'
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 AND team_ids[] = '{{ team_ids[] }}'
 AND integration_ids[] = '{{ integration_ids[] }}'
 AND since = '{{ since }}'
@@ -401,97 +374,57 @@ AND until = '{{ until }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_change_event"
+    defaultValue="create"
     values={[
-        { label: 'create_change_event', value: 'create_change_event' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_change_event">
+<TabItem value="create">
 
-Sending Change Events is documented as part of the V2 Events API. See [`Send Change Event`](https://developer.pagerduty.com/api-reference/b3A6Mjc0ODI2Ng-send-change-events-to-the-pager-duty-events-api).<br />
+Sending Change Events is documented as part of the V2 Events API. See &#91;`Send Change Event`&#93;(https:​//developer.pagerduty.com/api-reference/b3A6Mjc0ODI2Ng-send-change-events-to-the-pager-duty-events-api).&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.change_events.change_events (
-Accept,
-Content-Type
+
 )
 SELECT 
-'{{ Accept }}',
-'{{ Content-Type }}'
+
 ;
 ```
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: change_events
   props:
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-    - name: Content-Type
-      value: string
-```
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
 
-## Lifecycle Methods
+## `UPDATE` examples
 
 <Tabs
-    defaultValue="_list_change_events"
+    defaultValue="update"
     values={[
-        { label: '_list_change_events', value: '_list_change_events' },
-        { label: '_get_change_event', value: '_get_change_event' },
-        { label: 'update_change_event', value: 'update_change_event' }
+        { label: 'update', value: 'update' }
     ]}
 >
-<TabItem value="_list_change_events">
+<TabItem value="update">
 
-List all of the existing Change Events.<br /><br />Scoped OAuth requires: `change_events.read`<br />
-
-```sql
-EXEC pagerduty.change_events.change_events._list_change_events 
-@limit='{{ limit }}', 
-@offset='{{ offset }}', 
-@total={{ total }}, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@team_ids[]='{{ team_ids[] }}', 
-@integration_ids[]='{{ integration_ids[] }}', 
-@since='{{ since }}', 
-@until='{{ until }}'
-;
-```
-</TabItem>
-<TabItem value="_get_change_event">
-
-Get details about an existing Change Event.<br /><br />Scoped OAuth requires: `change_events.read`<br />
+Update an existing Change Event&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `change_events.write`&lt;br /&gt;
 
 ```sql
-EXEC pagerduty.change_events.change_events._get_change_event 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
-;
-```
-</TabItem>
-<TabItem value="update_change_event">
-
-Update an existing Change Event<br /><br />Scoped OAuth requires: `change_events.write`<br />
-
-```sql
-EXEC pagerduty.change_events.change_events.update_change_event 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"change_event": "{{ change_event }}"
-}'
-;
+UPDATE pagerduty.change_events.change_events
+SET 
+change_event = '{{ change_event }}'
+WHERE 
+id = '{{ id }}' --required
+AND change_event = '{{ change_event }}' --required
+RETURNING
+change_event;
 ```
 </TabItem>
 </Tabs>

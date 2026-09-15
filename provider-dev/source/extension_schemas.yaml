@@ -1,0 +1,458 @@
+openapi: 3.0.2
+info:
+  title: PagerDuty API - Extension Schemas
+  description: Extension schemas describe the available extension types (vendors and webhook types).
+  version: 2.0.0
+paths:
+  /extension_schemas:
+    get:
+      x-pd-requires-scope: extension_schemas.read
+      tags:
+        - Extension Schemas
+      operationId: listExtensionSchemas
+      description: |
+        List all extension schemas.
+
+        A PagerDuty extension vendor represents a specific type of outbound extension such as Generic Webhook, Slack, ServiceNow.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extension-schemas)
+
+        Scoped OAuth requires: `extension_schemas.read`
+      summary: List extension schemas
+      parameters:
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+      responses:
+        '200':
+          description: A paginated array of extension schemas.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  extension_schemas:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ExtensionSchema'
+                required:
+                  - extension_schemas
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    extension_schemas:
+                      - id: PJFWPEP
+                        type: extension_schema
+                        summary: Generic Webhook
+                        self: https://api.pagerduty.com/extension_schemas/PJFWPEP
+                        description: Long description here
+                        guide_url: https://developer.pagerduty.com
+                        icon_url: https://extension.com/extension.png
+                        key: generic_webhook
+                        label: Generic Webhook
+                        logo_url: https://extension.com/logo.png
+                        send_types:
+                          - trigger
+                          - acknowledge
+                          - resolve
+                          - delegate
+                          - escalate
+                          - unacknowledge
+                          - assign
+                        url: ''
+                    limit: 25
+                    offset: 0
+                    more: false
+                    total: null
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: List extension schemas.
+  /extension_schemas/{id}:
+    get:
+      x-pd-requires-scope: extension_schemas.read
+      tags:
+        - Extension Schemas
+      operationId: getExtensionSchema
+      description: |
+        Get details about one specific extension vendor.
+
+        A PagerDuty extension vendor represents a specific type of outbound extension such as Generic Webhook, Slack, ServiceNow.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extension-schemas)
+
+        Scoped OAuth requires: `extension_schemas.read`
+      summary: Get an extension vendor
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: The extension vendor requested
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  extension_schema:
+                    $ref: '#/components/schemas/ExtensionSchema'
+                required:
+                  - extension_schema
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    extension_schema:
+                      id: PJFWPEP
+                      type: extension_schema
+                      summary: Generic Webhook
+                      self: https://api.pagerduty.com/extension_schemas/PJFWPEP
+                      description: Long description here
+                      guide_url: https://developer.pagerduty.com
+                      icon_url: https://extension.com/extension.png
+                      key: generic_webhook
+                      label: Generic Webhook
+                      logo_url: https://extension.com/logo.png
+                      send_types:
+                        - trigger
+                        - acknowledge
+                        - resolve
+                        - delegate
+                        - escalate
+                        - unacknowledge
+                        - assign
+                      url: ''
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: Get details about one specific extension vendor.
+components:
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        offset:
+          type: integer
+          description: Echoes offset pagination property.
+          readOnly: true
+        limit:
+          type: integer
+          description: Echoes limit pagination property.
+          readOnly: true
+        more:
+          type: boolean
+          description: Indicates if there are additional records to return
+          readOnly: true
+        total:
+          type: integer
+          description: The total number of records matching the given query.
+          nullable: true
+          readOnly: true
+    ExtensionSchema:
+      type: object
+      properties:
+        icon_url:
+          type: string
+          format: url
+          readOnly: true
+          description: A small logo, 18-by-18 pixels.
+        logo_url:
+          type: string
+          format: url
+          readOnly: true
+          description: A large logo, 75 pixels high and no more than 300 pixels wide.
+        label:
+          type: string
+          readOnly: true
+          description: Human friendly display label
+        key:
+          type: string
+          readOnly: true
+          description: Machine friendly display label
+        description:
+          type: string
+          description: The long description for the Extension
+        guide_url:
+          type: string
+          format: url
+          readOnly: true
+          description: A link to the extension's support guide
+        send_types:
+          type: array
+          description: The types of PagerDuty incident events that will activate this Extension
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+              - trigger
+              - acknowledge
+              - resolve
+              - delegate
+              - escalate
+              - unacknowledge
+              - assign
+              - custom
+        url:
+          type: string
+          readOnly: true
+          description: The url that the webhook payload will be sent to for this Extension.
+      example:
+        id: PJFWPEP
+        type: extension_schema
+        summary: Generic Webhook
+        self: https://api.pagerduty.com/extension_schemas/PJFWPEP
+        html_url: 'null'
+        description: Long description here
+        guide_url: https://developer.pagerduty.com
+        icon_url: https://extension.com/extension.png
+        key: generic_webhook
+        label: Generic Webhook
+        logo_url: https://extension.com/logo.png
+        send_types:
+          - trigger
+          - acknowledge
+          - resolve
+          - delegate
+          - escalate
+          - unacknowledge
+          - assign
+          - custom
+        url: https://developer.pagerduty.com/my_webhook_endpoint
+  responses:
+    ArgumentError:
+      description: Caller provided invalid arguments. Please review the response for error details. Retrying with the same arguments will *not* work.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Unauthorized:
+      description: |
+        Caller did not supply credentials or did not provide the correct credentials.
+        If you are using an API key, it may be invalid or your Authorization header may be malformed.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Forbidden:
+      description: |
+        Caller is not authorized to view the requested resource.
+        While your authentication is valid, the authenticated user or token does not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    TooManyRequests:
+      description: Too many requests have been made, the rate limit has been reached.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Conflict:
+      description: The request conflicts with the current state of the server.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+  parameters:
+    offset_limit:
+      name: limit
+      in: query
+      required: false
+      description: The number of results per page.
+      schema:
+        type: integer
+    offset_offset:
+      name: offset
+      in: query
+      required: false
+      description: Offset to start pagination search results.
+      schema:
+        type: integer
+    offset_total:
+      name: total
+      in: query
+      required: false
+      description: |
+        By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.
+
+        See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information.
+      schema:
+        default: false
+        type: boolean
+    id:
+      name: id
+      description: The ID of the resource.
+      in: path
+      required: true
+      schema:
+        type: string
+servers:
+  - url: https://api.pagerduty.com
+    description: PagerDuty V2 API.

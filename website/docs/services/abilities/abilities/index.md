@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>abilities</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>abilities</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="abilities" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.abilities.abilities" /></td></tr>
 </tbody></table>
@@ -32,12 +33,12 @@ Creates, updates, deletes, gets or lists an <code>abilities</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_abilities"
+    defaultValue="list"
     values={[
-        { label: 'list_abilities', value: 'list_abilities' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="list_abilities">
+<TabItem value="list">
 
 An array of ability names.
 
@@ -50,11 +51,6 @@ An array of ability names.
     </tr>
 </thead>
 <tbody>
-<tr>
-    <td><CopyableCode code="ability_name" /></td>
-    <td><code>string</code></td>
-    <td>A single ability, as a name.</td>
-</tr>
 </tbody>
 </table>
 </TabItem>
@@ -76,25 +72,18 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_abilities"><CopyableCode code="list_abilities" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>List all of your account's abilities, by name.<br /><br />"Abilities" describes your account's capabilities by feature name. For example `"teams"`.<br /><br />An ability may be available to your account based on things like your pricing plan or account state.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#abilities)<br /><br />Scoped OAuth requires: `abilities.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_abilities"><CopyableCode code="_list_abilities" /></a></td>
-    <td><CopyableCode code="exec" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>List all of your account's abilities, by name.<br /><br />"Abilities" describes your account's capabilities by feature name. For example `"teams"`.<br /><br />An ability may be available to your account based on things like your pricing plan or account state.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#abilities)<br /><br />Scoped OAuth requires: `abilities.read`<br /></td>
+    <td>List all of your account's abilities, by name.&lt;br /&gt;&lt;br /&gt;"Abilities" describes your account's capabilities by feature name. For example `"teams"`.&lt;br /&gt;&lt;br /&gt;An ability may be available to your account based on things like your pricing plan or account state.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#abilities)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `abilities.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#get_ability"><CopyableCode code="get_ability" /></a></td>
+    <td><a href="#check"><CopyableCode code="check" /></a></td>
     <td><CopyableCode code="exec" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Test whether your account has a given ability.<br /><br />"Abilities" describes your account's capabilities by feature name. For example `"teams"`.<br /><br />An ability may be available to your account based on things like your pricing plan or account state.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#abilities)<br /><br />Scoped OAuth requires: `abilities.read`<br /></td>
+    <td></td>
+    <td>Test whether your account has a given ability.&lt;br /&gt;&lt;br /&gt;"Abilities" describes your account's capabilities by feature name. For example `"teams"`.&lt;br /&gt;&lt;br /&gt;An ability may be available to your account based on things like your pricing plan or account state.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#abilities)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `abilities.read`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -117,37 +106,25 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 </tbody>
 </table>
 
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_abilities"
+    defaultValue="list"
     values={[
-        { label: 'list_abilities', value: 'list_abilities' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="list_abilities">
+<TabItem value="list">
 
-List all of your account's abilities, by name.<br /><br />"Abilities" describes your account's capabilities by feature name. For example `"teams"`.<br /><br />An ability may be available to your account based on things like your pricing plan or account state.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#abilities)<br /><br />Scoped OAuth requires: `abilities.read`<br />
+List all of your account's abilities, by name.&lt;br /&gt;&lt;br /&gt;"Abilities" describes your account's capabilities by feature name. For example `"teams"`.&lt;br /&gt;&lt;br /&gt;An ability may be available to your account based on things like your pricing plan or account state.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#abilities)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `abilities.read`&lt;br /&gt;
 
 ```sql
 SELECT
-ability_name
+*
 FROM pagerduty.abilities.abilities
-WHERE Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
@@ -157,32 +134,18 @@ AND Content-Type = '{{ Content-Type }}'
 ## Lifecycle Methods
 
 <Tabs
-    defaultValue="_list_abilities"
+    defaultValue="check"
     values={[
-        { label: '_list_abilities', value: '_list_abilities' },
-        { label: 'get_ability', value: 'get_ability' }
+        { label: 'check', value: 'check' }
     ]}
 >
-<TabItem value="_list_abilities">
+<TabItem value="check">
 
-List all of your account's abilities, by name.<br /><br />"Abilities" describes your account's capabilities by feature name. For example `"teams"`.<br /><br />An ability may be available to your account based on things like your pricing plan or account state.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#abilities)<br /><br />Scoped OAuth requires: `abilities.read`<br />
-
-```sql
-EXEC pagerduty.abilities.abilities._list_abilities 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
-;
-```
-</TabItem>
-<TabItem value="get_ability">
-
-Test whether your account has a given ability.<br /><br />"Abilities" describes your account's capabilities by feature name. For example `"teams"`.<br /><br />An ability may be available to your account based on things like your pricing plan or account state.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#abilities)<br /><br />Scoped OAuth requires: `abilities.read`<br />
+Test whether your account has a given ability.&lt;br /&gt;&lt;br /&gt;"Abilities" describes your account's capabilities by feature name. For example `"teams"`.&lt;br /&gt;&lt;br /&gt;An ability may be available to your account based on things like your pricing plan or account state.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#abilities)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `abilities.read`&lt;br /&gt;
 
 ```sql
-EXEC pagerduty.abilities.abilities.get_ability 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
+EXEC pagerduty.abilities.abilities.check 
+@id='{{ id }}' --required
 ;
 ```
 </TabItem>

@@ -1,0 +1,826 @@
+openapi: 3.0.2
+info:
+  title: PagerDuty API - Audit
+  description: Account-wide audit records.
+  version: 2.0.0
+paths:
+  /audit/records:
+    get:
+      x-pd-requires-scope: audit_records.read
+      summary: List audit records
+      tags:
+        - Audit
+      operationId: listAuditRecords
+      description: |
+        List audit trail records matching provided query params or default criteria.
+
+        The returned records are sorted by the `execution_time` from newest to oldest.
+
+        See [`Cursor-based pagination`](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.
+
+        Only admins, account owners, or global API tokens on PagerDuty account [pricing plans](https://www.pagerduty.com/pricing) with the "Audit Trail" feature can access this endpoint.
+
+        For other role based access to audit records by resource ID, see the resource's API documentation.
+
+        For more information see the [Audit API Document](https://developer.pagerduty.com/docs/rest-api-v2/audit-records-api/).
+
+        Scoped OAuth requires: `audit_records.read`
+      parameters:
+        - $ref: '#/components/parameters/cursor_limit'
+        - $ref: '#/components/parameters/cursor_cursor'
+        - $ref: '#/components/parameters/audit_since'
+        - $ref: '#/components/parameters/audit_until'
+        - $ref: '#/components/parameters/audit_root_resource_types'
+        - $ref: '#/components/parameters/audit_actor_type'
+        - $ref: '#/components/parameters/audit_actor_id'
+        - $ref: '#/components/parameters/audit_method_type'
+        - $ref: '#/components/parameters/audit_method_truncated_token'
+        - $ref: '#/components/parameters/audit_actions'
+      responses:
+        '200':
+          description: Records matching the query criteria.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditRecordResponseSchema'
+              examples:
+                response:
+                  $ref: '#/components/examples/AuditRecordResponse'
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    description: List audit records.
+components:
+  schemas:
+    AuditRecordResponseSchema:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditRecord'
+        response_metadata:
+          nullable: true
+          anyOf:
+            - $ref: '#/components/schemas/AuditMetadata'
+        limit:
+          type: integer
+          description: The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+          readOnly: true
+        next_cursor:
+          type: string
+          description: |
+            An opaque string than will deliver the next set of results when provided as the `cursor` parameter in a subsequent request.  A `null` value for this field indicates that there are no additional results.
+          example: dXNlcjaVMzc5V0ZYTlo=
+          nullable: true
+          readOnly: true
+      required:
+        - records
+        - limit
+        - next_cursor
+    AuditRecord:
+      type: object
+      readOnly: true
+      description: An Audit Trail record
+      properties:
+        id:
+          type: string
+        self:
+          type: string
+          nullable: true
+          description: Record URL.
+        execution_time:
+          type: string
+          format: date-time
+          description: The date/time the action executed, in ISO8601 format and millisecond precision.
+        execution_context:
+          type: object
+          description: Action execution context
+          properties:
+            request_id:
+              type: string
+              nullable: true
+              description: Request Id
+            remote_address:
+              type: string
+              nullable: true
+              description: remote address
+          nullable: true
+        actors:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Reference'
+        method:
+          type: object
+          description: The method information
+          properties:
+            description:
+              type: string
+              nullable: true
+            truncated_token:
+              description: Truncated token containing the last 4 chars of the token's actual value.
+              type: string
+              nullable: true
+              example: 3xyz
+            type:
+              type: string
+              description: |
+                Describes the method used to perform the action:
+
+                `browser` -- authenticated user session. Session value is not returned in the `truncated_token` field.
+
+                `oauth` -- access token obtained via the OAuth flow. Truncated token value is returned in the `truncated_token` field.
+
+                `api_token` -- Pagerduty API token. Truncated token value is returned in the `truncated_token` field.
+
+                `identity_provider` -- action performed by an Identity provider on behalf of a user. No value is returned in the `truncated_token` field.
+
+                `other` -- Method that does not fall in the predefined categories. Truncated token value MAY be returned in the `truncated_token` field.
+              enum:
+                - browser
+                - oauth
+                - api_token
+                - identity_provider
+                - other
+          required:
+            - type
+        root_resource:
+          $ref: '#/components/schemas/Reference'
+        action:
+          type: string
+          example: create
+        details:
+          type: object
+          nullable: true
+          description: |
+            Additional details to provide further information about the action or
+            the resource that has been audited.
+          properties:
+            resource:
+              $ref: '#/components/schemas/Reference'
+            fields:
+              description: |
+                A set of fields that have been affected.
+                The fields that have not been affected MAY be returned.
+              type: array
+              nullable: true
+              items:
+                type: object
+                description: |
+                  Information about the affected field.
+                  When available, field's before and after values are returned:
+                    
+                  #### Resource creation
+                  - `value` MAY be returned
+
+                  #### Resource update
+                  - `value` MAY be returned
+                  - `before_value` MAY be returned
+
+                  #### Resource deletion
+                  - `before_value` MAY be returned
+                properties:
+                  name:
+                    type: string
+                    description: Name of the resource field
+                    example: name
+                  description:
+                    type: string
+                    nullable: true
+                    description: Human readable description of the resource field
+                    example: First and Last name
+                  value:
+                    type: string
+                    nullable: true
+                    description: new or updated value of the field
+                    example: Jonathan
+                  before_value:
+                    type: string
+                    nullable: true
+                    description: previous or deleted value of the field
+                    example: John
+                required:
+                  - name
+            references:
+              description: A set of references that have been affected.
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Name of the reference field
+                    example: team_members
+                  description:
+                    type: string
+                    nullable: true
+                    description: Human readable description of the references field
+                    example: First and Last name
+                  added:
+                    type: array
+                    nullable: true
+                    items:
+                      $ref: '#/components/schemas/Reference'
+                  removed:
+                    type: array
+                    nullable: true
+                    items:
+                      $ref: '#/components/schemas/Reference'
+                required:
+                  - name
+          required:
+            - resource
+      required:
+        - id
+        - execution_time
+        - method
+        - root_resource
+        - action
+    AuditMetadata:
+      type: object
+      properties:
+        messages:
+          type: array
+          nullable: true
+          items:
+            type: string
+            example: Message about the result
+    CursorPagination:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+          readOnly: true
+        next_cursor:
+          type: string
+          description: |
+            An opaque string than will deliver the next set of results when provided as the `cursor` parameter in a subsequent request.  A `null` value for this field indicates that there are no additional results.
+          example: dXNlcjaVMzc5V0ZYTlo=
+          nullable: true
+          readOnly: true
+      required:
+        - limit
+        - next_cursor
+    Reference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        label:
+          type: string
+          description: The label of the tag.
+          maxLength: 191
+      required:
+        - label
+        - type
+      example:
+        type: tag
+        label: Batman
+  responses:
+    ArgumentError:
+      description: Caller provided invalid arguments. Please review the response for error details. Retrying with the same arguments will *not* work.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Unauthorized:
+      description: |
+        Caller did not supply credentials or did not provide the correct credentials.
+        If you are using an API key, it may be invalid or your Authorization header may be malformed.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    PaymentRequired:
+      description: |
+        Account does not have the abilities to perform the action. Please review the response for the required abilities.
+        You can also use the [Abilities API](#resource_Abilities) to determine what features are available to your account.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Forbidden:
+      description: |
+        Caller is not authorized to view the requested resource.
+        While your authentication is valid, the authenticated user or token does not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    TooManyRequests:
+      description: Too many requests have been made, the rate limit has been reached.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    InternalServerError:
+      description: Internal Server Error the PagerDuty server experienced an error.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Conflict:
+      description: The request conflicts with the current state of the server.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+  parameters:
+    cursor_limit:
+      name: limit
+      in: query
+      required: false
+      description: The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+      schema:
+        type: integer
+    cursor_cursor:
+      name: cursor
+      in: query
+      required: false
+      description: |
+        Optional parameter used to request the "next" set of results from an API.  The value provided here is most commonly obtained from the `next_cursor` field of the previous request.  When no value is provided, the request starts at the beginning of the result set.
+      schema:
+        type: string
+    audit_since:
+      name: since
+      in: query
+      description: The start of the date range over which you want to search. If not specified, defaults to `now() - 24 hours` (past 24 hours)
+      schema:
+        type: string
+        format: date-time
+    audit_until:
+      name: until
+      in: query
+      description: The end of the date range over which you want to search. If not specified, defaults to `now()`. May not be more than 31 days after `since`.
+      schema:
+        type: string
+        format: date-time
+    audit_root_resource_types:
+      name: root_resource_types[]
+      in: query
+      description: Resource type filter for the root_resource.
+      schema:
+        type: string
+        enum:
+          - users
+          - teams
+          - schedules
+          - escalation_policies
+          - services
+          - ip_allow_lists
+        example: users
+    audit_actor_type:
+      name: actor_type
+      in: query
+      description: Actor type filter.
+      schema:
+        type: string
+        enum:
+          - user_reference
+          - api_key_reference
+          - app_reference
+        example: user_reference
+    audit_actor_id:
+      name: actor_id
+      in: query
+      description: Actor Id filter. Must be qualified by providing the `actor_type` param.
+      schema:
+        type: string
+        example: P123456
+    audit_method_type:
+      name: method_type
+      in: query
+      description: Method type filter.
+      schema:
+        type: string
+        description: |
+          Describes the method used to perform the action:
+
+          `browser` -- authenticated user session. Session value is not returned in the `truncated_token` field.
+
+          `oauth` -- access token obtained via the OAuth flow. Truncated token value is returned in the `truncated_token` field.
+
+          `api_token` -- Pagerduty API token. Truncated token value is returned in the `truncated_token` field.
+
+          `identity_provider` -- action performed by an Identity provider on behalf of a user. No value is returned in the `truncated_token` field.
+
+          `other` -- Method that does not fall in the predefined categories. Truncated token value MAY be returned in the `truncated_token` field.
+        enum:
+          - browser
+          - oauth
+          - api_token
+          - identity_provider
+          - other
+    audit_method_truncated_token:
+      name: method_truncated_token
+      in: query
+      description: Method truncated_token filter. Must be qualified by providing the `method_type` param.
+      schema:
+        type: string
+        example: 3xyz
+    audit_actions:
+      name: actions[]
+      in: query
+      description: Action filter
+      schema:
+        type: string
+        description: |
+          The action executed on the aggregate
+        enum:
+          - create
+          - update
+          - delete
+  examples:
+    AuditRecordResponse:
+      summary: Response Example
+      value:
+        records:
+          - id: PDRECORDID1_TEAM_CREATED
+            execution_time: '2020-06-04T15:30:16.272Z'
+            execution_context:
+              request_id: 111lDEOIH-534-4ljhLHJjh111
+              remote_address: 201.19.20.19
+            actors:
+              - id: PDUSER
+                summary: John Snow
+                type: user_reference
+            method:
+              type: api_token
+              truncated_token: 3usr
+            root_resource:
+              id: PXASDFE
+              type: team_reference
+              summary: my DevOps team
+            action: create
+            details:
+              resource:
+                id: PXASDFE
+                type: team_reference
+                summary: my DevOps team
+              fields:
+                - name: teamName
+                  value: DevOps team
+          - id: PDRECORDID2_USER_REMOVED_FROM_TEAM
+            execution_time: '2020-06-04T15:30:16.272Z'
+            execution_context:
+              request_id: 222lDEOIH-534-4ljhLHJjh222
+              remote_address: 201.19.20.19
+            method:
+              type: api_token
+              truncated_token: 2adm
+            root_resource:
+              id: PRY9M8B
+              type: team_reference
+              summary: DevOps
+            action: update
+            details:
+              resource:
+                id: PRY9M8B
+                type: team_reference
+                summary: DevOps
+              references:
+                - name: members
+                  removed:
+                    - id: PRY9M8B
+                      type: user_reference
+                      summary: John Doe
+          - id: PDRECORDID5_USERS_TEAM_ROLE_UPDATED
+            execution_time: '2020-06-04T15:30:16.272Z'
+            execution_context:
+              request_id: 222lDEOIH-534-4ljhLHJjh222
+              remote_address: 201.19.20.19
+            method:
+              type: api_token
+              truncated_token: 2adm
+            root_resource:
+              id: PRY9M8B
+              type: team_reference
+              summary: DevOps
+            action: update
+            details:
+              resource:
+                id: PDUSER
+                type: user_reference
+                summary: John Snow
+              fields:
+                - name: team_role
+                  before_value: observer
+                  value: manager
+          - id: PDRECORDID3_USERS_NAME_AND_EMAIL_UPDATED
+            execution_time: '2020-06-04T15:30:16.272Z'
+            execution_context:
+              request_id: 222lDEOIH-534-4ljhLHJjh222
+              remote_address: 201.19.20.19
+            actors:
+              - id: PDUSER
+                summary: John Snow
+                type: user_reference
+            method:
+              type: identity_provider
+            root_resource:
+              id: PDUSER
+              type: user_reference
+              summary: John Snow
+            action: update
+            details:
+              resource:
+                id: PDUSER
+                type: user_reference
+                summary: John Snow
+              fields:
+                - name: name
+                  before_value: Bob Doe
+                  value: Jon Snow
+                - name: email
+                  before_value: bob.doe@domain.com
+                  value: john.snow@domain.com
+          - id: PDRECORDID4_UPDATED_USERS_NOTIFICATION_RULE
+            execution_time: '2020-06-04T15:30:16.272Z'
+            execution_context:
+              request_id: 222lDEOIH-534-4ljhLHJjh222
+              remote_address: 201.19.20.19
+            actors:
+              - id: PDUSER
+                summary: John Snow
+                type: user_reference
+            method:
+              type: api_token
+              truncated_token: 2adm
+            root_resource:
+              id: PDUSER
+              type: user_reference
+              summary: John Snow
+            action: update
+            details:
+              resource:
+                id: PXOGWUS
+                type: assignment_notification_rule_reference
+                summary: '0 minutes: channel P1IAAPZ'
+              fields:
+                - name: start_delay_in_minutes
+                  before_value: '0'
+                  value: '2'
+              references:
+                - name: contact_method
+                  removed:
+                    - id: POE6L88
+                      type: push_notification_contact_method_reference
+                      summary: Pixel 3
+                  added:
+                    - id: P4GTUMK
+                      type: sms_contact_method_reference
+                      summary: Mobile
+        next_cursor: null
+        limit: 10
+servers:
+  - url: https://api.pagerduty.com
+    description: PagerDuty V2 API.

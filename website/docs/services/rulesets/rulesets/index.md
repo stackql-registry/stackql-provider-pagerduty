@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>rulesets</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>rulesets</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="rulesets" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.rulesets.rulesets" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>rulesets</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_ruleset"
+    defaultValue="get"
     values={[
-        { label: 'get_ruleset', value: 'get_ruleset' },
-        { label: 'list_rulesets', value: 'list_rulesets' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_ruleset">
+<TabItem value="get">
 
 The Ruleset object.
 
@@ -89,7 +90,7 @@ The Ruleset object.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td> (global, default_global)</td>
 </tr>
 <tr>
     <td><CopyableCode code="updated_at" /></td>
@@ -104,7 +105,7 @@ The Ruleset object.
 </tbody>
 </table>
 </TabItem>
-<TabItem value="list_rulesets">
+<TabItem value="list">
 
 A paginated array of Ruleset objects.
 
@@ -155,7 +156,7 @@ A paginated array of Ruleset objects.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td> (global, default_global)</td>
 </tr>
 <tr>
     <td><CopyableCode code="updated_at" /></td>
@@ -188,53 +189,39 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_ruleset"><CopyableCode code="get_ruleset" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get a Ruleset.<br />&lt;!-- theme: warning --&gt;<br />&gt; ### End-of-life<br />&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.<br /><br />Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)<br /><br />Scoped OAuth requires: `event_rules.read`<br /></td>
+    <td></td>
+    <td>Get a Ruleset.&lt;br /&gt;&lt;!-- theme: warning --&gt;&lt;br /&gt;&gt; ### End-of-life&lt;br /&gt;&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you &#91;migrate to Event Orchestration&#93;(https:​//support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.&lt;br /&gt;&lt;br /&gt;Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_rules.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#list_rulesets"><CopyableCode code="list_rulesets" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a></td>
-    <td>List all Rulesets<br />&lt;!-- theme: warning --&gt;<br />&gt; ### End-of-life<br />&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.<br /><br />Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)<br /><br />Scoped OAuth requires: `event_rules.read`<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a></td>
+    <td>List all Rulesets&lt;br /&gt;&lt;!-- theme: warning --&gt;&lt;br /&gt;&gt; ### End-of-life&lt;br /&gt;&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you &#91;migrate to Event Orchestration&#93;(https:​//support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.&lt;br /&gt;&lt;br /&gt;Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_rules.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_ruleset"><CopyableCode code="create_ruleset" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-data__ruleset"><code>data__ruleset</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Create a new Ruleset.<br />&lt;!-- theme: warning --&gt;<br />&gt; ### End-of-life<br />&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.<br /><br />Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)<br /><br />Scoped OAuth requires: `event_rules.write`<br /></td>
+    <td><a href="#parameter-ruleset"><code>ruleset</code></a></td>
+    <td></td>
+    <td>Create a new Ruleset.&lt;br /&gt;&lt;!-- theme: warning --&gt;&lt;br /&gt;&gt; ### End-of-life&lt;br /&gt;&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you &#91;migrate to Event Orchestration&#93;(https:​//support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.&lt;br /&gt;&lt;br /&gt;Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_rules.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#delete_ruleset"><CopyableCode code="delete_ruleset" /></a></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-ruleset"><code>ruleset</code></a></td>
+    <td></td>
+    <td>Update a Ruleset.&lt;br /&gt;&lt;!-- theme: warning --&gt;&lt;br /&gt;&gt; ### End-of-life&lt;br /&gt;&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you &#91;migrate to Event Orchestration&#93;(https:​//support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.&lt;br /&gt;&lt;br /&gt;Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_rules.write`&lt;br /&gt;</td>
+</tr>
+<tr>
+    <td><a href="#delete"><CopyableCode code="delete" /></a></td>
     <td><CopyableCode code="delete" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Delete a Ruleset.<br />&lt;!-- theme: warning --&gt;<br />&gt; ### End-of-life<br />&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.<br /><br />Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)<br /><br />Scoped OAuth requires: `event_rules.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_rulesets"><CopyableCode code="_list_rulesets" /></a></td>
-    <td><CopyableCode code="exec" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a></td>
-    <td>List all Rulesets<br />&lt;!-- theme: warning --&gt;<br />&gt; ### End-of-life<br />&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.<br /><br />Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)<br /><br />Scoped OAuth requires: `event_rules.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_ruleset"><CopyableCode code="_get_ruleset" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get a Ruleset.<br />&lt;!-- theme: warning --&gt;<br />&gt; ### End-of-life<br />&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.<br /><br />Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)<br /><br />Scoped OAuth requires: `event_rules.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#update_ruleset"><CopyableCode code="update_ruleset" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-ruleset"><code>ruleset</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Update a Ruleset.<br />&lt;!-- theme: warning --&gt;<br />&gt; ### End-of-life<br />&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.<br /><br />Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)<br /><br />Scoped OAuth requires: `event_rules.write`<br /></td>
+    <td>Delete a Ruleset.&lt;br /&gt;&lt;!-- theme: warning --&gt;&lt;br /&gt;&gt; ### End-of-life&lt;br /&gt;&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you &#91;migrate to Event Orchestration&#93;(https:​//support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.&lt;br /&gt;&lt;br /&gt;Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_rules.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -257,16 +244,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 <tr id="parameter-limit">
     <td><CopyableCode code="limit" /></td>
     <td><code>integer</code></td>
@@ -280,7 +257,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-total">
     <td><CopyableCode code="total" /></td>
     <td><code>boolean</code></td>
-    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
+    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our &#91;Pagination Docs&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
 </tr>
 </tbody>
 </table>
@@ -288,15 +265,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_ruleset"
+    defaultValue="get"
     values={[
-        { label: 'get_ruleset', value: 'get_ruleset' },
-        { label: 'list_rulesets', value: 'list_rulesets' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_ruleset">
+<TabItem value="get">
 
-Get a Ruleset.<br />&lt;!-- theme: warning --&gt;<br />&gt; ### End-of-life<br />&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.<br /><br />Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)<br /><br />Scoped OAuth requires: `event_rules.read`<br />
+Get a Ruleset.&lt;br /&gt;&lt;!-- theme: warning --&gt;&lt;br /&gt;&gt; ### End-of-life&lt;br /&gt;&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you &#91;migrate to Event Orchestration&#93;(https:​//support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.&lt;br /&gt;&lt;br /&gt;Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_rules.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -312,14 +289,12 @@ updated_at,
 updater
 FROM pagerduty.rulesets.rulesets
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
-<TabItem value="list_rulesets">
+<TabItem value="list">
 
-List all Rulesets<br />&lt;!-- theme: warning --&gt;<br />&gt; ### End-of-life<br />&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.<br /><br />Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)<br /><br />Scoped OAuth requires: `event_rules.read`<br />
+List all Rulesets&lt;br /&gt;&lt;!-- theme: warning --&gt;&lt;br /&gt;&gt; ### End-of-life&lt;br /&gt;&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you &#91;migrate to Event Orchestration&#93;(https:​//support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.&lt;br /&gt;&lt;br /&gt;Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_rules.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -334,9 +309,7 @@ type,
 updated_at,
 updater
 FROM pagerduty.rulesets.rulesets
-WHERE Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-AND limit = '{{ limit }}'
+WHERE limit = '{{ limit }}'
 AND offset = '{{ offset }}'
 AND total = '{{ total }}'
 ;
@@ -348,26 +321,22 @@ AND total = '{{ total }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_ruleset"
+    defaultValue="create"
     values={[
-        { label: 'create_ruleset', value: 'create_ruleset' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_ruleset">
+<TabItem value="create">
 
-Create a new Ruleset.<br />&lt;!-- theme: warning --&gt;<br />&gt; ### End-of-life<br />&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.<br /><br />Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)<br /><br />Scoped OAuth requires: `event_rules.write`<br />
+Create a new Ruleset.&lt;br /&gt;&lt;!-- theme: warning --&gt;&lt;br /&gt;&gt; ### End-of-life&lt;br /&gt;&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you &#91;migrate to Event Orchestration&#93;(https:​//support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.&lt;br /&gt;&lt;br /&gt;Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_rules.write`&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.rulesets.rulesets (
-data__ruleset,
-Accept,
-Content-Type
+ruleset
 )
 SELECT 
-'{{ ruleset }}' /* required */,
-'{{ Accept }}',
-'{{ Content-Type }}'
+'{{ ruleset }}' /* required */
 RETURNING
 ruleset
 ;
@@ -375,17 +344,60 @@ ruleset
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: rulesets
   props:
     - name: ruleset
-      value: object
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-    - name: Content-Type
-      value: string
+      description: |
+        (opaque JSON object)
+      value:
+        id: "{{ id }}"
+        self: "{{ self }}"
+        type: "{{ type }}"
+        name: "{{ name }}"
+        routing_keys:
+          - "{{ routing_keys }}"
+        created_at: "{{ created_at }}"
+        creator:
+          id: "{{ id }}"
+          type: "{{ type }}"
+          self: "{{ self }}"
+        updated_at: "{{ updated_at }}"
+        updater:
+          id: "{{ id }}"
+          type: "{{ type }}"
+          self: "{{ self }}"
+        team:
+          id: "{{ id }}"
+          type: "{{ type }}"
+          self: "{{ self }}"
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
+
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Update a Ruleset.&lt;br /&gt;&lt;!-- theme: warning --&gt;&lt;br /&gt;&gt; ### End-of-life&lt;br /&gt;&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you &#91;migrate to Event Orchestration&#93;(https:​//support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.&lt;br /&gt;&lt;br /&gt;Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_rules.write`&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.rulesets.rulesets
+SET 
+ruleset = '{{ ruleset }}'
+WHERE 
+id = '{{ id }}' --required
+AND ruleset = '{{ ruleset }}' --required
+RETURNING
+ruleset;
 ```
 </TabItem>
 </Tabs>
@@ -394,75 +406,18 @@ ruleset
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="delete_ruleset"
+    defaultValue="delete"
     values={[
-        { label: 'delete_ruleset', value: 'delete_ruleset' }
+        { label: 'delete', value: 'delete' }
     ]}
 >
-<TabItem value="delete_ruleset">
+<TabItem value="delete">
 
-Delete a Ruleset.<br />&lt;!-- theme: warning --&gt;<br />&gt; ### End-of-life<br />&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.<br /><br />Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)<br /><br />Scoped OAuth requires: `event_rules.write`<br />
+Delete a Ruleset.&lt;br /&gt;&lt;!-- theme: warning --&gt;&lt;br /&gt;&gt; ### End-of-life&lt;br /&gt;&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you &#91;migrate to Event Orchestration&#93;(https:​//support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.&lt;br /&gt;&lt;br /&gt;Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_rules.write`&lt;br /&gt;
 
 ```sql
 DELETE FROM pagerduty.rulesets.rulesets
 WHERE id = '{{ id }}' --required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_list_rulesets"
-    values={[
-        { label: '_list_rulesets', value: '_list_rulesets' },
-        { label: '_get_ruleset', value: '_get_ruleset' },
-        { label: 'update_ruleset', value: 'update_ruleset' }
-    ]}
->
-<TabItem value="_list_rulesets">
-
-List all Rulesets<br />&lt;!-- theme: warning --&gt;<br />&gt; ### End-of-life<br />&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.<br /><br />Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)<br /><br />Scoped OAuth requires: `event_rules.read`<br />
-
-```sql
-EXEC pagerduty.rulesets.rulesets._list_rulesets 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@limit='{{ limit }}', 
-@offset='{{ offset }}', 
-@total={{ total }}
-;
-```
-</TabItem>
-<TabItem value="_get_ruleset">
-
-Get a Ruleset.<br />&lt;!-- theme: warning --&gt;<br />&gt; ### End-of-life<br />&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.<br /><br />Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)<br /><br />Scoped OAuth requires: `event_rules.read`<br />
-
-```sql
-EXEC pagerduty.rulesets.rulesets._get_ruleset 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
-;
-```
-</TabItem>
-<TabItem value="update_ruleset">
-
-Update a Ruleset.<br />&lt;!-- theme: warning --&gt;<br />&gt; ### End-of-life<br />&gt; Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.<br /><br />Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)<br /><br />Scoped OAuth requires: `event_rules.write`<br />
-
-```sql
-EXEC pagerduty.rulesets.rulesets.update_ruleset 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"ruleset": "{{ ruleset }}"
-}'
 ;
 ```
 </TabItem>

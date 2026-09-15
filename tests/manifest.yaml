@@ -1,0 +1,469 @@
+# Smoke-test manifest for the stackql pagerduty provider (tests/smoke.py).
+#
+# Tests run in order and share a variable map: a test's `exports` publish
+# values as {test_name}.{export_name}, referenced by later templates (and
+# `contains` expectations) as {{ test_name.export_name }}. Every statement is
+# inline `sql:` (Jinja2-rendered); `file:` under tests/queries/ also works.
+#
+# Read smokes cover the resources a PagerDuty user reaches for first
+# (users, teams, services, escalation policies, schedules, on-calls,
+# incidents, log entries, priorities, vendors, licenses, audit records with
+# cursor pagination, an analytics POST-based read). The write lifecycle
+# mirrors the resources the Terraform provider documents most: a team, an
+# escalation policy targeting the calling user, a service on that policy
+# with an Events API v2 integration, an incident on the service (created,
+# annotated, acknowledged and resolved), a tag applied to the team, and a
+# maintenance window - everything named stackql-smoke-<stamp> and torn down
+# by always_run cleanup steps. There is no per-call charge on the PagerDuty
+# REST API; the suite costs nothing beyond the account itself.
+#
+# The `From` header (PagerDuty attributes incident writes to a person) is
+# sent from PAGERDUTY_FROM_EMAIL when set - required with an account-level
+# General Access key, unnecessary with a User API token. `from` is a
+# reserved word, so the column is double-quoted: "From".
+
+config:
+  registry_path: ../provider-dev/openapi
+  queries_dir: queries
+  query_timeout_seconds: 120
+  inter_request_delay_seconds: 0.25
+
+vars:
+  team_name: stackql-smoke-{{ stamp }}-team
+  ep_name: stackql-smoke-{{ stamp }}-escalation
+  service_name: stackql-smoke-{{ stamp }}-service
+  incident_title: stackql-smoke-{{ stamp }}-incident
+  tag_label: stackql-smoke-{{ stamp }}-tag
+  mw_description: stackql-smoke-{{ stamp }}-maintenance
+  note_content: stackql-smoke-{{ stamp }}-note
+
+tests:
+  # ----- read smokes ----------------------------------------------------------
+  - name: me
+    description: the calling user (GET /users/me via $.user); exports the id used as an escalation target
+    sql: >-
+      SELECT id, name, email, role FROM pagerduty.users.me
+    expect:
+      min_rows: 1
+    exports:
+      - name: user_id
+        column: id
+      - name: email
+        column: email
+
+  - name: abilities
+    description: account abilities (scalar array, wrapped by the normalize pass)
+    sql: >-
+      SELECT * FROM pagerduty.abilities.abilities
+    expect:
+      min_rows: 1
+
+  - name: users_list
+    description: users list via $.users
+    sql: >-
+      SELECT id, name, email, role, time_zone FROM pagerduty.users.users
+    expect:
+      min_rows: 1
+      contains: ["{{ me.user_id }}"]
+
+  - name: teams_list
+    description: teams list (zero teams is fine on a new account)
+    sql: >-
+      SELECT id, name, description FROM pagerduty.teams.teams
+
+  - name: services_list
+    description: services list with the escalation policy reference projected
+    sql: >-
+      SELECT id, name, status, json_extract(escalation_policy, '$.id') AS escalation_policy_id FROM pagerduty.services.services
+
+  - name: escalation_policies_list
+    description: escalation policies (every account has at least the default policy)
+    sql: >-
+      SELECT id, name, num_loops FROM pagerduty.escalation_policies.escalation_policies
+    expect:
+      min_rows: 1
+
+  - name: schedules_list
+    description: on-call schedules
+    sql: >-
+      SELECT id, name, time_zone FROM pagerduty.schedules.schedules
+
+  - name: on_calls
+    description: who is on call (offset-paginated list, first page)
+    sql: >-
+      SELECT json_extract(user, '$.summary') AS user_name, json_extract(escalation_policy, '$.summary') AS policy, escalation_level, start, "end" FROM pagerduty.on_calls.on_calls
+
+  - name: incidents_open
+    description: open incidents via the statuses[] array filter (quoted identifier)
+    sql: >-
+      SELECT id, incident_number, title, status, urgency, created_at FROM pagerduty.incidents.incidents WHERE "statuses[]" = 'triggered'
+
+  - name: incidents_recent_limit
+    description: LIMIT pushed down to the limit query parameter
+    sql: >-
+      SELECT id, incident_number, status FROM pagerduty.incidents.incidents WHERE since = '{{ days_ago_30_iso }}' AND until = '{{ now_iso }}' LIMIT 5
+
+  - name: log_entries_recent
+    description: log entries in the last 7 days
+    sql: >-
+      SELECT id, type, created_at, summary FROM pagerduty.log_entries.log_entries WHERE since = '{{ days_ago_7_iso }}' AND until = '{{ now_iso }}' LIMIT 10
+
+  - name: priorities
+    description: incident priorities (empty unless the account configured them)
+    sql: >-
+      SELECT id, name, description FROM pagerduty.priorities.priorities
+
+  - name: vendors
+    description: integration vendors, filtered server-side
+    sql: >-
+      SELECT id, name, website_url FROM pagerduty.vendors.vendors WHERE query = 'Datadog'
+    expect:
+      min_rows: 1
+      contains: ["Datadog"]
+
+  - name: extension_schemas
+    description: extension schemas (webhook and integration types)
+    sql: >-
+      SELECT id, label, key FROM pagerduty.extension_schemas.extension_schemas
+    expect:
+      min_rows: 1
+
+  - name: licenses
+    description: licenses on the account
+    sql: >-
+      SELECT id, name, current_value, allocations_available FROM pagerduty.licenses.licenses
+
+  - name: audit_records
+    description: audit records for the last 7 days (cursor pagination followed automatically)
+    sql: >-
+      SELECT id, action, execution_time, json_extract(root_resource, '$.type') AS resource_type FROM pagerduty.audit.records WHERE since = '{{ days_ago_7_iso }}' AND until = '{{ now_iso }}'
+
+  - name: analytics_incident_metrics
+    description: aggregate incident metrics (POST-based SELECT; WHERE filters becomes the request body)
+    sql: >-
+      SELECT mean_seconds_to_resolve, mean_seconds_to_first_ack, total_incident_count, total_notifications FROM pagerduty.analytics.incident_metrics WHERE filters = '{"created_at_start": "{{ days_ago_30_iso }}", "created_at_end": "{{ now_iso }}"}'
+    expect:
+      min_rows: 1
+
+  # ----- team lifecycle -------------------------------------------------------
+  - name: team_create
+    description: "INSERT a team ({team: {...}} body via naive request body translate)"
+    sql: >-
+      INSERT INTO pagerduty.teams.teams (team) SELECT '{"type": "team", "name": "{{ team_name }}", "description": "stackql smoke test team"}'
+
+  - name: team_find
+    description: server-side query for the new team; exports its id
+    sql: >-
+      SELECT id, name FROM pagerduty.teams.teams WHERE query = '{{ team_name }}'
+    retry:
+      attempts: 4
+      delay_seconds: 3
+    expect:
+      min_rows: 1
+      contains: ["{{ team_name }}"]
+    exports:
+      - name: team_id
+        column: id
+
+  - name: team_get
+    description: get by id via $.team
+    sql: >-
+      SELECT id, name, description FROM pagerduty.teams.teams WHERE id = '{{ team_find.team_id }}'
+    expect:
+      min_rows: 1
+      contains: ["{{ team_name }}", "stackql smoke test team"]
+
+  - name: team_update
+    description: "UPDATE the team description (PUT {team: {...}})"
+    sql: >-
+      UPDATE pagerduty.teams.teams SET team = '{"type": "team", "name": "{{ team_name }}", "description": "stackql smoke updated"}' WHERE id = '{{ team_find.team_id }}'
+
+  - name: team_verify
+    description: re-read shows the updated description
+    sql: >-
+      SELECT description FROM pagerduty.teams.teams WHERE id = '{{ team_find.team_id }}'
+    expect:
+      contains: ["stackql smoke updated"]
+
+  - name: team_member_add
+    description: add the calling user to the team (PUT mapped as INSERT on teams.members)
+    sql: >-
+      INSERT INTO pagerduty.teams.members (id, user_id, role) SELECT '{{ team_find.team_id }}', '{{ me.user_id }}', 'manager'
+
+  - name: team_members_list
+    description: team members via $.members
+    sql: >-
+      SELECT json_extract(user, '$.id') AS user_id, role FROM pagerduty.teams.members WHERE id = '{{ team_find.team_id }}'
+    expect:
+      min_rows: 1
+      contains: ["{{ me.user_id }}"]
+
+  # ----- escalation policy + service ------------------------------------------
+  - name: escalation_policy_create
+    description: INSERT an escalation policy targeting the calling user (From header when configured)
+    sql: >-
+      INSERT INTO pagerduty.escalation_policies.escalation_policies (escalation_policy{% if from_email %}, "From"{% endif %})
+      SELECT '{"type": "escalation_policy", "name": "{{ ep_name }}", "description": "stackql smoke", "num_loops": 1,
+      "escalation_rules": [{"escalation_delay_in_minutes": 30, "targets": [{"id": "{{ me.user_id }}", "type": "user_reference"}]}],
+      "teams": [{"id": "{{ team_find.team_id }}", "type": "team_reference"}]}'{% if from_email %}, '{{ from_email }}'{% endif %}
+
+  - name: escalation_policy_find
+    description: server-side query for the policy; exports its id
+    sql: >-
+      SELECT id, name FROM pagerduty.escalation_policies.escalation_policies WHERE query = '{{ ep_name }}'
+    retry:
+      attempts: 4
+      delay_seconds: 3
+    expect:
+      min_rows: 1
+      contains: ["{{ ep_name }}"]
+    exports:
+      - name: ep_id
+        column: id
+
+  - name: service_create
+    description: INSERT a service on the smoke escalation policy
+    sql: >-
+      INSERT INTO pagerduty.services.services (service)
+      SELECT '{"type": "service", "name": "{{ service_name }}", "description": "stackql smoke",
+      "escalation_policy": {"id": "{{ escalation_policy_find.ep_id }}", "type": "escalation_policy_reference"},
+      "alert_creation": "create_alerts_and_incidents", "auto_resolve_timeout": 14400, "acknowledgement_timeout": 1800}'
+
+  - name: service_find
+    description: server-side query for the service; exports its id
+    sql: >-
+      SELECT id, name, status FROM pagerduty.services.services WHERE query = '{{ service_name }}'
+    retry:
+      attempts: 4
+      delay_seconds: 3
+    expect:
+      min_rows: 1
+      contains: ["{{ service_name }}"]
+    exports:
+      - name: service_id
+        column: id
+
+  - name: service_get
+    description: get by id via $.service with the nested escalation policy id
+    sql: >-
+      SELECT id, name, status, json_extract(escalation_policy, '$.id') AS ep_id FROM pagerduty.services.services WHERE id = '{{ service_find.service_id }}'
+    expect:
+      min_rows: 1
+      contains: ["{{ escalation_policy_find.ep_id }}"]
+
+  - name: service_integration_create
+    description: add an Events API v2 integration to the service
+    sql: >-
+      INSERT INTO pagerduty.services.integrations (id, integration) SELECT '{{ service_find.service_id }}', '{"type": "events_api_v2_inbound_integration", "name": "stackql smoke events"}'
+
+  - name: service_update
+    description: UPDATE the service description
+    sql: >-
+      UPDATE pagerduty.services.services SET service = '{"type": "service", "name": "{{ service_name }}", "description": "stackql smoke updated",
+      "escalation_policy": {"id": "{{ escalation_policy_find.ep_id }}", "type": "escalation_policy_reference"}}'
+      WHERE id = '{{ service_find.service_id }}'
+
+  - name: service_verify
+    description: re-read shows the updated description
+    sql: >-
+      SELECT description FROM pagerduty.services.services WHERE id = '{{ service_find.service_id }}'
+    expect:
+      contains: ["stackql smoke updated"]
+
+  # ----- incident lifecycle ---------------------------------------------------
+  - name: incident_create
+    description: INSERT an incident on the smoke service (From header when configured)
+    sql: >-
+      INSERT INTO pagerduty.incidents.incidents (incident{% if from_email %}, "From"{% endif %})
+      SELECT '{"type": "incident", "title": "{{ incident_title }}", "urgency": "low",
+      "service": {"id": "{{ service_find.service_id }}", "type": "service_reference"},
+      "body": {"type": "incident_body", "details": "created by the stackql smoke suite"}}'{% if from_email %}, '{{ from_email }}'{% endif %}
+
+  - name: incident_find
+    description: the open incident on the smoke service; exports its id
+    sql: >-
+      SELECT id, incident_number, title, status FROM pagerduty.incidents.incidents WHERE "service_ids[]" = '{{ service_find.service_id }}' AND "statuses[]" = 'triggered'
+    retry:
+      attempts: 4
+      delay_seconds: 3
+    expect:
+      min_rows: 1
+      contains: ["{{ incident_title }}"]
+    exports:
+      - name: incident_id
+        column: id
+
+  - name: incident_note_create
+    description: "add a note (POST /incidents/{id}/notes)"
+    sql: >-
+      INSERT INTO pagerduty.incidents.notes (id, note{% if from_email %}, "From"{% endif %}) SELECT '{{ incident_find.incident_id }}', '{"content": "{{ note_content }}"}'{% if from_email %}, '{{ from_email }}'{% endif %}
+
+  - name: incident_notes_list
+    description: notes via $.notes
+    sql: >-
+      SELECT id, content, created_at FROM pagerduty.incidents.notes WHERE id = '{{ incident_find.incident_id }}'
+    expect:
+      min_rows: 1
+      contains: ["{{ note_content }}"]
+
+  - name: incident_log_entries
+    description: the incident's log entries (trigger entry at least)
+    sql: >-
+      SELECT id, type, created_at FROM pagerduty.incidents.log_entries WHERE id = '{{ incident_find.incident_id }}'
+    expect:
+      min_rows: 1
+
+  - name: incident_snooze
+    description: EXEC snooze with the raw JSON body (integer duration; From header when configured)
+    sql: >-
+      EXEC pagerduty.incidents.incidents.snooze @id = '{{ incident_find.incident_id }}'{% if from_email %}, @"From" = '{{ from_email }}'{% endif %} @@json='{"duration": 600}'
+
+  - name: incident_acknowledge
+    description: UPDATE the incident status to acknowledged
+    sql: >-
+      UPDATE pagerduty.incidents.incidents SET incident = '{"type": "incident_reference", "status": "acknowledged"}'{% if from_email %}, "From" = '{{ from_email }}'{% endif %} WHERE id = '{{ incident_find.incident_id }}'
+
+  - name: incident_verify_acknowledged
+    description: re-read shows acknowledged
+    sql: >-
+      SELECT status FROM pagerduty.incidents.incidents WHERE id = '{{ incident_find.incident_id }}'
+    retry:
+      attempts: 4
+      delay_seconds: 3
+    expect:
+      contains: ["acknowledged"]
+
+  - name: incident_resolve
+    description: UPDATE the incident status to resolved
+    always_run: true
+    sql: >-
+      UPDATE pagerduty.incidents.incidents SET incident = '{"type": "incident_reference", "status": "resolved"}'{% if from_email %}, "From" = '{{ from_email }}'{% endif %} WHERE id = '{{ incident_find.incident_id }}'
+
+  - name: incident_verify_resolved
+    description: re-read shows resolved
+    sql: >-
+      SELECT status, resolved_at FROM pagerduty.incidents.incidents WHERE id = '{{ incident_find.incident_id }}'
+    retry:
+      attempts: 4
+      delay_seconds: 3
+    expect:
+      contains: ["resolved"]
+
+  # ----- tags -----------------------------------------------------------------
+  - name: tag_create
+    description: INSERT a tag
+    sql: >-
+      INSERT INTO pagerduty.tags.tags (tag) SELECT '{"type": "tag", "label": "{{ tag_label }}"}'
+
+  - name: tag_find
+    description: server-side query for the tag; exports its id
+    sql: >-
+      SELECT id, label FROM pagerduty.tags.tags WHERE query = '{{ tag_label }}'
+    retry:
+      attempts: 4
+      delay_seconds: 3
+    expect:
+      min_rows: 1
+      contains: ["{{ tag_label }}"]
+    exports:
+      - name: tag_id
+        column: id
+
+  - name: team_tag_assign
+    description: EXEC change_tags to apply the tag to the team (array body attribute)
+    sql: >-
+      EXEC pagerduty.tags.entity_tags.change_tags @entity_type = 'teams', @id = '{{ team_find.team_id }}', @add = '[{"type": "tag_reference", "id": "{{ tag_find.tag_id }}"}]'
+
+  - name: team_tags_list
+    description: tags on the team via $.tags
+    sql: >-
+      SELECT id, label FROM pagerduty.tags.entity_tags WHERE entity_type = 'teams' AND id = '{{ team_find.team_id }}'
+    retry:
+      attempts: 4
+      delay_seconds: 3
+    expect:
+      contains: ["{{ tag_label }}"]
+
+  # ----- maintenance window ---------------------------------------------------
+  - name: maintenance_window_create
+    description: INSERT a one-hour maintenance window on the smoke service (From header when configured)
+    sql: >-
+      INSERT INTO pagerduty.maintenance_windows.maintenance_windows (maintenance_window{% if from_email %}, "From"{% endif %})
+      SELECT '{"type": "maintenance_window", "start_time": "{{ mw_start_iso }}", "end_time": "{{ mw_end_iso }}", "description": "{{ mw_description }}",
+      "services": [{"id": "{{ service_find.service_id }}", "type": "service_reference"}]}'{% if from_email %}, '{{ from_email }}'{% endif %}
+
+  - name: maintenance_window_find
+    description: maintenance windows on the service; exports the smoke window id
+    sql: >-
+      SELECT id, description, start_time, end_time FROM pagerduty.maintenance_windows.maintenance_windows WHERE "service_ids[]" = '{{ service_find.service_id }}' AND filter = 'future'
+    retry:
+      attempts: 4
+      delay_seconds: 3
+    expect:
+      min_rows: 1
+      contains: ["{{ mw_description }}"]
+    exports:
+      - name: mw_id
+        column: id
+
+  # ----- cleanup (always_run; skipped automatically when the export never materialised)
+  - name: maintenance_window_delete
+    description: DELETE the maintenance window
+    always_run: true
+    sql: >-
+      DELETE FROM pagerduty.maintenance_windows.maintenance_windows WHERE id = '{{ maintenance_window_find.mw_id }}'
+
+  - name: tag_delete
+    description: DELETE the tag
+    always_run: true
+    sql: >-
+      DELETE FROM pagerduty.tags.tags WHERE id = '{{ tag_find.tag_id }}'
+
+  - name: service_delete
+    description: DELETE the service (incident already resolved)
+    always_run: true
+    retry:
+      attempts: 3
+      delay_seconds: 5
+    sql: >-
+      DELETE FROM pagerduty.services.services WHERE id = '{{ service_find.service_id }}'
+
+  - name: service_confirm_gone
+    description: the service no longer lists
+    always_run: true
+    retry:
+      attempts: 4
+      delay_seconds: 5
+    sql: >-
+      SELECT id FROM pagerduty.services.services WHERE query = '{{ service_name }}'
+    expect:
+      not_contains: ["{{ service_find.service_id }}"]
+
+  - name: escalation_policy_delete
+    description: DELETE the escalation policy
+    always_run: true
+    retry:
+      attempts: 3
+      delay_seconds: 5
+    sql: >-
+      DELETE FROM pagerduty.escalation_policies.escalation_policies WHERE id = '{{ escalation_policy_find.ep_id }}'
+
+  - name: team_delete
+    description: DELETE the team
+    always_run: true
+    retry:
+      attempts: 3
+      delay_seconds: 5
+    sql: >-
+      DELETE FROM pagerduty.teams.teams WHERE id = '{{ team_find.team_id }}'
+
+  - name: team_confirm_gone
+    description: the team no longer lists
+    always_run: true
+    retry:
+      attempts: 4
+      delay_seconds: 5
+    sql: >-
+      SELECT id FROM pagerduty.teams.teams WHERE query = '{{ team_name }}'
+    expect:
+      not_contains: ["{{ team_find.team_id }}"]

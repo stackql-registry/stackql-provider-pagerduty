@@ -18,7 +18,7 @@ services service documentation.
 
 :::info[Service Summary]
 
-total resources: __4__  
+total resources: __6__  
 
 :::
 
@@ -26,9 +26,11 @@ total resources: __4__
 <div class="row">
 <div class="providerDocColumn">
 <a href="/services/services/audit_records/">audit_records</a><br />
-<a href="/services/services/integrations/">integrations</a>
+<a href="/services/services/custom_field_values/">custom_field_values</a><br />
+<a href="/services/services/enablements/">enablements</a>
 </div>
 <div class="providerDocColumn">
+<a href="/services/services/integrations/">integrations</a><br />
 <a href="/services/services/rules/">rules</a><br />
 <a href="/services/services/services/">services</a>
 </div>

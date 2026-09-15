@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>templates</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>templates</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="templates" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.templates.templates" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>templates</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_template"
+    defaultValue="get"
     values={[
-        { label: 'get_template', value: 'get_template' },
-        { label: 'get_templates', value: 'get_templates' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_template">
+<TabItem value="get">
 
 Successful operation
 
@@ -89,7 +90,7 @@ Successful operation
 <tr>
     <td><CopyableCode code="template_type" /></td>
     <td><code>string</code></td>
-    <td>The type of template (`status_update` is the only supported template at this time)</td>
+    <td>The type of template (`status_update` is the only supported template at this time) (status_update)</td>
 </tr>
 <tr>
     <td><CopyableCode code="templated_fields" /></td>
@@ -99,7 +100,7 @@ Successful operation
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td> (template)</td>
 </tr>
 <tr>
     <td><CopyableCode code="updated_by" /></td>
@@ -109,7 +110,7 @@ Successful operation
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_templates">
+<TabItem value="list">
 
 A paginated array of templates.
 
@@ -160,7 +161,7 @@ A paginated array of templates.
 <tr>
     <td><CopyableCode code="template_type" /></td>
     <td><code>string</code></td>
-    <td>The type of template (`status_update` is the only supported template at this time)</td>
+    <td>The type of template (`status_update` is the only supported template at this time) (status_update)</td>
 </tr>
 <tr>
     <td><CopyableCode code="templated_fields" /></td>
@@ -170,7 +171,7 @@ A paginated array of templates.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td> (template)</td>
 </tr>
 <tr>
     <td><CopyableCode code="updated_by" /></td>
@@ -198,60 +199,46 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_template"><CopyableCode code="get_template" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
     <td></td>
-    <td>Get a single template on the account<br /><br />Scoped OAuth requires: `templates.read`<br /></td>
+    <td>Get a single template on the account&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `templates.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#get_templates"><CopyableCode code="get_templates" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
     <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-query"><code>query</code></a>, <a href="#parameter-template_type"><code>template_type</code></a>, <a href="#parameter-sort_by"><code>sort_by</code></a></td>
-    <td>Get a list of all the template on an account<br /><br />Scoped OAuth requires: `templates.read`<br /></td>
+    <td>Get a list of all the template on an account&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `templates.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_template"><CopyableCode code="create_template" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-data__template"><code>data__template</code></a></td>
+    <td><a href="#parameter-template"><code>template</code></a></td>
     <td></td>
-    <td>Create a new template<br /><br />Scoped OAuth requires: `templates.write`<br /></td>
+    <td>Create a new template&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `templates.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#delete_template"><CopyableCode code="delete_template" /></a></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-template"><code>template</code></a></td>
+    <td></td>
+    <td>Update an existing template&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `templates.write`&lt;br /&gt;</td>
+</tr>
+<tr>
+    <td><a href="#delete"><CopyableCode code="delete" /></a></td>
     <td><CopyableCode code="delete" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
     <td></td>
-    <td>Delete a specific of templates on the account<br /><br />Scoped OAuth requires: `templates.write`<br /></td>
+    <td>Delete a specific of templates on the account&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `templates.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#_get_templates"><CopyableCode code="_get_templates" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td></td>
-    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-query"><code>query</code></a>, <a href="#parameter-template_type"><code>template_type</code></a>, <a href="#parameter-sort_by"><code>sort_by</code></a></td>
-    <td>Get a list of all the template on an account<br /><br />Scoped OAuth requires: `templates.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_template"><CopyableCode code="_get_template" /></a></td>
+    <td><a href="#render"><CopyableCode code="render" /></a></td>
     <td><CopyableCode code="exec" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
     <td></td>
-    <td>Get a single template on the account<br /><br />Scoped OAuth requires: `templates.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#update_template"><CopyableCode code="update_template" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-template"><code>template</code></a></td>
-    <td></td>
-    <td>Update an existing template<br /><br />Scoped OAuth requires: `templates.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#render_template"><CopyableCode code="render_template" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td></td>
-    <td>Render a template. This endpoint has a variable request body depending on the template type. For the `status_update` template type, the caller will provide the incident id, and a status update message.<br /><br />Scoped OAuth requires: `templates.read`<br /></td>
+    <td>Render a template. This endpoint has a variable request body depending on the template type. For the `status_update` template type, the caller will provide the incident id, and a status update message.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `templates.read`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -302,7 +289,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-total">
     <td><CopyableCode code="total" /></td>
     <td><code>boolean</code></td>
-    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
+    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our &#91;Pagination Docs&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
 </tr>
 </tbody>
 </table>
@@ -310,15 +297,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_template"
+    defaultValue="get"
     values={[
-        { label: 'get_template', value: 'get_template' },
-        { label: 'get_templates', value: 'get_templates' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_template">
+<TabItem value="get">
 
-Get a single template on the account<br /><br />Scoped OAuth requires: `templates.read`<br />
+Get a single template on the account&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `templates.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -338,9 +325,9 @@ WHERE id = '{{ id }}' -- required
 ;
 ```
 </TabItem>
-<TabItem value="get_templates">
+<TabItem value="list">
 
-Get a list of all the template on an account<br /><br />Scoped OAuth requires: `templates.read`<br />
+Get a list of all the template on an account&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `templates.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -371,19 +358,19 @@ AND sort_by = '{{ sort_by }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_template"
+    defaultValue="create"
     values={[
-        { label: 'create_template', value: 'create_template' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_template">
+<TabItem value="create">
 
-Create a new template<br /><br />Scoped OAuth requires: `templates.write`<br />
+Create a new template&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `templates.write`&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.templates.templates (
-data__template
+template
 )
 SELECT 
 '{{ template }}' /* required */
@@ -394,12 +381,45 @@ template
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: templates
   props:
     - name: template
-      value: object
+      value:
+        template_type: "{{ template_type }}"
+        name: "{{ name }}"
+        description: "{{ description }}"
+        templated_fields:
+          email_subject: "{{ email_subject }}"
+          email_body: "{{ email_body }}"
+          message: "{{ message }}"
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
+
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Update an existing template&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `templates.write`&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.templates.templates
+SET 
+template = '{{ template }}'
+WHERE 
+id = '{{ id }}' --required
+AND template = '{{ template }}' --required
+RETURNING
+template;
 ```
 </TabItem>
 </Tabs>
@@ -408,14 +428,14 @@ template
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="delete_template"
+    defaultValue="delete"
     values={[
-        { label: 'delete_template', value: 'delete_template' }
+        { label: 'delete', value: 'delete' }
     ]}
 >
-<TabItem value="delete_template">
+<TabItem value="delete">
 
-Delete a specific of templates on the account<br /><br />Scoped OAuth requires: `templates.write`<br />
+Delete a specific of templates on the account&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `templates.write`&lt;br /&gt;
 
 ```sql
 DELETE FROM pagerduty.templates.templates
@@ -429,59 +449,17 @@ WHERE id = '{{ id }}' --required
 ## Lifecycle Methods
 
 <Tabs
-    defaultValue="_get_templates"
+    defaultValue="render"
     values={[
-        { label: '_get_templates', value: '_get_templates' },
-        { label: '_get_template', value: '_get_template' },
-        { label: 'update_template', value: 'update_template' },
-        { label: 'render_template', value: 'render_template' }
+        { label: 'render', value: 'render' }
     ]}
 >
-<TabItem value="_get_templates">
+<TabItem value="render">
 
-Get a list of all the template on an account<br /><br />Scoped OAuth requires: `templates.read`<br />
-
-```sql
-EXEC pagerduty.templates.templates._get_templates 
-@limit='{{ limit }}', 
-@offset='{{ offset }}', 
-@total={{ total }}, 
-@query='{{ query }}', 
-@template_type='{{ template_type }}', 
-@sort_by='{{ sort_by }}'
-;
-```
-</TabItem>
-<TabItem value="_get_template">
-
-Get a single template on the account<br /><br />Scoped OAuth requires: `templates.read`<br />
+Render a template. This endpoint has a variable request body depending on the template type. For the `status_update` template type, the caller will provide the incident id, and a status update message.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `templates.read`&lt;br /&gt;
 
 ```sql
-EXEC pagerduty.templates.templates._get_template 
-@id='{{ id }}' --required
-;
-```
-</TabItem>
-<TabItem value="update_template">
-
-Update an existing template<br /><br />Scoped OAuth requires: `templates.write`<br />
-
-```sql
-EXEC pagerduty.templates.templates.update_template 
-@id='{{ id }}' --required 
-@@json=
-'{
-"template": "{{ template }}"
-}'
-;
-```
-</TabItem>
-<TabItem value="render_template">
-
-Render a template. This endpoint has a variable request body depending on the template type. For the `status_update` template type, the caller will provide the incident id, and a status update message.<br /><br />Scoped OAuth requires: `templates.read`<br />
-
-```sql
-EXEC pagerduty.templates.templates.render_template 
+EXEC pagerduty.templates.templates.render 
 @id='{{ id }}' --required 
 @@json=
 '{

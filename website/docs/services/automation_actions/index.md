@@ -25,13 +25,13 @@ total resources: __6__
 ## Resources
 <div class="row">
 <div class="providerDocColumn">
-<a href="/services/automation_actions/actions/">actions</a><br />
-<a href="/services/automation_actions/actions_services/">actions_services</a><br />
-<a href="/services/automation_actions/actions_teams/">actions_teams</a>
+<a href="/services/automation_actions/action_services/">action_services</a><br />
+<a href="/services/automation_actions/action_teams/">action_teams</a><br />
+<a href="/services/automation_actions/actions/">actions</a>
 </div>
 <div class="providerDocColumn">
 <a href="/services/automation_actions/invocations/">invocations</a><br />
-<a href="/services/automation_actions/runners/">runners</a><br />
-<a href="/services/automation_actions/runners_teams/">runners_teams</a>
+<a href="/services/automation_actions/runner_teams/">runner_teams</a><br />
+<a href="/services/automation_actions/runners/">runners</a>
 </div>
 </div>

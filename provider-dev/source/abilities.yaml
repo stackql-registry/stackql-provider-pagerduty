@@ -1,0 +1,277 @@
+openapi: 3.0.2
+info:
+  title: PagerDuty API - Abilities
+  description: Account abilities by feature name (for example teams), which depend on the pricing plan and account state.
+  version: 2.0.0
+paths:
+  /abilities:
+    get:
+      x-pd-requires-scope: abilities.read
+      tags:
+        - Abilities
+      operationId: listAbilities
+      description: |
+        List all of your account's abilities, by name.
+
+        "Abilities" describes your account's capabilities by feature name. For example `"teams"`.
+
+        An ability may be available to your account based on things like your pricing plan or account state.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#abilities)
+
+        Scoped OAuth requires: `abilities.read`
+      summary: List abilities
+      parameters: []
+      responses:
+        '200':
+          description: An array of ability names.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  abilities:
+                    type: array
+                    description: The set of abilities your account has.
+                    items:
+                      type: string
+                      description: A single ability, as a name.
+                      readOnly: true
+                required:
+                  - abilities
+              examples:
+                response:
+                  summary: Example Response
+                  value:
+                    abilities:
+                      - teams
+                      - read_only_users
+                      - service_support_hours
+                      - urgencies
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: List your account's abilities.
+  /abilities/{id}:
+    get:
+      x-pd-requires-scope: abilities.read
+      tags:
+        - Abilities
+      operationId: getAbility
+      description: |
+        Test whether your account has a given ability.
+
+        "Abilities" describes your account's capabilities by feature name. For example `"teams"`.
+
+        An ability may be available to your account based on things like your pricing plan or account state.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#abilities)
+
+        Scoped OAuth requires: `abilities.read`
+      summary: Test an ability
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: The account has the requested ability.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: Get an ability.
+components:
+  responses:
+    Unauthorized:
+      description: |
+        Caller did not supply credentials or did not provide the correct credentials.
+        If you are using an API key, it may be invalid or your Authorization header may be malformed.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Forbidden:
+      description: |
+        Caller is not authorized to view the requested resource.
+        While your authentication is valid, the authenticated user or token does not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    TooManyRequests:
+      description: Too many requests have been made, the rate limit has been reached.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    PaymentRequired:
+      description: |
+        Account does not have the abilities to perform the action. Please review the response for the required abilities.
+        You can also use the [Abilities API](#resource_Abilities) to determine what features are available to your account.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Conflict:
+      description: The request conflicts with the current state of the server.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+  parameters:
+    id:
+      name: id
+      description: The ID of the resource.
+      in: path
+      required: true
+      schema:
+        type: string
+servers:
+  - url: https://api.pagerduty.com
+    description: PagerDuty V2 API.

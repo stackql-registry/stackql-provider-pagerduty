@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>records</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>records</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="records" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.audit.records" /></td></tr>
 </tbody></table>
@@ -32,12 +33,12 @@ Creates, updates, deletes, gets or lists a <code>records</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_audit_records"
+    defaultValue="list"
     values={[
-        { label: 'list_audit_records', value: 'list_audit_records' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="list_audit_records">
+<TabItem value="list">
 
 Records matching the query criteria.
 
@@ -88,7 +89,7 @@ Records matching the query criteria.
 <tr>
     <td><CopyableCode code="root_resource" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="self" /></td>
@@ -116,18 +117,11 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_audit_records"><CopyableCode code="list_audit_records" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-cursor"><code>cursor</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a>, <a href="#parameter-root_resource_types[]"><code>root_resource_types[]</code></a>, <a href="#parameter-actor_type"><code>actor_type</code></a>, <a href="#parameter-actor_id"><code>actor_id</code></a>, <a href="#parameter-method_type"><code>method_type</code></a>, <a href="#parameter-method_truncated_token"><code>method_truncated_token</code></a>, <a href="#parameter-actions[]"><code>actions[]</code></a></td>
-    <td>List audit trail records matching provided query params or default criteria.<br /><br />The returned records are sorted by the `execution_time` from newest to oldest.<br /><br />See [`Cursor-based pagination`](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.<br /><br />Only admins, account owners, or global API tokens on PagerDuty account [pricing plans](https://www.pagerduty.com/pricing) with the "Audit Trail" feature can access this endpoint.<br /><br />For other role based access to audit records by resource ID, see the resource's API documentation.<br /><br />For more information see the [Audit API Document](https://developer.pagerduty.com/docs/rest-api-v2/audit-records-api/).<br /><br />Scoped OAuth requires: `audit_records.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_audit_records"><CopyableCode code="_list_audit_records" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-cursor"><code>cursor</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a>, <a href="#parameter-root_resource_types[]"><code>root_resource_types[]</code></a>, <a href="#parameter-actor_type"><code>actor_type</code></a>, <a href="#parameter-actor_id"><code>actor_id</code></a>, <a href="#parameter-method_type"><code>method_type</code></a>, <a href="#parameter-method_truncated_token"><code>method_truncated_token</code></a>, <a href="#parameter-actions[]"><code>actions[]</code></a></td>
-    <td>List audit trail records matching provided query params or default criteria.<br /><br />The returned records are sorted by the `execution_time` from newest to oldest.<br /><br />See [`Cursor-based pagination`](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.<br /><br />Only admins, account owners, or global API tokens on PagerDuty account [pricing plans](https://www.pagerduty.com/pricing) with the "Audit Trail" feature can access this endpoint.<br /><br />For other role based access to audit records by resource ID, see the resource's API documentation.<br /><br />For more information see the [Audit API Document](https://developer.pagerduty.com/docs/rest-api-v2/audit-records-api/).<br /><br />Scoped OAuth requires: `audit_records.read`<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-cursor"><code>cursor</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a>, <a href="#parameter-root_resource_types[]"><code>root_resource_types[]</code></a>, <a href="#parameter-actor_type"><code>actor_type</code></a>, <a href="#parameter-actor_id"><code>actor_id</code></a>, <a href="#parameter-method_type"><code>method_type</code></a>, <a href="#parameter-method_truncated_token"><code>method_truncated_token</code></a>, <a href="#parameter-actions[]"><code>actions[]</code></a></td>
+    <td>List audit trail records matching provided query params or default criteria.&lt;br /&gt;&lt;br /&gt;The returned records are sorted by the `execution_time` from newest to oldest.&lt;br /&gt;&lt;br /&gt;See &#91;`Cursor-based pagination`&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.&lt;br /&gt;&lt;br /&gt;Only admins, account owners, or global API tokens on PagerDuty account &#91;pricing plans&#93;(https:​//www.pagerduty.com/pricing) with the "Audit Trail" feature can access this endpoint.&lt;br /&gt;&lt;br /&gt;For other role based access to audit records by resource ID, see the resource's API documentation.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;Audit API Document&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/audit-records-api/).&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `audit_records.read`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -145,16 +139,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 <tr id="parameter-actions[]">
     <td><CopyableCode code="actions[]" /></td>
     <td><code>string</code></td>
@@ -211,14 +195,14 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_audit_records"
+    defaultValue="list"
     values={[
-        { label: 'list_audit_records', value: 'list_audit_records' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="list_audit_records">
+<TabItem value="list">
 
-List audit trail records matching provided query params or default criteria.<br /><br />The returned records are sorted by the `execution_time` from newest to oldest.<br /><br />See [`Cursor-based pagination`](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.<br /><br />Only admins, account owners, or global API tokens on PagerDuty account [pricing plans](https://www.pagerduty.com/pricing) with the "Audit Trail" feature can access this endpoint.<br /><br />For other role based access to audit records by resource ID, see the resource's API documentation.<br /><br />For more information see the [Audit API Document](https://developer.pagerduty.com/docs/rest-api-v2/audit-records-api/).<br /><br />Scoped OAuth requires: `audit_records.read`<br />
+List audit trail records matching provided query params or default criteria.&lt;br /&gt;&lt;br /&gt;The returned records are sorted by the `execution_time` from newest to oldest.&lt;br /&gt;&lt;br /&gt;See &#91;`Cursor-based pagination`&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.&lt;br /&gt;&lt;br /&gt;Only admins, account owners, or global API tokens on PagerDuty account &#91;pricing plans&#93;(https:​//www.pagerduty.com/pricing) with the "Audit Trail" feature can access this endpoint.&lt;br /&gt;&lt;br /&gt;For other role based access to audit records by resource ID, see the resource's API documentation.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;Audit API Document&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/audit-records-api/).&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `audit_records.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -232,9 +216,7 @@ method,
 root_resource,
 self
 FROM pagerduty.audit.records
-WHERE Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-AND limit = '{{ limit }}'
+WHERE limit = '{{ limit }}'
 AND cursor = '{{ cursor }}'
 AND since = '{{ since }}'
 AND until = '{{ until }}'
@@ -244,38 +226,6 @@ AND actor_id = '{{ actor_id }}'
 AND method_type = '{{ method_type }}'
 AND method_truncated_token = '{{ method_truncated_token }}'
 AND actions[] = '{{ actions[] }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_list_audit_records"
-    values={[
-        { label: '_list_audit_records', value: '_list_audit_records' }
-    ]}
->
-<TabItem value="_list_audit_records">
-
-List audit trail records matching provided query params or default criteria.<br /><br />The returned records are sorted by the `execution_time` from newest to oldest.<br /><br />See [`Cursor-based pagination`](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.<br /><br />Only admins, account owners, or global API tokens on PagerDuty account [pricing plans](https://www.pagerduty.com/pricing) with the "Audit Trail" feature can access this endpoint.<br /><br />For other role based access to audit records by resource ID, see the resource's API documentation.<br /><br />For more information see the [Audit API Document](https://developer.pagerduty.com/docs/rest-api-v2/audit-records-api/).<br /><br />Scoped OAuth requires: `audit_records.read`<br />
-
-```sql
-EXEC pagerduty.audit.records._list_audit_records 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@limit='{{ limit }}', 
-@cursor='{{ cursor }}', 
-@since='{{ since }}', 
-@until='{{ until }}', 
-@root_resource_types[]='{{ root_resource_types[] }}', 
-@actor_type='{{ actor_type }}', 
-@actor_id='{{ actor_id }}', 
-@method_type='{{ method_type }}', 
-@method_truncated_token='{{ method_truncated_token }}', 
-@actions[]='{{ actions[] }}'
 ;
 ```
 </TabItem>

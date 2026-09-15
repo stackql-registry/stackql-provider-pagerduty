@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>runners</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>runners</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="runners" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.automation_actions.runners" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>runners</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_automation_actions_runner"
+    defaultValue="get"
     values={[
-        { label: 'get_automation_actions_runner', value: 'get_automation_actions_runner' },
-        { label: 'get_automation_actions_runners', value: 'get_automation_actions_runners' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_automation_actions_runner">
+<TabItem value="get">
 
 Runner information
 
@@ -88,8 +89,8 @@ Runner information
 </tr>
 <tr>
     <td><CopyableCode code="metadata" /></td>
-    <td><code>object</code></td>
-    <td>Additional metadata</td>
+    <td><code>string</code></td>
+    <td>Additional metadata (opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="privileges" /></td>
@@ -99,12 +100,12 @@ Runner information
 <tr>
     <td><CopyableCode code="runbook_base_uri" /></td>
     <td><code>string</code></td>
-    <td>The base URI of the Runbook server to connect to. May only contain alphanumeric characters, periods, underscores and dashes. (example: subdomain)</td>
+    <td>The base URI of the Runbook server to connect to. May only contain alphanumeric characters, periods, underscores and dashes. Specified as the subdomain portion of an RBA host, as in &lt;runbook_base_uri&gt;.runbook.pagerduty.cloud (example: subdomain)</td>
 </tr>
 <tr>
     <td><CopyableCode code="runner_type" /></td>
     <td><code>string</code></td>
-    <td>sidecar -- The runner is backed by an external sidecar that polls for invocations. runbook -- The runner communicates directly with a runbook instance.  (example: runbook)</td>
+    <td>sidecar -- The runner is backed by an external sidecar that polls for invocations. runbook -- The runner communicates directly with a runbook instance.  (sidecar, runbook) (example: runbook)</td>
 </tr>
 <tr>
     <td><CopyableCode code="self" /></td>
@@ -114,7 +115,7 @@ Runner information
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>Configured -- Runner has connected to the backend at least once  NotConfigured -- Runner has never connected to backend  (example: Configured)</td>
+    <td>Configured -- Runner has connected to the backend at least once  NotConfigured -- Runner has never connected to backend  (Configured, NotConfigured) (example: Configured)</td>
 </tr>
 <tr>
     <td><CopyableCode code="summary" /></td>
@@ -134,7 +135,7 @@ Runner information
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_automation_actions_runners">
+<TabItem value="list">
 
 Runners matching the criteria.
 
@@ -184,8 +185,8 @@ Runners matching the criteria.
 </tr>
 <tr>
     <td><CopyableCode code="metadata" /></td>
-    <td><code>object</code></td>
-    <td>Additional metadata</td>
+    <td><code>string</code></td>
+    <td>Additional metadata (opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="privileges" /></td>
@@ -195,12 +196,12 @@ Runners matching the criteria.
 <tr>
     <td><CopyableCode code="runbook_base_uri" /></td>
     <td><code>string</code></td>
-    <td>The base URI of the Runbook server to connect to. May only contain alphanumeric characters, periods, underscores and dashes. (example: subdomain)</td>
+    <td>The base URI of the Runbook server to connect to. May only contain alphanumeric characters, periods, underscores and dashes. Specified as the subdomain portion of an RBA host, as in &lt;runbook_base_uri&gt;.runbook.pagerduty.cloud (example: subdomain)</td>
 </tr>
 <tr>
     <td><CopyableCode code="runner_type" /></td>
     <td><code>string</code></td>
-    <td>sidecar -- The runner is backed by an external sidecar that polls for invocations. runbook -- The runner communicates directly with a runbook instance.  (example: runbook)</td>
+    <td>sidecar -- The runner is backed by an external sidecar that polls for invocations. runbook -- The runner communicates directly with a runbook instance.  (sidecar, runbook) (example: runbook)</td>
 </tr>
 <tr>
     <td><CopyableCode code="self" /></td>
@@ -210,7 +211,7 @@ Runners matching the criteria.
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>Configured -- Runner has connected to the backend at least once  NotConfigured -- Runner has never connected to backend  (example: Configured)</td>
+    <td>Configured -- Runner has connected to the backend at least once  NotConfigured -- Runner has never connected to backend  (Configured, NotConfigured) (example: Configured)</td>
 </tr>
 <tr>
     <td><CopyableCode code="summary" /></td>
@@ -248,53 +249,39 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_automation_actions_runner"><CopyableCode code="get_automation_actions_runner" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get an Automation Action runner<br /></td>
+    <td></td>
+    <td>Get an Automation Action runner&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#get_automation_actions_runners"><CopyableCode code="get_automation_actions_runners" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-cursor"><code>cursor</code></a>, <a href="#parameter-name"><code>name</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>Lists Automation Action runners matching provided query params.<br />The returned records are sorted by runner name in alphabetical order.<br /><br />See [`Cursor-based pagination`](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-cursor"><code>cursor</code></a>, <a href="#parameter-name"><code>name</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
+    <td>Lists Automation Action runners matching provided query params.&lt;br /&gt;The returned records are sorted by runner name in alphabetical order.&lt;br /&gt;&lt;br /&gt;See &#91;`Cursor-based pagination`&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_automation_actions_runner"><CopyableCode code="create_automation_actions_runner" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-data__runner"><code>data__runner</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Create a Process Automation or a Runbook Automation runner.<br /></td>
+    <td><a href="#parameter-runner"><code>runner</code></a></td>
+    <td></td>
+    <td>Create a Process Automation or a Runbook Automation runner.&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#delete_automation_actions_runner"><CopyableCode code="delete_automation_actions_runner" /></a></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-runner"><code>runner</code></a></td>
+    <td></td>
+    <td>Update an Automation Action runner&lt;br /&gt;</td>
+</tr>
+<tr>
+    <td><a href="#delete"><CopyableCode code="delete" /></a></td>
     <td><CopyableCode code="delete" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Delete an Automation Action runner<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_automation_actions_runners"><CopyableCode code="_get_automation_actions_runners" /></a></td>
-    <td><CopyableCode code="exec" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-cursor"><code>cursor</code></a>, <a href="#parameter-name"><code>name</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>Lists Automation Action runners matching provided query params.<br />The returned records are sorted by runner name in alphabetical order.<br /><br />See [`Cursor-based pagination`](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_automation_actions_runner"><CopyableCode code="_get_automation_actions_runner" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get an Automation Action runner<br /></td>
-</tr>
-<tr>
-    <td><a href="#update_automation_actions_runner"><CopyableCode code="update_automation_actions_runner" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-runner"><code>runner</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Update an Automation Action runner<br /></td>
+    <td>Delete an Automation Action runner&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -316,16 +303,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><CopyableCode code="id" /></td>
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
-</tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
 </tr>
 <tr id="parameter-cursor">
     <td><CopyableCode code="cursor" /></td>
@@ -353,15 +330,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_automation_actions_runner"
+    defaultValue="get"
     values={[
-        { label: 'get_automation_actions_runner', value: 'get_automation_actions_runner' },
-        { label: 'get_automation_actions_runners', value: 'get_automation_actions_runners' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_automation_actions_runner">
+<TabItem value="get">
 
-Get an Automation Action runner<br />
+Get an Automation Action runner&lt;br /&gt;
 
 ```sql
 SELECT
@@ -383,14 +360,12 @@ teams,
 type
 FROM pagerduty.automation_actions.runners
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
-<TabItem value="get_automation_actions_runners">
+<TabItem value="list">
 
-Lists Automation Action runners matching provided query params.<br />The returned records are sorted by runner name in alphabetical order.<br /><br />See [`Cursor-based pagination`](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.<br />
+Lists Automation Action runners matching provided query params.&lt;br /&gt;The returned records are sorted by runner name in alphabetical order.&lt;br /&gt;&lt;br /&gt;See &#91;`Cursor-based pagination`&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.&lt;br /&gt;
 
 ```sql
 SELECT
@@ -411,9 +386,7 @@ summary,
 teams,
 type
 FROM pagerduty.automation_actions.runners
-WHERE Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-AND limit = '{{ limit }}'
+WHERE limit = '{{ limit }}'
 AND cursor = '{{ cursor }}'
 AND name = '{{ name }}'
 AND include[] = '{{ include[] }}'
@@ -426,26 +399,22 @@ AND include[] = '{{ include[] }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_automation_actions_runner"
+    defaultValue="create"
     values={[
-        { label: 'create_automation_actions_runner', value: 'create_automation_actions_runner' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_automation_actions_runner">
+<TabItem value="create">
 
-Create a Process Automation or a Runbook Automation runner.<br />
+Create a Process Automation or a Runbook Automation runner.&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.automation_actions.runners (
-data__runner,
-Accept,
-Content-Type
+runner
 )
 SELECT 
-'{{ runner }}' /* required */,
-'{{ Accept }}',
-'{{ Content-Type }}'
+'{{ runner }}' /* required */
 RETURNING
 runner
 ;
@@ -453,17 +422,49 @@ runner
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: runners
   props:
     - name: runner
-      value: string
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-    - name: Content-Type
-      value: string
+      value:
+        runner_type: "{{ runner_type }}"
+        name: "{{ name }}"
+        description: "{{ description }}"
+        teams:
+          - id: "{{ id }}"
+            summary: "{{ summary }}"
+            type: "{{ type }}"
+            self: "{{ self }}"
+            html_url: "{{ html_url }}"
+        runbook_base_uri: "{{ runbook_base_uri }}"
+        runbook_api_key: "{{ runbook_api_key }}"
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
+
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Update an Automation Action runner&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.automation_actions.runners
+SET 
+runner = '{{ runner }}'
+WHERE 
+id = '{{ id }}' --required
+AND runner = '{{ runner }}' --required
+RETURNING
+runner;
 ```
 </TabItem>
 </Tabs>
@@ -472,76 +473,18 @@ runner
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="delete_automation_actions_runner"
+    defaultValue="delete"
     values={[
-        { label: 'delete_automation_actions_runner', value: 'delete_automation_actions_runner' }
+        { label: 'delete', value: 'delete' }
     ]}
 >
-<TabItem value="delete_automation_actions_runner">
+<TabItem value="delete">
 
-Delete an Automation Action runner<br />
+Delete an Automation Action runner&lt;br /&gt;
 
 ```sql
 DELETE FROM pagerduty.automation_actions.runners
 WHERE id = '{{ id }}' --required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_get_automation_actions_runners"
-    values={[
-        { label: '_get_automation_actions_runners', value: '_get_automation_actions_runners' },
-        { label: '_get_automation_actions_runner', value: '_get_automation_actions_runner' },
-        { label: 'update_automation_actions_runner', value: 'update_automation_actions_runner' }
-    ]}
->
-<TabItem value="_get_automation_actions_runners">
-
-Lists Automation Action runners matching provided query params.<br />The returned records are sorted by runner name in alphabetical order.<br /><br />See [`Cursor-based pagination`](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.<br />
-
-```sql
-EXEC pagerduty.automation_actions.runners._get_automation_actions_runners 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@limit='{{ limit }}', 
-@cursor='{{ cursor }}', 
-@name='{{ name }}', 
-@include[]='{{ include[] }}'
-;
-```
-</TabItem>
-<TabItem value="_get_automation_actions_runner">
-
-Get an Automation Action runner<br />
-
-```sql
-EXEC pagerduty.automation_actions.runners._get_automation_actions_runner 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
-;
-```
-</TabItem>
-<TabItem value="update_automation_actions_runner">
-
-Update an Automation Action runner<br />
-
-```sql
-EXEC pagerduty.automation_actions.runners.update_automation_actions_runner 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"runner": "{{ runner }}"
-}'
 ;
 ```
 </TabItem>

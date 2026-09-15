@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>escalation_policies</code> res
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>escalation_policies</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="escalation_policies" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.teams.escalation_policies" /></td></tr>
 </tbody></table>
@@ -50,18 +51,18 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#delete_team_escalation_policy"><CopyableCode code="delete_team_escalation_policy" /></a></td>
-    <td><CopyableCode code="delete" /></td>
+    <td><a href="#add"><CopyableCode code="add" /></a></td>
+    <td><CopyableCode code="insert" /></td>
     <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-escalation_policy_id"><code>escalation_policy_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Remove an escalation policy from a team.<br /><br />A team is a collection of Users and Escalation Policies that represent a group of people within an organization.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)<br /><br />Scoped OAuth requires: `teams.write`<br /></td>
+    <td></td>
+    <td>Add an escalation policy to a team.&lt;br /&gt;&lt;br /&gt;A team is a collection of Users and Escalation Policies that represent a group of people within an organization.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `teams.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#update_team_escalation_policy"><CopyableCode code="update_team_escalation_policy" /></a></td>
-    <td><CopyableCode code="exec" /></td>
+    <td><a href="#remove"><CopyableCode code="remove" /></a></td>
+    <td><CopyableCode code="delete" /></td>
     <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-escalation_policy_id"><code>escalation_policy_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Add an escalation policy to a team.<br /><br />A team is a collection of Users and Escalation Policies that represent a group of people within an organization.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)<br /><br />Scoped OAuth requires: `teams.write`<br /></td>
+    <td></td>
+    <td>Remove an escalation policy from a team.&lt;br /&gt;&lt;br /&gt;A team is a collection of Users and Escalation Policies that represent a group of people within an organization.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `teams.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -89,61 +90,66 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 </tbody>
 </table>
+
+## `INSERT` examples
+
+<Tabs
+    defaultValue="add"
+    values={[
+        { label: 'add', value: 'add' },
+        { label: 'Manifest', value: 'manifest' }
+    ]}
+>
+<TabItem value="add">
+
+Add an escalation policy to a team.&lt;br /&gt;&lt;br /&gt;A team is a collection of Users and Escalation Policies that represent a group of people within an organization.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `teams.write`&lt;br /&gt;
+
+```sql
+INSERT INTO pagerduty.teams.escalation_policies (
+id,
+escalation_policy_id
+)
+SELECT 
+'{{ id }}',
+'{{ escalation_policy_id }}'
+;
+```
+</TabItem>
+<TabItem value="manifest">
+
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
+- name: escalation_policies
+  props:
+    - name: id
+      value: "{{ id }}"
+      description: Required parameter for the escalation_policies resource.
+    - name: escalation_policy_id
+      value: "{{ escalation_policy_id }}"
+      description: Required parameter for the escalation_policies resource.
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
 
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="delete_team_escalation_policy"
+    defaultValue="remove"
     values={[
-        { label: 'delete_team_escalation_policy', value: 'delete_team_escalation_policy' }
+        { label: 'remove', value: 'remove' }
     ]}
 >
-<TabItem value="delete_team_escalation_policy">
+<TabItem value="remove">
 
-Remove an escalation policy from a team.<br /><br />A team is a collection of Users and Escalation Policies that represent a group of people within an organization.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)<br /><br />Scoped OAuth requires: `teams.write`<br />
+Remove an escalation policy from a team.&lt;br /&gt;&lt;br /&gt;A team is a collection of Users and Escalation Policies that represent a group of people within an organization.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `teams.write`&lt;br /&gt;
 
 ```sql
 DELETE FROM pagerduty.teams.escalation_policies
 WHERE id = '{{ id }}' --required
 AND escalation_policy_id = '{{ escalation_policy_id }}' --required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="update_team_escalation_policy"
-    values={[
-        { label: 'update_team_escalation_policy', value: 'update_team_escalation_policy' }
-    ]}
->
-<TabItem value="update_team_escalation_policy">
-
-Add an escalation policy to a team.<br /><br />A team is a collection of Users and Escalation Policies that represent a group of people within an organization.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)<br /><br />Scoped OAuth requires: `teams.write`<br />
-
-```sql
-EXEC pagerduty.teams.escalation_policies.update_team_escalation_policy 
-@id='{{ id }}' --required, 
-@escalation_policy_id='{{ escalation_policy_id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
 ;
 ```
 </TabItem>

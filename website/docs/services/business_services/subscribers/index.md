@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>subscribers</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>subscribers</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="subscribers" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.business_services.subscribers" /></td></tr>
 </tbody></table>
@@ -32,12 +33,12 @@ Creates, updates, deletes, gets or lists a <code>subscribers</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_business_service_subscribers"
+    defaultValue="list"
     values={[
-        { label: 'get_business_service_subscribers', value: 'get_business_service_subscribers' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_business_service_subscribers">
+<TabItem value="list">
 
 <table>
 <thead>
@@ -56,7 +57,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="subscriber_type" /></td>
     <td><code>string</code></td>
-    <td>The type of the entity being subscribed</td>
+    <td>The type of the entity being subscribed (user, team)</td>
 </tr>
 </tbody>
 </table>
@@ -79,25 +80,25 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_business_service_subscribers"><CopyableCode code="get_business_service_subscribers" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a></td>
-    <td>Retrieve a list of Notification Subscribers on the Business Service.<br /><br />&lt;!-- theme: warning --&gt;<br />&gt; Users must be added through `POST /business_services/&#123;id&#125;/subscribers` to be returned from this endpoint.<br />Scoped OAuth requires: `subscribers.read`<br /></td>
+    <td></td>
+    <td>Retrieve a list of Notification Subscribers on the Business Service.&lt;br /&gt;&lt;br /&gt;&lt;!-- theme: warning --&gt;&lt;br /&gt;&gt; Users must be added through `POST /business_services/&#123;id&#125;/subscribers` to be returned from this endpoint.&lt;br /&gt;Scoped OAuth requires: `subscribers.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_business_service_notification_subscribers"><CopyableCode code="create_business_service_notification_subscribers" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-data__subscribers"><code>data__subscribers</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a></td>
-    <td>Subscribe the given entities to the given Business Service.<br /><br />Scoped OAuth requires: `subscribers.write`<br /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-subscribers"><code>subscribers</code></a></td>
+    <td></td>
+    <td>Subscribe the given entities to the given Business Service.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `subscribers.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#_get_business_service_subscribers"><CopyableCode code="_get_business_service_subscribers" /></a></td>
+    <td><a href="#unsubscribe"><CopyableCode code="unsubscribe" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a></td>
-    <td>Retrieve a list of Notification Subscribers on the Business Service.<br /><br />&lt;!-- theme: warning --&gt;<br />&gt; Users must be added through `POST /business_services/&#123;id&#125;/subscribers` to be returned from this endpoint.<br />Scoped OAuth requires: `subscribers.read`<br /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-subscribers"><code>subscribers</code></a></td>
+    <td></td>
+    <td>Unsubscribes the matching Subscribers from a Business Service.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `subscribers.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -120,25 +121,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
 </tbody>
 </table>
 
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_business_service_subscribers"
+    defaultValue="list"
     values={[
-        { label: 'get_business_service_subscribers', value: 'get_business_service_subscribers' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_business_service_subscribers">
+<TabItem value="list">
 
-Retrieve a list of Notification Subscribers on the Business Service.<br /><br />&lt;!-- theme: warning --&gt;<br />&gt; Users must be added through `POST /business_services/&#123;id&#125;/subscribers` to be returned from this endpoint.<br />Scoped OAuth requires: `subscribers.read`<br />
+Retrieve a list of Notification Subscribers on the Business Service.&lt;br /&gt;&lt;br /&gt;&lt;!-- theme: warning --&gt;&lt;br /&gt;&gt; Users must be added through `POST /business_services/&#123;id&#125;/subscribers` to be returned from this endpoint.&lt;br /&gt;Scoped OAuth requires: `subscribers.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -146,7 +142,6 @@ subscriber_id,
 subscriber_type
 FROM pagerduty.business_services.subscribers
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
 ;
 ```
 </TabItem>
@@ -156,26 +151,24 @@ AND Accept = '{{ Accept }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_business_service_notification_subscribers"
+    defaultValue="create"
     values={[
-        { label: 'create_business_service_notification_subscribers', value: 'create_business_service_notification_subscribers' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_business_service_notification_subscribers">
+<TabItem value="create">
 
-Subscribe the given entities to the given Business Service.<br /><br />Scoped OAuth requires: `subscribers.write`<br />
+Subscribe the given entities to the given Business Service.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `subscribers.write`&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.business_services.subscribers (
-data__subscribers,
-id,
-Accept
+subscribers,
+id
 )
 SELECT 
 '{{ subscribers }}' /* required */,
-'{{ id }}',
-'{{ Accept }}'
+'{{ id }}'
 RETURNING
 subscriptions
 ;
@@ -183,19 +176,18 @@ subscriptions
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: subscribers
   props:
     - name: id
-      value: string
+      value: "{{ id }}"
       description: Required parameter for the subscribers resource.
     - name: subscribers
-      value: array
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-```
+      value:
+        - subscriber_id: "{{ subscriber_id }}"
+          subscriber_type: "{{ subscriber_type }}"
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -203,19 +195,22 @@ subscriptions
 ## Lifecycle Methods
 
 <Tabs
-    defaultValue="_get_business_service_subscribers"
+    defaultValue="unsubscribe"
     values={[
-        { label: '_get_business_service_subscribers', value: '_get_business_service_subscribers' }
+        { label: 'unsubscribe', value: 'unsubscribe' }
     ]}
 >
-<TabItem value="_get_business_service_subscribers">
+<TabItem value="unsubscribe">
 
-Retrieve a list of Notification Subscribers on the Business Service.<br /><br />&lt;!-- theme: warning --&gt;<br />&gt; Users must be added through `POST /business_services/&#123;id&#125;/subscribers` to be returned from this endpoint.<br />Scoped OAuth requires: `subscribers.read`<br />
+Unsubscribes the matching Subscribers from a Business Service.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `subscribers.write`&lt;br /&gt;
 
 ```sql
-EXEC pagerduty.business_services.subscribers._get_business_service_subscribers 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}'
+EXEC pagerduty.business_services.subscribers.unsubscribe 
+@id='{{ id }}' --required 
+@@json=
+'{
+"subscribers": "{{ subscribers }}"
+}'
 ;
 ```
 </TabItem>

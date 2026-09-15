@@ -1,0 +1,1008 @@
+openapi: 3.0.2
+info:
+  title: PagerDuty API - Change Events
+  description: Change events represent changes (deployments, configuration changes) correlated with incidents.
+  version: 2.0.0
+paths:
+  /change_events:
+    get:
+      x-pd-requires-scope: change_events.read
+      tags:
+        - Change Events
+      operationId: listChangeEvents
+      description: |
+        List all of the existing Change Events.
+
+        Scoped OAuth requires: `change_events.read`
+      summary: List Change Events
+      parameters:
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+        - $ref: '#/components/parameters/team_ids'
+        - $ref: '#/components/parameters/integration_ids'
+        - $ref: '#/components/parameters/change_since'
+        - $ref: '#/components/parameters/change_until'
+      responses:
+        '200':
+          description: The array of Change Events returned by the query.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  change_events:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ChangeEvent'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    change_events:
+                      - summary: Build Success - Increase snapshot create timeout to 30 seconds
+                        id: 01BBYA6PEVW6A852BUO6QYUE7O
+                        timestamp: '2020-07-17T08:42:58Z'
+                        type: change_event
+                        source: acme-build-pipeline-tool-default-i-9999
+                        integration:
+                          id: PEYSGVF
+                          type: inbound_integration_reference
+                        services:
+                          - id: PEYSGRV
+                            type: service_reference
+                        custom_details:
+                          build_state: passed
+                          build_number: '2'
+                          run_time: 1236s
+                        links:
+                          - href: https://acme.pagerduty.dev/build/2
+                            text: View more details in Acme!
+                      - summary: Build Success - Increase snapshot create timeout to 15 seconds
+                        id: 01BBYA6PDIXPL8KO1HPIUL9CZN
+                        timestamp: '2020-07-17T07:42:58Z'
+                        type: change_event
+                        source: acme-build-pipeline-tool-default-i-9999
+                        integration:
+                          id: PEYSGVF
+                          type: inbound_integration_reference
+                        services:
+                          - id: PEYSGRV
+                            type: service_reference
+                        custom_details:
+                          build_state: passed
+                          build_number: '1'
+                          run_time: 1233s
+                        links:
+                          - href: https://acme.pagerduty.dev/build/1
+                            text: View more details in Acme!
+                    limit: null
+                    offset: null
+                    total: null
+                    more: false
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      summary: Create a Change Event
+      description: |
+        Sending Change Events is documented as part of the V2 Events API. See [`Send Change Event`](https://developer.pagerduty.com/api-reference/b3A6Mjc0ODI2Ng-send-change-events-to-the-pager-duty-events-api).
+      operationId: createChangeEvent
+      tags:
+        - Change Events
+      parameters: []
+      responses:
+        '202':
+          description: See [`Send Change Event`](https://developer.pagerduty.com/api-reference/b3A6Mjc0ODI2Ng-send-change-events-to-the-pager-duty-events-api) in the V2 Events API reference.
+    description: List change events.
+  /change_events/{id}:
+    get:
+      x-pd-requires-scope: change_events.read
+      tags:
+        - Change Events
+      operationId: getChangeEvent
+      description: |
+        Get details about an existing Change Event.
+
+        Scoped OAuth requires: `change_events.read`
+      summary: Get a Change Event
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: The Change Event requested.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  change_event:
+                    $ref: '#/components/schemas/ChangeEvent'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    change_event:
+                      summary: Build Success - Increase snapshot create timeout to 30 seconds
+                      timestamp: '2020-07-17T08:42:58Z'
+                      type: change_event
+                      source: acme-build-pipeline-tool-default-i-9999
+                      integration:
+                        id: PEYSGVF
+                        type: inbound_integration_reference
+                      services:
+                        - id: PEYSGRV
+                          type: service_reference
+                      custom_details:
+                        build_state: passed
+                        build_number: '2'
+                        run_time: 1236s
+                      links:
+                        - href: https://acme.pagerduty.dev/build/2
+                          text: View more details in Acme!
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      x-pd-requires-scope: change_events.write
+      summary: Update a Change Event
+      description: |
+        Update an existing Change Event
+
+        Scoped OAuth requires: `change_events.write`
+      tags:
+        - Change Events
+      operationId: updateChangeEvent
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                change_event:
+                  $ref: '#/components/schemas/ChangeEvent'
+              required:
+                - change_event
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  change_event:
+                    summary: Build Success - Increase snapshot create timeout to 30 seconds
+                    type: change_event
+                    custom_details:
+                      build_state: passed
+                      build_number: '2'
+                      run_time: 1236s
+        description: The Change Event to be updated.
+      responses:
+        '200':
+          description: The Change Event that was updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  change_event:
+                    $ref: '#/components/schemas/ChangeEvent'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    change_event:
+                      summary: Build Success - Increase snapshot create timeout to 30 seconds
+                      timestamp: '2020-07-17T08:42:58Z'
+                      type: change_event
+                      source: acme-build-pipeline-tool-default-i-9999
+                      integration:
+                        id: PEYSGVF
+                        type: inbound_integration_reference
+                      services:
+                        - id: PEYSGRV
+                          type: service_reference
+                      custom_details:
+                        build_state: passed
+                        build_number: '2'
+                        run_time: 1236s
+                      links:
+                        - href: https://acme.pagerduty.dev/build/2
+                          text: View more details in Acme!
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    description: Read and update a Change Event.
+  /incidents/{id}/related_change_events:
+    get:
+      x-pd-requires-scope: incidents.read
+      tags:
+        - Change Events
+      operationId: listIncidentRelatedChangeEvents
+      description: |
+        List related Change Events for an Incident, as well as the reason these changes are correlated with the incident.
+
+        Change events represent service changes such as deploys, build completion, and configuration changes, providing information that is critical during incident triage or hypercare. For more information on change events, see [Change Events](https://support.pagerduty.com/docs/change-events).
+
+        The Change Correlation feature provides incident responders with recent change events that are most relevant to that incident. Change Correlation informs the responder why a particular change event was surfaced and correlated to an incident based on three key factors which include time, related service, or intelligence (machine learning).
+
+        Scoped OAuth requires: `incidents.read`
+      summary: List related Change Events for an Incident
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/offset_limit'
+      responses:
+        '200':
+          description: The array of Change Events returned by the query.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  change_events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          readOnly: true
+                        summary:
+                          type: string
+                          nullable: true
+                          readOnly: true
+                          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+                        type:
+                          type: string
+                          readOnly: true
+                          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+                        self:
+                          type: string
+                          nullable: true
+                          readOnly: true
+                          format: url
+                          description: the API show URL at which the object is accessible
+                        html_url:
+                          type: string
+                          nullable: true
+                          readOnly: true
+                          format: url
+                          description: a URL at which the entity is uniquely displayed in the Web app
+                        timestamp:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                          description: The time at which the emitting tool detected or generated the event.
+                        services:
+                          type: array
+                          readOnly: true
+                          description: An array containing Service objects that this change event is associated with.
+                          items:
+                            $ref: '#/components/schemas/ServiceReference'
+                        integration:
+                          readOnly: true
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              readOnly: true
+                            summary:
+                              type: string
+                              nullable: true
+                              readOnly: true
+                              description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+                            type:
+                              type: string
+                              readOnly: true
+                              description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+                            self:
+                              type: string
+                              nullable: true
+                              readOnly: true
+                              format: url
+                              description: the API show URL at which the object is accessible
+                            html_url:
+                              type: string
+                              nullable: true
+                              readOnly: true
+                              format: url
+                              description: a URL at which the entity is uniquely displayed in the Web app
+                          required:
+                            - type
+                            - id
+                          description: (opaque JSON object)
+                        routing_key:
+                          readOnly: true
+                          title: Routing Key
+                          description: This is the 32 character Integration Key for an Integration on a Service. The same Integration Key can be used for both alert and change events.
+                          type: string
+                        source:
+                          type: string
+                          readOnly: true
+                          description: The unique name of the location where the Change Event occurred.
+                        links:
+                          type: array
+                          readOnly: true
+                          description: List of links to include.
+                          items:
+                            type: object
+                            properties:
+                              href:
+                                type: string
+                              text:
+                                type: string
+                        images:
+                          type: array
+                          readOnly: true
+                          items:
+                            type: object
+                            properties:
+                              src:
+                                type: string
+                              href:
+                                type: string
+                              alt:
+                                type: string
+                        custom_details:
+                          type: string
+                          description: Additional details about the change event. (opaque JSON object)
+                          title: Custom Details
+                        correlation_reason:
+                          type: object
+                          properties:
+                            reason:
+                              type: string
+                              enum:
+                                - most_recent
+                                - related_service
+                                - intelligent
+                              readOnly: true
+                              description: The reason a change event was determined to be related to the given incident.
+                      example:
+                        summary: Build Success - Increase snapshot create timeout to 30 seconds
+                        timestamp: '2020-07-17T08:42:58Z'
+                        type: change_event
+                        source: acme-build-pipeline-tool-default-i-9999
+                        integration:
+                          id: PEYSGVF
+                          type: inbound_integration_reference
+                        services:
+                          - id: PEYSGRV
+                            type: service_reference
+                        custom_details:
+                          build_state: passed
+                          build_number: '2'
+                          run_time: 1236s
+                        links:
+                          - href: https://acme.pagerduty.dev/build/2
+                            text: View more details in Acme!
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    change_events:
+                      - summary: Build Success - Increase snapshot create timeout to 30 seconds
+                        id: 01BBYA6PEVW6A852BUO6QYUE7O
+                        timestamp: '2020-07-17T08:42:58Z'
+                        type: change_event
+                        source: acme-build-pipeline-tool-default-i-9999
+                        integration:
+                          id: PEYSGVF
+                          type: inbound_integration_reference
+                        services:
+                          - id: PEYSGRV
+                            type: service_reference
+                        custom_details:
+                          build_state: passed
+                          build_number: '2'
+                          run_time: 1236s
+                        links:
+                          - href: https://acme.pagerduty.dev/build/2
+                            text: View more details in Acme!
+                        correlation_reason:
+                          reason: most_recent
+                      - summary: Build Success - Increase snapshot create timeout to 15 seconds
+                        id: 01BBYA6PDIXPL8KO1HPIUL9CZN
+                        timestamp: '2020-07-17T07:42:58Z'
+                        type: change_event
+                        source: acme-build-pipeline-tool-default-i-9999
+                        integration:
+                          id: PEYSGVF
+                          type: inbound_integration_reference
+                        services:
+                          - id: PEYSGRV
+                            type: service_reference
+                        custom_details:
+                          build_state: passed
+                          build_number: '1'
+                          run_time: 1233s
+                        links:
+                          - href: https://acme.pagerduty.dev/build/1
+                            text: View more details in Acme!
+                        correlation_reason:
+                          reason: related_service
+                    limit: null
+                    offset: null
+                    total: null
+                    more: false
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    description: List change events related to an incident.
+  /services/{id}/change_events:
+    get:
+      x-pd-requires-scope: services.read
+      tags:
+        - Change Events
+      operationId: listServiceChangeEvents
+      description: |
+        List all of the existing Change Events for a service.
+
+        Scoped OAuth requires: `services.read`
+      summary: List Change Events for a service
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/change_since'
+        - $ref: '#/components/parameters/change_until'
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+        - $ref: '#/components/parameters/team_ids'
+        - $ref: '#/components/parameters/integration_ids'
+      responses:
+        '200':
+          description: The array of Change Events returned by the query.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  change_events:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ChangeEvent'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    change_events:
+                      - summary: Build Success - Increase snapshot create timeout to 30 seconds
+                        id: 01BBYA6PEVW6A852BUO6QYUE7O
+                        timestamp: '2020-07-17T08:42:58Z'
+                        type: change_event
+                        source: acme-build-pipeline-tool-default-i-9999
+                        integration:
+                          id: PEYSGVF
+                          type: inbound_integration_reference
+                        services:
+                          - id: PEYSGRV
+                            type: service_reference
+                        custom_details:
+                          build_state: passed
+                          build_number: '2'
+                          run_time: 1236s
+                        links:
+                          - href: https://acme.pagerduty.dev/build/2
+                            text: View more details in Acme!
+                      - summary: Build Success - Increase snapshot create timeout to 15 seconds
+                        id: 01BBYA6PDIXPL8KO1HPIUL9CZN
+                        timestamp: '2020-07-17T07:42:58Z'
+                        type: change_event
+                        source: acme-build-pipeline-tool-default-i-9999
+                        integration:
+                          id: PEYSGVF
+                          type: inbound_integration_reference
+                        services:
+                          - id: PEYSGRV
+                            type: service_reference
+                        custom_details:
+                          build_state: passed
+                          build_number: '1'
+                          run_time: 1233s
+                        links:
+                          - href: https://acme.pagerduty.dev/build/1
+                            text: View more details in Acme!
+                    limit: null
+                    offset: null
+                    total: null
+                    more: false
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    description: List change events for a service.
+components:
+  schemas:
+    ChangeEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        timestamp:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The time at which the emitting tool detected or generated the event.
+        services:
+          type: array
+          readOnly: true
+          description: An array containing Service objects that this change event is associated with.
+          items:
+            $ref: '#/components/schemas/ServiceReference'
+        integration:
+          readOnly: true
+          type: object
+          properties:
+            id:
+              type: string
+              readOnly: true
+            summary:
+              type: string
+              nullable: true
+              readOnly: true
+              description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+            type:
+              type: string
+              readOnly: true
+              description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+            self:
+              type: string
+              nullable: true
+              readOnly: true
+              format: url
+              description: the API show URL at which the object is accessible
+            html_url:
+              type: string
+              nullable: true
+              readOnly: true
+              format: url
+              description: a URL at which the entity is uniquely displayed in the Web app
+          required:
+            - type
+            - id
+          description: (opaque JSON object)
+        routing_key:
+          readOnly: true
+          title: Routing Key
+          description: This is the 32 character Integration Key for an Integration on a Service. The same Integration Key can be used for both alert and change events.
+          type: string
+        source:
+          type: string
+          readOnly: true
+          description: The unique name of the location where the Change Event occurred.
+        links:
+          type: array
+          readOnly: true
+          description: List of links to include.
+          items:
+            type: object
+            properties:
+              href:
+                type: string
+              text:
+                type: string
+        images:
+          type: array
+          readOnly: true
+          items:
+            type: object
+            properties:
+              src:
+                type: string
+              href:
+                type: string
+              alt:
+                type: string
+        custom_details:
+          type: string
+          description: Additional details about the change event. (opaque JSON object)
+          title: Custom Details
+      example:
+        summary: Build Success - Increase snapshot create timeout to 30 seconds
+        timestamp: '2020-07-17T08:42:58Z'
+        type: change_event
+        source: acme-build-pipeline-tool-default-i-9999
+        integration:
+          id: PEYSGVF
+          type: inbound_integration_reference
+        services:
+          - id: PEYSGRV
+            type: service_reference
+        custom_details:
+          build_state: passed
+          build_number: '2'
+          run_time: 1236s
+        links:
+          - href: https://acme.pagerduty.dev/build/2
+            text: View more details in Acme!
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        label:
+          type: string
+          description: The label of the tag.
+          maxLength: 191
+      required:
+        - label
+        - type
+      example:
+        type: tag
+        label: Batman
+    ServiceReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    IntegrationReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    Reference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+  responses:
+    ArgumentError:
+      description: Caller provided invalid arguments. Please review the response for error details. Retrying with the same arguments will *not* work.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Unauthorized:
+      description: |
+        Caller did not supply credentials or did not provide the correct credentials.
+        If you are using an API key, it may be invalid or your Authorization header may be malformed.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Forbidden:
+      description: |
+        Caller is not authorized to view the requested resource.
+        While your authentication is valid, the authenticated user or token does not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Conflict:
+      description: The request conflicts with the current state of the server.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+  parameters:
+    offset_limit:
+      name: limit
+      in: query
+      required: false
+      description: The number of results per page.
+      schema:
+        type: integer
+    offset_offset:
+      name: offset
+      in: query
+      required: false
+      description: Offset to start pagination search results.
+      schema:
+        type: integer
+    offset_total:
+      name: total
+      in: query
+      required: false
+      description: |
+        By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.
+
+        See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information.
+      schema:
+        default: false
+        type: boolean
+    team_ids:
+      name: team_ids[]
+      in: query
+      description: An array of team IDs. Only results related to these teams will be returned. Account must have the `teams` ability to use this parameter.
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+    integration_ids:
+      name: integration_ids[]
+      in: query
+      description: An array of integration IDs. Only results related to these integrations will be returned.
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+    change_since:
+      name: since
+      in: query
+      description: The start of the date range over which you want to search, as a UTC ISO 8601 datetime string. Will return an HTTP 400 for non-UTC datetimes.
+      schema:
+        type: string
+        format: date-time
+        pattern: YYYY-MM-DDThh:mm:ssZ
+    change_until:
+      name: until
+      in: query
+      description: The end of the date range over which you want to search, as a UTC ISO 8601 datetime string. Will return an HTTP 400 for non-UTC datetimes.
+      schema:
+        type: string
+        format: date-time
+        pattern: YYYY-MM-DDThh:mm:ssZ
+    id:
+      name: id
+      description: The ID of the resource.
+      in: path
+      required: true
+      schema:
+        type: string
+servers:
+  - url: https://api.pagerduty.com
+    description: PagerDuty V2 API.

@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>licenses</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>licenses</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="licenses" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.licenses.licenses" /></td></tr>
 </tbody></table>
@@ -32,12 +33,12 @@ Creates, updates, deletes, gets or lists a <code>licenses</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_licenses"
+    defaultValue="list"
     values={[
-        { label: 'list_licenses', value: 'list_licenses' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="list_licenses">
+<TabItem value="list">
 
 Licenses associated with your Account
 
@@ -83,7 +84,7 @@ Licenses associated with your Account
 <tr>
     <td><CopyableCode code="role_group" /></td>
     <td><code>string</code></td>
-    <td>Indicates whether this License is assignable to full or stakeholder Users (example: FullUser)</td>
+    <td>Indicates whether this License is assignable to full or stakeholder Users (FullUser, Stakeholder) (example: FullUser)</td>
 </tr>
 <tr>
     <td><CopyableCode code="self" /></td>
@@ -126,18 +127,11 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_licenses"><CopyableCode code="list_licenses" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>List the Licenses associated with your Account<br /><br />Scoped OAuth requires: `licenses.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_licenses"><CopyableCode code="_list_licenses" /></a></td>
-    <td><CopyableCode code="exec" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>List the Licenses associated with your Account<br /><br />Scoped OAuth requires: `licenses.read`<br /></td>
+    <td>List the Licenses associated with your Account&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `licenses.read`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -155,30 +149,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 </tbody>
 </table>
 
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_licenses"
+    defaultValue="list"
     values={[
-        { label: 'list_licenses', value: 'list_licenses' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="list_licenses">
+<TabItem value="list">
 
-List the Licenses associated with your Account<br /><br />Scoped OAuth requires: `licenses.read`<br />
+List the Licenses associated with your Account&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `licenses.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -194,30 +178,6 @@ summary,
 type,
 valid_roles
 FROM pagerduty.licenses.licenses
-WHERE Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_list_licenses"
-    values={[
-        { label: '_list_licenses', value: '_list_licenses' }
-    ]}
->
-<TabItem value="_list_licenses">
-
-List the Licenses associated with your Account<br /><br />Scoped OAuth requires: `licenses.read`<br />
-
-```sql
-EXEC pagerduty.licenses.licenses._list_licenses 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
 ;
 ```
 </TabItem>

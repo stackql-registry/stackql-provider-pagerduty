@@ -1,41 +1,14 @@
-# Website
+# pagerduty provider microsite
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+Docusaurus 3.10 site for [pagerduty-provider.stackql.io](https://pagerduty-provider.stackql.io), on the shared architecture used by the other StackQL provider microsites: navbar, footer, theme and plugin configuration come from [`stackql/docusaurus-config`](https://github.com/stackql/docusaurus-config), vendored into `.shared-config/` by the `prestart` / `prebuild` hooks. Site-local files are `provider.js` (provider identity), thin wrappers (`docusaurus.config.js`, `sidebars.js`), the shared components and theme under `src/`, and the static assets (`static/CNAME` pins the hostname).
 
-## Installation
-
-```bash
-yarn
-```
-
-## Local Development
+The pages under `docs/` are generated - run `make docs` from the repository root after regenerating the provider; do not edit them by hand. `docs/index.md` is assembled from `provider-dev/docgen/provider-data/headerContent1.txt` and `headerContent2.txt`.
 
 ```bash
-yarn start
+yarn install
+yarn start      # dev server (vendors the shared config first; needs GitHub access)
+yarn build      # static build into build/
+yarn serve      # serve the static build
 ```
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
-
-## Build
-
-```bash
-yarn build
-```
-
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-## Deployment
-
-Using SSH:
-
-```bash
-USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```bash
-GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+Deployment is GitHub Pages via `.github/workflows/prod-web-deploy.yml` on pushes to `main` that touch `website/**`.

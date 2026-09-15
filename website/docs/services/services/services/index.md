@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>services</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>services</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="services" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.services.services" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>services</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_service"
+    defaultValue="get"
     values={[
-        { label: 'get_service', value: 'get_service' },
-        { label: 'list_services', value: 'list_services' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_service">
+<TabItem value="get">
 
 The service requested.
 
@@ -74,22 +75,22 @@ The service requested.
 <tr>
     <td><CopyableCode code="alert_creation" /></td>
     <td><code>string</code></td>
-    <td>Whether a service creates only incidents, or both alerts and incidents. A service must create alerts in order to enable incident merging. * "create_incidents" - The service will create one incident and zero alerts for each incoming event. * "create_alerts_and_incidents" - The service will create one incident and one associated alert for each incoming event. </td>
+    <td>Whether a service creates only incidents, or both alerts and incidents. A service must create alerts in order to enable incident merging. * "create_incidents" - The service will create one incident and zero alerts for each incoming event. * "create_alerts_and_incidents" - The service will create one incident and one associated alert for each incoming event. This attribute has been deprecated as all services will be migrated to use alerts and incidents. Afterward, the incident only service setting will no longer be available. For details, please refer to the knowledge base: https:​//support.pagerduty.com/docs/alerts#enable-and-disable-alerts-on-a-service.  (create_incidents, create_alerts_and_incidents) (default: create_alerts_and_incidents)</td>
 </tr>
 <tr>
     <td><CopyableCode code="alert_grouping" /></td>
     <td><code>string</code></td>
-    <td>Defines how alerts on this service will be automatically grouped into incidents. Note that the alert grouping features are available only on certain plans. There are three available options: * null - No alert grouping on the service. Each alert will create a separate incident; * "time" - All alerts within a specified duration will be grouped into the same incident. This duration is set in the `alert_grouping_timeout` setting (described below). Available on Standard, Enterprise, and Event Intelligence plans; * "intelligent" - Alerts will be intelligently grouped based on a machine learning model that looks at the alert summary, timing, and the history of grouped alerts. Available on Enterprise and Event Intelligence plans </td>
+    <td>Defines how alerts on this service will be automatically grouped into incidents. Note that the alert grouping features are available only on certain plans. There are three available options: * null - No alert grouping on the service. Each alert will create a separate incident; * "time" - All alerts within a specified duration will be grouped into the same incident. This duration is set in the `alert_grouping_timeout` setting (described below). Available on Standard, Enterprise, and Event Intelligence plans; * "intelligent" - Alerts will be intelligently grouped based on a machine learning model that looks at the alert summary, timing, and the history of grouped alerts. Available on Enterprise and Event Intelligence plans  This attribute has been deprecated and configuration via &#91;Alert Grouping Settings&#93;(https:​//developer.pagerduty.com/api-reference/587edbc8ff416-create-an-alert-grouping-setting) resource is encouraged.  (time, intelligent)</td>
 </tr>
 <tr>
     <td><CopyableCode code="alert_grouping_parameters" /></td>
-    <td><code>object</code></td>
-    <td>Defines how alerts on this service will be automatically grouped into incidents. Note that the alert grouping features are available only on certain plans. To turn grouping off set the type to null. </td>
+    <td><code></code></td>
+    <td>Alert Grouping Parameters</td>
 </tr>
 <tr>
     <td><CopyableCode code="alert_grouping_timeout" /></td>
     <td><code>integer</code></td>
-    <td>The duration in minutes within which to automatically group incoming alerts. This setting applies only when `alert_grouping` is set to `time`. To continue grouping alerts until the Incident is resolved, set this value to `0`. </td>
+    <td>The duration in minutes within which to automatically group incoming alerts. This setting applies only when `alert_grouping` is set to `time`. To continue grouping alerts until the Incident is resolved, set this value to `0`.  This attribute has been deprecated and configuration via &#91;Alert Grouping Settings&#93;(https:​//developer.pagerduty.com/api-reference/587edbc8ff416-create-an-alert-grouping-setting) resource is encouraged. </td>
 </tr>
 <tr>
     <td><CopyableCode code="auto_pause_notifications_parameters" /></td>
@@ -114,7 +115,7 @@ The service requested.
 <tr>
     <td><CopyableCode code="escalation_policy" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="html_url" /></td>
@@ -138,7 +139,7 @@ The service requested.
 </tr>
 <tr>
     <td><CopyableCode code="response_play" /></td>
-    <td><code>object</code></td>
+    <td><code></code></td>
     <td>Response plays associated with this service.</td>
 </tr>
 <tr>
@@ -154,7 +155,7 @@ The service requested.
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>The current state of the Service. Valid statuses are:   - `active`: The service is enabled and has no open incidents. This is the only status a service can be created with. - `warning`: The service is enabled and has one or more acknowledged incidents. - `critical`: The service is enabled and has one or more triggered incidents. - `maintenance`: The service is under maintenance, no new incidents will be triggered during maintenance mode. - `disabled`: The service is disabled and will not have any new triggered incidents.  (default: active)</td>
+    <td>The current state of the Service. Valid statuses are:   - `active`: The service is enabled and has no open incidents. This is the only status a service can be created with. - `warning`: The service is enabled and has one or more acknowledged incidents. - `critical`: The service is enabled and has one or more triggered incidents. - `maintenance`: The service is under maintenance, no new incidents will be triggered during maintenance mode. - `disabled`: The service is disabled and will not have any new triggered incidents.  (active, warning, critical, maintenance, disabled) (default: active)</td>
 </tr>
 <tr>
     <td><CopyableCode code="summary" /></td>
@@ -174,12 +175,12 @@ The service requested.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of object being created. (default: service)</td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 </tbody>
 </table>
 </TabItem>
-<TabItem value="list_services">
+<TabItem value="list">
 
 A paginated array of services.
 
@@ -215,22 +216,22 @@ A paginated array of services.
 <tr>
     <td><CopyableCode code="alert_creation" /></td>
     <td><code>string</code></td>
-    <td>Whether a service creates only incidents, or both alerts and incidents. A service must create alerts in order to enable incident merging. * "create_incidents" - The service will create one incident and zero alerts for each incoming event. * "create_alerts_and_incidents" - The service will create one incident and one associated alert for each incoming event. </td>
+    <td>Whether a service creates only incidents, or both alerts and incidents. A service must create alerts in order to enable incident merging. * "create_incidents" - The service will create one incident and zero alerts for each incoming event. * "create_alerts_and_incidents" - The service will create one incident and one associated alert for each incoming event. This attribute has been deprecated as all services will be migrated to use alerts and incidents. Afterward, the incident only service setting will no longer be available. For details, please refer to the knowledge base: https:​//support.pagerduty.com/docs/alerts#enable-and-disable-alerts-on-a-service.  (create_incidents, create_alerts_and_incidents) (default: create_alerts_and_incidents)</td>
 </tr>
 <tr>
     <td><CopyableCode code="alert_grouping" /></td>
     <td><code>string</code></td>
-    <td>Defines how alerts on this service will be automatically grouped into incidents. Note that the alert grouping features are available only on certain plans. There are three available options: * null - No alert grouping on the service. Each alert will create a separate incident; * "time" - All alerts within a specified duration will be grouped into the same incident. This duration is set in the `alert_grouping_timeout` setting (described below). Available on Standard, Enterprise, and Event Intelligence plans; * "intelligent" - Alerts will be intelligently grouped based on a machine learning model that looks at the alert summary, timing, and the history of grouped alerts. Available on Enterprise and Event Intelligence plans </td>
+    <td>Defines how alerts on this service will be automatically grouped into incidents. Note that the alert grouping features are available only on certain plans. There are three available options: * null - No alert grouping on the service. Each alert will create a separate incident; * "time" - All alerts within a specified duration will be grouped into the same incident. This duration is set in the `alert_grouping_timeout` setting (described below). Available on Standard, Enterprise, and Event Intelligence plans; * "intelligent" - Alerts will be intelligently grouped based on a machine learning model that looks at the alert summary, timing, and the history of grouped alerts. Available on Enterprise and Event Intelligence plans  This attribute has been deprecated and configuration via &#91;Alert Grouping Settings&#93;(https:​//developer.pagerduty.com/api-reference/587edbc8ff416-create-an-alert-grouping-setting) resource is encouraged.  (time, intelligent)</td>
 </tr>
 <tr>
     <td><CopyableCode code="alert_grouping_parameters" /></td>
-    <td><code>object</code></td>
-    <td>Defines how alerts on this service will be automatically grouped into incidents. Note that the alert grouping features are available only on certain plans. To turn grouping off set the type to null. </td>
+    <td><code></code></td>
+    <td>Alert Grouping Parameters</td>
 </tr>
 <tr>
     <td><CopyableCode code="alert_grouping_timeout" /></td>
     <td><code>integer</code></td>
-    <td>The duration in minutes within which to automatically group incoming alerts. This setting applies only when `alert_grouping` is set to `time`. To continue grouping alerts until the Incident is resolved, set this value to `0`. </td>
+    <td>The duration in minutes within which to automatically group incoming alerts. This setting applies only when `alert_grouping` is set to `time`. To continue grouping alerts until the Incident is resolved, set this value to `0`.  This attribute has been deprecated and configuration via &#91;Alert Grouping Settings&#93;(https:​//developer.pagerduty.com/api-reference/587edbc8ff416-create-an-alert-grouping-setting) resource is encouraged. </td>
 </tr>
 <tr>
     <td><CopyableCode code="auto_pause_notifications_parameters" /></td>
@@ -255,7 +256,7 @@ A paginated array of services.
 <tr>
     <td><CopyableCode code="escalation_policy" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="html_url" /></td>
@@ -279,7 +280,7 @@ A paginated array of services.
 </tr>
 <tr>
     <td><CopyableCode code="response_play" /></td>
-    <td><code>object</code></td>
+    <td><code></code></td>
     <td>Response plays associated with this service.</td>
 </tr>
 <tr>
@@ -295,7 +296,7 @@ A paginated array of services.
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>The current state of the Service. Valid statuses are:   - `active`: The service is enabled and has no open incidents. This is the only status a service can be created with. - `warning`: The service is enabled and has one or more acknowledged incidents. - `critical`: The service is enabled and has one or more triggered incidents. - `maintenance`: The service is under maintenance, no new incidents will be triggered during maintenance mode. - `disabled`: The service is disabled and will not have any new triggered incidents.  (default: active)</td>
+    <td>The current state of the Service. Valid statuses are:   - `active`: The service is enabled and has no open incidents. This is the only status a service can be created with. - `warning`: The service is enabled and has one or more acknowledged incidents. - `critical`: The service is enabled and has one or more triggered incidents. - `maintenance`: The service is under maintenance, no new incidents will be triggered during maintenance mode. - `disabled`: The service is disabled and will not have any new triggered incidents.  (active, warning, critical, maintenance, disabled) (default: active)</td>
 </tr>
 <tr>
     <td><CopyableCode code="summary" /></td>
@@ -315,7 +316,7 @@ A paginated array of services.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of object being created. (default: service)</td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 </tbody>
 </table>
@@ -338,53 +339,39 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_service"><CopyableCode code="get_service" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>Get details about an existing service.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.read`<br /></td>
+    <td><a href="#parameter-include[]"><code>include[]</code></a></td>
+    <td>Get details about an existing service.&lt;br /&gt;&lt;br /&gt;A service may represent an application, component, or team you wish to open incidents against.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#list_services"><CopyableCode code="list_services" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-query"><code>query</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-team_ids[]"><code>team_ids[]</code></a>, <a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-sort_by"><code>sort_by</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>List existing Services.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.read`<br /></td>
+    <td><a href="#parameter-query"><code>query</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-team_ids[]"><code>team_ids[]</code></a>, <a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-sort_by"><code>sort_by</code></a>, <a href="#parameter-include[]"><code>include[]</code></a>, <a href="#parameter-name"><code>name</code></a></td>
+    <td>List existing Services.&lt;br /&gt;&lt;br /&gt;A service may represent an application, component, or team you wish to open incidents against.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_service"><CopyableCode code="create_service" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-data__service"><code>data__service</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Create a new service.<br /><br />If `status` is included in the request, it must have a value of `active` when creating a new service. If a different status is required, make a second request to update the service.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />There is a limit of 25,000 services per account. If the limit is reached, the API will respond with an error. There is also a limit of 100,000 open Incidents per Service. If the limit is reached and `auto_resolve_timeout` is disabled (set to 0 or null), the `auto_resolve_timeout` property will automatically be set to  84600 (1 day).<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.write`<br /></td>
+    <td><a href="#parameter-service"><code>service</code></a></td>
+    <td></td>
+    <td>Create a new service.&lt;br /&gt;&lt;br /&gt;If `status` is included in the request, it must have a value of `active` when creating a new service. If a different status is required, make a second request to update the service.&lt;br /&gt;&lt;br /&gt;A service may represent an application, component, or team you wish to open incidents against.&lt;br /&gt;&lt;br /&gt;There is a limit of 25,000 services per account. If the limit is reached, the API will respond with an error. There is also a limit of 100,000 open Incidents per Service. If the limit is reached and `auto_resolve_timeout` is disabled (set to 0 or null), the `auto_resolve_timeout` property will automatically be set to  84600 (1 day).&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#delete_service"><CopyableCode code="delete_service" /></a></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-service"><code>service</code></a></td>
+    <td></td>
+    <td>Update an existing service.&lt;br /&gt;&lt;br /&gt;A service may represent an application, component, or team you wish to open incidents against.&lt;br /&gt;&lt;br /&gt;There is a limit of 100,000 open Incidents per Service. If the limit is reached and you disable `auto_resolve_timeout` (set to 0 or null), the API will respond with an error.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.write`&lt;br /&gt;</td>
+</tr>
+<tr>
+    <td><a href="#delete"><CopyableCode code="delete" /></a></td>
     <td><CopyableCode code="delete" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Delete an existing service.<br /><br />Once the service is deleted, it will not be accessible from the web UI and new incidents won't be able to be created for this service.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_services"><CopyableCode code="_list_services" /></a></td>
-    <td><CopyableCode code="exec" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-query"><code>query</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-team_ids[]"><code>team_ids[]</code></a>, <a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-sort_by"><code>sort_by</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>List existing Services.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_service"><CopyableCode code="_get_service" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>Get details about an existing service.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#update_service"><CopyableCode code="update_service" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-service"><code>service</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Update an existing service.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />There is a limit of 100,000 open Incidents per Service. If the limit is reached and you disable `auto_resolve_timeout` (set to 0 or null), the API will respond with an error.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.write`<br /></td>
+    <td>Delete an existing service.&lt;br /&gt;&lt;br /&gt;Once the service is deleted, it will not be accessible from the web UI and new incidents won't be able to be created for this service.&lt;br /&gt;&lt;br /&gt;A service may represent an application, component, or team you wish to open incidents against.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -407,16 +394,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 <tr id="parameter-include[]">
     <td><CopyableCode code="include[]" /></td>
     <td><code>string</code></td>
@@ -426,6 +403,11 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><CopyableCode code="limit" /></td>
     <td><code>integer</code></td>
     <td>The number of results per page.</td>
+</tr>
+<tr id="parameter-name">
+    <td><CopyableCode code="name" /></td>
+    <td><code>string</code></td>
+    <td>Filters the results, showing only services with the specified name.</td>
 </tr>
 <tr id="parameter-offset">
     <td><CopyableCode code="offset" /></td>
@@ -450,12 +432,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-time_zone">
     <td><CopyableCode code="time_zone" /></td>
     <td><code>string (tzinfo)</code></td>
-    <td>Time zone in which dates in the result will be rendered.</td>
+    <td>Time zone in which results will be rendered. This will default to the account time zone.</td>
 </tr>
 <tr id="parameter-total">
     <td><CopyableCode code="total" /></td>
     <td><code>boolean</code></td>
-    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
+    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our &#91;Pagination Docs&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
 </tr>
 </tbody>
 </table>
@@ -463,15 +445,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_service"
+    defaultValue="get"
     values={[
-        { label: 'get_service', value: 'get_service' },
-        { label: 'list_services', value: 'list_services' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_service">
+<TabItem value="get">
 
-Get details about an existing service.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.read`<br />
+Get details about an existing service.&lt;br /&gt;&lt;br /&gt;A service may represent an application, component, or team you wish to open incidents against.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -502,15 +484,13 @@ teams,
 type
 FROM pagerduty.services.services
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 AND include[] = '{{ include[] }}'
 ;
 ```
 </TabItem>
-<TabItem value="list_services">
+<TabItem value="list">
 
-List existing Services.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.read`<br />
+List existing Services.&lt;br /&gt;&lt;br /&gt;A service may represent an application, component, or team you wish to open incidents against.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -540,9 +520,7 @@ support_hours,
 teams,
 type
 FROM pagerduty.services.services
-WHERE Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-AND query = '{{ query }}'
+WHERE query = '{{ query }}'
 AND limit = '{{ limit }}'
 AND offset = '{{ offset }}'
 AND total = '{{ total }}'
@@ -550,6 +528,7 @@ AND team_ids[] = '{{ team_ids[] }}'
 AND time_zone = '{{ time_zone }}'
 AND sort_by = '{{ sort_by }}'
 AND include[] = '{{ include[] }}'
+AND name = '{{ name }}'
 ;
 ```
 </TabItem>
@@ -559,26 +538,22 @@ AND include[] = '{{ include[] }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_service"
+    defaultValue="create"
     values={[
-        { label: 'create_service', value: 'create_service' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_service">
+<TabItem value="create">
 
-Create a new service.<br /><br />If `status` is included in the request, it must have a value of `active` when creating a new service. If a different status is required, make a second request to update the service.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />There is a limit of 25,000 services per account. If the limit is reached, the API will respond with an error. There is also a limit of 100,000 open Incidents per Service. If the limit is reached and `auto_resolve_timeout` is disabled (set to 0 or null), the `auto_resolve_timeout` property will automatically be set to  84600 (1 day).<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.write`<br />
+Create a new service.&lt;br /&gt;&lt;br /&gt;If `status` is included in the request, it must have a value of `active` when creating a new service. If a different status is required, make a second request to update the service.&lt;br /&gt;&lt;br /&gt;A service may represent an application, component, or team you wish to open incidents against.&lt;br /&gt;&lt;br /&gt;There is a limit of 25,000 services per account. If the limit is reached, the API will respond with an error. There is also a limit of 100,000 open Incidents per Service. If the limit is reached and `auto_resolve_timeout` is disabled (set to 0 or null), the `auto_resolve_timeout` property will automatically be set to  84600 (1 day).&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.write`&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.services.services (
-data__service,
-Accept,
-Content-Type
+service
 )
 SELECT 
-'{{ service }}' /* required */,
-'{{ Accept }}',
-'{{ Content-Type }}'
+'{{ service }}' /* required */
 RETURNING
 service
 ;
@@ -586,17 +561,107 @@ service
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: services
   props:
     - name: service
-      value: object
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-    - name: Content-Type
-      value: string
+      value:
+        id: "{{ id }}"
+        summary: "{{ summary }}"
+        type: "{{ type }}"
+        self: "{{ self }}"
+        html_url: "{{ html_url }}"
+        name: "{{ name }}"
+        description: "{{ description }}"
+        auto_resolve_timeout: {{ auto_resolve_timeout }}
+        acknowledgement_timeout: {{ acknowledgement_timeout }}
+        created_at: "{{ created_at }}"
+        status: "{{ status }}"
+        last_incident_timestamp: "{{ last_incident_timestamp }}"
+        escalation_policy:
+          id: "{{ id }}"
+          summary: "{{ summary }}"
+          type: "{{ type }}"
+          self: "{{ self }}"
+          html_url: "{{ html_url }}"
+        response_play: "{{ response_play }}"
+        teams:
+          - id: "{{ id }}"
+            summary: "{{ summary }}"
+            type: "{{ type }}"
+            self: "{{ self }}"
+            html_url: "{{ html_url }}"
+        integrations:
+          - id: "{{ id }}"
+            summary: "{{ summary }}"
+            type: "{{ type }}"
+            self: "{{ self }}"
+            html_url: "{{ html_url }}"
+        incident_urgency_rule:
+          type: "{{ type }}"
+          urgency: "{{ urgency }}"
+          during_support_hours:
+            type: "{{ type }}"
+            urgency: "{{ urgency }}"
+          outside_support_hours:
+            type: "{{ type }}"
+            urgency: "{{ urgency }}"
+        support_hours:
+          type: "{{ type }}"
+          time_zone: "{{ time_zone }}"
+          days_of_week:
+            - {{ days_of_week }}
+          start_time: "{{ start_time }}"
+          end_time: "{{ end_time }}"
+        scheduled_actions:
+          - type: "{{ type }}"
+            at:
+              type: "{{ type }}"
+              name: "{{ name }}"
+            to_urgency: "{{ to_urgency }}"
+        addons:
+          - id: "{{ id }}"
+            summary: "{{ summary }}"
+            type: "{{ type }}"
+            self: "{{ self }}"
+            html_url: "{{ html_url }}"
+            src: "{{ src }}"
+            name: "{{ name }}"
+        alert_creation: "{{ alert_creation }}"
+        alert_grouping_parameters: "{{ alert_grouping_parameters }}"
+        alert_grouping: "{{ alert_grouping }}"
+        alert_grouping_timeout: {{ alert_grouping_timeout }}
+        auto_pause_notifications_parameters:
+          enabled: {{ enabled }}
+          timeout: {{ timeout }}
+          recommended_timeout: {{ recommended_timeout }}
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
+
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Update an existing service.&lt;br /&gt;&lt;br /&gt;A service may represent an application, component, or team you wish to open incidents against.&lt;br /&gt;&lt;br /&gt;There is a limit of 100,000 open Incidents per Service. If the limit is reached and you disable `auto_resolve_timeout` (set to 0 or null), the API will respond with an error.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.write`&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.services.services
+SET 
+service = '{{ service }}'
+WHERE 
+id = '{{ id }}' --required
+AND service = '{{ service }}' --required
+RETURNING
+service;
 ```
 </TabItem>
 </Tabs>
@@ -605,81 +670,18 @@ service
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="delete_service"
+    defaultValue="delete"
     values={[
-        { label: 'delete_service', value: 'delete_service' }
+        { label: 'delete', value: 'delete' }
     ]}
 >
-<TabItem value="delete_service">
+<TabItem value="delete">
 
-Delete an existing service.<br /><br />Once the service is deleted, it will not be accessible from the web UI and new incidents won't be able to be created for this service.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.write`<br />
+Delete an existing service.&lt;br /&gt;&lt;br /&gt;Once the service is deleted, it will not be accessible from the web UI and new incidents won't be able to be created for this service.&lt;br /&gt;&lt;br /&gt;A service may represent an application, component, or team you wish to open incidents against.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.write`&lt;br /&gt;
 
 ```sql
 DELETE FROM pagerduty.services.services
 WHERE id = '{{ id }}' --required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_list_services"
-    values={[
-        { label: '_list_services', value: '_list_services' },
-        { label: '_get_service', value: '_get_service' },
-        { label: 'update_service', value: 'update_service' }
-    ]}
->
-<TabItem value="_list_services">
-
-List existing Services.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.read`<br />
-
-```sql
-EXEC pagerduty.services.services._list_services 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@query='{{ query }}', 
-@limit='{{ limit }}', 
-@offset='{{ offset }}', 
-@total={{ total }}, 
-@team_ids[]='{{ team_ids[] }}', 
-@time_zone='{{ time_zone }}', 
-@sort_by='{{ sort_by }}', 
-@include[]='{{ include[] }}'
-;
-```
-</TabItem>
-<TabItem value="_get_service">
-
-Get details about an existing service.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.read`<br />
-
-```sql
-EXEC pagerduty.services.services._get_service 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@include[]='{{ include[] }}'
-;
-```
-</TabItem>
-<TabItem value="update_service">
-
-Update an existing service.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />There is a limit of 100,000 open Incidents per Service. If the limit is reached and you disable `auto_resolve_timeout` (set to 0 or null), the API will respond with an error.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.write`<br />
-
-```sql
-EXEC pagerduty.services.services.update_service 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"service": "{{ service }}"
-}'
 ;
 ```
 </TabItem>

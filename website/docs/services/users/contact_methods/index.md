@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>contact_methods</code> resource
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>contact_methods</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="contact_methods" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.users.contact_methods" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>contact_methods</code> resource
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_user_contact_method"
+    defaultValue="get"
     values={[
-        { label: 'get_user_contact_method', value: 'get_user_contact_method' },
-        { label: 'get_user_contact_methods', value: 'get_user_contact_methods' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_user_contact_method">
+<TabItem value="get">
 
 The user's contact method requested.
 
@@ -51,10 +52,80 @@ The user's contact method requested.
     </tr>
 </thead>
 <tbody>
+<tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="address" /></td>
+    <td><code>string</code></td>
+    <td>The "address" to deliver to: email, phone number, etc., depending on the type.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="blacklisted" /></td>
+    <td><code>boolean</code></td>
+    <td>If true, this phone has been blacklisted by PagerDuty and no messages will be sent to it.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="country_code" /></td>
+    <td><code>integer</code></td>
+    <td>The 1-to-3 digit country calling code.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="created_at" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>Time at which the contact method was created.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="device_type" /></td>
+    <td><code>string</code></td>
+    <td>The type of device. (android, ios)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="enabled" /></td>
+    <td><code>boolean</code></td>
+    <td>If true, this phone is capable of receiving notifications.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="html_url" /></td>
+    <td><code>string (url)</code></td>
+    <td>a URL at which the entity is uniquely displayed in the Web app</td>
+</tr>
+<tr>
+    <td><CopyableCode code="label" /></td>
+    <td><code>string</code></td>
+    <td>The label (e.g., "Work", "Mobile", etc.).</td>
+</tr>
+<tr>
+    <td><CopyableCode code="self" /></td>
+    <td><code>string (url)</code></td>
+    <td>the API show URL at which the object is accessible</td>
+</tr>
+<tr>
+    <td><CopyableCode code="send_short_email" /></td>
+    <td><code>boolean</code></td>
+    <td>Send an abbreviated email message instead of the standard email output. Useful for email-to-SMS gateways and email based pagers.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="sounds" /></td>
+    <td><code>array</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="summary" /></td>
+    <td><code>string</code></td>
+    <td>A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="type" /></td>
+    <td><code>string</code></td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
+</tr>
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_user_contact_methods">
+<TabItem value="list">
 
 A list of contact methods.
 
@@ -88,53 +159,39 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_user_contact_method"><CopyableCode code="get_user_contact_method" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-contact_method_id"><code>contact_method_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get details about a User's contact method.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.read`<br /></td>
+    <td></td>
+    <td>Get details about a User's contact method.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#get_user_contact_methods"><CopyableCode code="get_user_contact_methods" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>List contact methods of your PagerDuty user.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.read`<br /></td>
+    <td></td>
+    <td>List contact methods of your PagerDuty user.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_user_contact_method"><CopyableCode code="create_user_contact_method" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-data__contact_method"><code>data__contact_method</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Create a new contact method for the User.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.write`<br /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-contact_method"><code>contact_method</code></a></td>
+    <td></td>
+    <td>Create a new contact method for the User.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#delete_user_contact_method"><CopyableCode code="delete_user_contact_method" /></a></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-contact_method_id"><code>contact_method_id</code></a>, <a href="#parameter-contact_method"><code>contact_method</code></a></td>
+    <td></td>
+    <td>Update a User's contact method.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.write`&lt;br /&gt;</td>
+</tr>
+<tr>
+    <td><a href="#delete"><CopyableCode code="delete" /></a></td>
     <td><CopyableCode code="delete" /></td>
     <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-contact_method_id"><code>contact_method_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Remove a user's contact method.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_user_contact_methods"><CopyableCode code="_get_user_contact_methods" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>List contact methods of your PagerDuty user.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_user_contact_method"><CopyableCode code="_get_user_contact_method" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-contact_method_id"><code>contact_method_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get details about a User's contact method.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#update_user_contact_method"><CopyableCode code="update_user_contact_method" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-contact_method_id"><code>contact_method_id</code></a>, <a href="#parameter-contact_method"><code>contact_method</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Update a User's contact method.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.write`<br /></td>
+    <td></td>
+    <td>Remove a user's contact method.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -162,54 +219,53 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 </tbody>
 </table>
 
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_user_contact_method"
+    defaultValue="get"
     values={[
-        { label: 'get_user_contact_method', value: 'get_user_contact_method' },
-        { label: 'get_user_contact_methods', value: 'get_user_contact_methods' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_user_contact_method">
+<TabItem value="get">
 
-Get details about a User's contact method.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.read`<br />
+Get details about a User's contact method.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.read`&lt;br /&gt;
 
 ```sql
 SELECT
-*
+id,
+address,
+blacklisted,
+country_code,
+created_at,
+device_type,
+enabled,
+html_url,
+label,
+self,
+send_short_email,
+sounds,
+summary,
+type
 FROM pagerduty.users.contact_methods
 WHERE id = '{{ id }}' -- required
 AND contact_method_id = '{{ contact_method_id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
-<TabItem value="get_user_contact_methods">
+<TabItem value="list">
 
-List contact methods of your PagerDuty user.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.read`<br />
+List contact methods of your PagerDuty user.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.read`&lt;br /&gt;
 
 ```sql
 SELECT
 *
 FROM pagerduty.users.contact_methods
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
@@ -219,28 +275,24 @@ AND Content-Type = '{{ Content-Type }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_user_contact_method"
+    defaultValue="create"
     values={[
-        { label: 'create_user_contact_method', value: 'create_user_contact_method' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_user_contact_method">
+<TabItem value="create">
 
-Create a new contact method for the User.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.write`<br />
+Create a new contact method for the User.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.write`&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.users.contact_methods (
-data__contact_method,
-id,
-Accept,
-Content-Type
+contact_method,
+id
 )
 SELECT 
 '{{ contact_method }}' /* required */,
-'{{ id }}',
-'{{ Accept }}',
-'{{ Content-Type }}'
+'{{ id }}'
 RETURNING
 contact_method
 ;
@@ -248,20 +300,60 @@ contact_method
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: contact_methods
   props:
     - name: id
-      value: string
+      value: "{{ id }}"
       description: Required parameter for the contact_methods resource.
     - name: contact_method
-      value: string
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-    - name: Content-Type
-      value: string
+      description: |
+        The Phone Contact Method of the User, used for Voice or SMS.
+      value:
+        id: "{{ id }}"
+        summary: "{{ summary }}"
+        type: "{{ type }}"
+        self: "{{ self }}"
+        html_url: "{{ html_url }}"
+        label: "{{ label }}"
+        address: "{{ address }}"
+        country_code: {{ country_code }}
+        enabled: {{ enabled }}
+        blacklisted: {{ blacklisted }}
+        device_type: "{{ device_type }}"
+        sounds:
+          - type: "{{ type }}"
+            file: "{{ file }}"
+        created_at: "{{ created_at }}"
+        send_short_email: {{ send_short_email }}
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
+
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Update a User's contact method.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.write`&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.users.contact_methods
+SET 
+contact_method = '{{ contact_method }}'
+WHERE 
+id = '{{ id }}' --required
+AND contact_method_id = '{{ contact_method_id }}' --required
+AND contact_method = '{{ contact_method }}' --required
+RETURNING
+contact_method;
 ```
 </TabItem>
 </Tabs>
@@ -270,76 +362,19 @@ contact_method
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="delete_user_contact_method"
+    defaultValue="delete"
     values={[
-        { label: 'delete_user_contact_method', value: 'delete_user_contact_method' }
+        { label: 'delete', value: 'delete' }
     ]}
 >
-<TabItem value="delete_user_contact_method">
+<TabItem value="delete">
 
-Remove a user's contact method.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.write`<br />
+Remove a user's contact method.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.write`&lt;br /&gt;
 
 ```sql
 DELETE FROM pagerduty.users.contact_methods
 WHERE id = '{{ id }}' --required
 AND contact_method_id = '{{ contact_method_id }}' --required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_get_user_contact_methods"
-    values={[
-        { label: '_get_user_contact_methods', value: '_get_user_contact_methods' },
-        { label: '_get_user_contact_method', value: '_get_user_contact_method' },
-        { label: 'update_user_contact_method', value: 'update_user_contact_method' }
-    ]}
->
-<TabItem value="_get_user_contact_methods">
-
-List contact methods of your PagerDuty user.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.read`<br />
-
-```sql
-EXEC pagerduty.users.contact_methods._get_user_contact_methods 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
-;
-```
-</TabItem>
-<TabItem value="_get_user_contact_method">
-
-Get details about a User's contact method.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.read`<br />
-
-```sql
-EXEC pagerduty.users.contact_methods._get_user_contact_method 
-@id='{{ id }}' --required, 
-@contact_method_id='{{ contact_method_id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
-;
-```
-</TabItem>
-<TabItem value="update_user_contact_method">
-
-Update a User's contact method.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.write`<br />
-
-```sql
-EXEC pagerduty.users.contact_methods.update_user_contact_method 
-@id='{{ id }}' --required, 
-@contact_method_id='{{ contact_method_id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"contact_method": "{{ contact_method }}"
-}'
 ;
 ```
 </TabItem>

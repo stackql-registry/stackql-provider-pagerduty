@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>incidents</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>incidents</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="incidents" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.incidents.incidents" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists an <code>incidents</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_incident"
+    defaultValue="get"
     values={[
-        { label: 'get_incident', value: 'get_incident' },
-        { label: 'list_incidents', value: 'list_incidents' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_incident">
+<TabItem value="get">
 
 The incident requested.
 
@@ -59,7 +60,7 @@ The incident requested.
 <tr>
     <td><CopyableCode code="acknowledgements" /></td>
     <td><code>array</code></td>
-    <td>List of all acknowledgements for this incident. This list will be empty if the `Incident.status` is `resolved` or `triggered`.</td>
+    <td>List of all acknowledgements for this incident. This list will be empty if the `Incident.status` is `resolved` or `triggered`. If the `include&#91;&#93;=acknowledgers` query parameter is provided, the full user or service definitions will be returned for each acknowledgement entry.</td>
 </tr>
 <tr>
     <td><CopyableCode code="alert_counts" /></td>
@@ -67,39 +68,44 @@ The incident requested.
     <td></td>
 </tr>
 <tr>
+    <td><CopyableCode code="alert_grouping" /></td>
+    <td><code>object</code></td>
+    <td>Describes the alert grouping state of this incident. Will be null if the incident has no alerts.</td>
+</tr>
+<tr>
     <td><CopyableCode code="assigned_via" /></td>
     <td><code>string</code></td>
-    <td>How the current incident assignments were decided.  Note that `direct_assignment` incidents will not escalate up the attached `escalation_policy`</td>
+    <td>How the current incident assignments were decided.  Note that `direct_assignment` incidents will not escalate up the attached `escalation_policy` (escalation_policy, direct_assignment)</td>
 </tr>
 <tr>
     <td><CopyableCode code="assignments" /></td>
     <td><code>array</code></td>
-    <td>List of all assignments for this incident. This list will be empty if the `Incident.status` is `resolved`.</td>
+    <td>List of all assignments for this incident. This list will be empty if the `Incident.status` is `resolved`. Returns a user reference for each assignment. Full user definitions will be returned if the `include&#91;&#93;=assignees` query parameter is provided.</td>
 </tr>
 <tr>
     <td><CopyableCode code="body" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>The additional incident body details. Only returned if the `include&#91;&#93;=body` query parameter is provided.</td>
 </tr>
 <tr>
     <td><CopyableCode code="conference_bridge" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>The conference bridge information attached to the incident. Only returned if the `include&#91;&#93;=conference_bridge` query parameter is provided.</td>
 </tr>
 <tr>
     <td><CopyableCode code="created_at" /></td>
     <td><code>string (date-time)</code></td>
-    <td>The date/time the incident was first triggered.</td>
+    <td>The time the incident was first triggered. (example: 2019-12-01T20:00:00Z)</td>
 </tr>
 <tr>
     <td><CopyableCode code="escalation_policy" /></td>
-    <td><code>object</code></td>
-    <td></td>
+    <td><code></code></td>
+    <td>The escalation policy attached to the service that the incident is on. If the `include&#91;&#93;=escalation_policies` query parameter is provided, the full escalation policy definition will be returned.</td>
 </tr>
 <tr>
     <td><CopyableCode code="first_trigger_log_entry" /></td>
-    <td><code>object</code></td>
-    <td></td>
+    <td><code></code></td>
+    <td>The first log entry on the incident. The log entry will be of type `TriggerLogEntry` and will represent information about how the incident was triggered. If the `include&#91;&#93;=first_trigger_log_entries` query parameter is provided, the full log entry definition will be returned.</td>
 </tr>
 <tr>
     <td><CopyableCode code="html_url" /></td>
@@ -117,19 +123,29 @@ The incident requested.
     <td>The number of the incident. This is unique across your account.</td>
 </tr>
 <tr>
+    <td><CopyableCode code="incident_type" /></td>
+    <td><code>object</code></td>
+    <td>The incident type of the incident.</td>
+</tr>
+<tr>
     <td><CopyableCode code="incidents_responders" /></td>
     <td><code>array</code></td>
-    <td></td>
+    <td>The responders on the incident. Only returned if the account has access to the &#91;responder requests&#93;(https:​//support.pagerduty.com/docs/add-responders) feature.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="is_mergeable" /></td>
+    <td><code>boolean</code></td>
+    <td>Whether the incident is mergeable. Only incidents that have alerts, or that are manually created can be merged.</td>
 </tr>
 <tr>
     <td><CopyableCode code="last_status_change_at" /></td>
     <td><code>string (date-time)</code></td>
-    <td>The time at which the status of the incident last changed.</td>
+    <td>The time the status of the incident last changed. If the incident is not currently acknowledged or resolved, this will be the incident's `updated_at`. (example: 2019-12-01T21:01:00Z)</td>
 </tr>
 <tr>
     <td><CopyableCode code="last_status_change_by" /></td>
-    <td><code>object</code></td>
-    <td>The agent (user, service or integration) that created or modified the Incident Log Entry.</td>
+    <td><code></code></td>
+    <td>The entity that last changed the status of the incident. If the `include&#91;&#93;=agents` query parameter is provided, the full user/service/integration definition will be returned.</td>
 </tr>
 <tr>
     <td><CopyableCode code="pending_actions" /></td>
@@ -147,9 +163,14 @@ The incident requested.
     <td></td>
 </tr>
 <tr>
+    <td><CopyableCode code="resolved_at" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>The time the incident became "resolved" or `null` if the incident is not resolved. (example: 2019-12-01T21:01:00Z)</td>
+</tr>
+<tr>
     <td><CopyableCode code="responder_requests" /></td>
     <td><code>array</code></td>
-    <td></td>
+    <td>Previous responder requests made on this incident. Only returned if the account has access to the &#91;responder requests&#93;(https:​//support.pagerduty.com/docs/add-responders) feature.</td>
 </tr>
 <tr>
     <td><CopyableCode code="self" /></td>
@@ -158,13 +179,13 @@ The incident requested.
 </tr>
 <tr>
     <td><CopyableCode code="service" /></td>
-    <td><code>object</code></td>
-    <td></td>
+    <td><code></code></td>
+    <td>The service the incident is on. If the `include&#91;&#93;=services` query parameter is provided, the full service definition will be returned.</td>
 </tr>
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>The current status of the incident.</td>
+    <td>The current status of the incident. (triggered, acknowledged, resolved)</td>
 </tr>
 <tr>
     <td><CopyableCode code="summary" /></td>
@@ -174,7 +195,7 @@ The incident requested.
 <tr>
     <td><CopyableCode code="teams" /></td>
     <td><code>array</code></td>
-    <td>The teams involved in the incident’s lifecycle.</td>
+    <td>The teams involved in the incident’s lifecycle. If the `include&#91;&#93;=teams` query parameter is provided, the full team definitions will be returned.</td>
 </tr>
 <tr>
     <td><CopyableCode code="title" /></td>
@@ -187,14 +208,19 @@ The incident requested.
     <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 <tr>
+    <td><CopyableCode code="updated_at" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>The time the incident was last modified. (example: 2019-12-01T21:02:00Z)</td>
+</tr>
+<tr>
     <td><CopyableCode code="urgency" /></td>
     <td><code>string</code></td>
-    <td>The current urgency of the incident.</td>
+    <td>The current urgency of the incident. (high, low)</td>
 </tr>
 </tbody>
 </table>
 </TabItem>
-<TabItem value="list_incidents">
+<TabItem value="list">
 
 A paginated array of incidents.
 
@@ -215,7 +241,7 @@ A paginated array of incidents.
 <tr>
     <td><CopyableCode code="acknowledgements" /></td>
     <td><code>array</code></td>
-    <td>List of all acknowledgements for this incident. This list will be empty if the `Incident.status` is `resolved` or `triggered`.</td>
+    <td>List of all acknowledgements for this incident. This list will be empty if the `Incident.status` is `resolved` or `triggered`. If the `include&#91;&#93;=acknowledgers` query parameter is provided, the full user or service definitions will be returned for each acknowledgement entry.</td>
 </tr>
 <tr>
     <td><CopyableCode code="alert_counts" /></td>
@@ -223,39 +249,44 @@ A paginated array of incidents.
     <td></td>
 </tr>
 <tr>
+    <td><CopyableCode code="alert_grouping" /></td>
+    <td><code>object</code></td>
+    <td>Describes the alert grouping state of this incident. Will be null if the incident has no alerts.</td>
+</tr>
+<tr>
     <td><CopyableCode code="assigned_via" /></td>
     <td><code>string</code></td>
-    <td>How the current incident assignments were decided.  Note that `direct_assignment` incidents will not escalate up the attached `escalation_policy`</td>
+    <td>How the current incident assignments were decided.  Note that `direct_assignment` incidents will not escalate up the attached `escalation_policy` (escalation_policy, direct_assignment)</td>
 </tr>
 <tr>
     <td><CopyableCode code="assignments" /></td>
     <td><code>array</code></td>
-    <td>List of all assignments for this incident. This list will be empty if the `Incident.status` is `resolved`.</td>
+    <td>List of all assignments for this incident. This list will be empty if the `Incident.status` is `resolved`. Returns a user reference for each assignment. Full user definitions will be returned if the `include&#91;&#93;=assignees` query parameter is provided.</td>
 </tr>
 <tr>
     <td><CopyableCode code="body" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>The additional incident body details. Only returned if the `include&#91;&#93;=body` query parameter is provided.</td>
 </tr>
 <tr>
     <td><CopyableCode code="conference_bridge" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>The conference bridge information attached to the incident. Only returned if the `include&#91;&#93;=conference_bridge` query parameter is provided.</td>
 </tr>
 <tr>
     <td><CopyableCode code="created_at" /></td>
     <td><code>string (date-time)</code></td>
-    <td>The date/time the incident was first triggered.</td>
+    <td>The time the incident was first triggered. (example: 2019-12-01T20:00:00Z)</td>
 </tr>
 <tr>
     <td><CopyableCode code="escalation_policy" /></td>
-    <td><code>object</code></td>
-    <td></td>
+    <td><code></code></td>
+    <td>The escalation policy attached to the service that the incident is on. If the `include&#91;&#93;=escalation_policies` query parameter is provided, the full escalation policy definition will be returned.</td>
 </tr>
 <tr>
     <td><CopyableCode code="first_trigger_log_entry" /></td>
-    <td><code>object</code></td>
-    <td></td>
+    <td><code></code></td>
+    <td>The first log entry on the incident. The log entry will be of type `TriggerLogEntry` and will represent information about how the incident was triggered. If the `include&#91;&#93;=first_trigger_log_entries` query parameter is provided, the full log entry definition will be returned.</td>
 </tr>
 <tr>
     <td><CopyableCode code="html_url" /></td>
@@ -273,19 +304,29 @@ A paginated array of incidents.
     <td>The number of the incident. This is unique across your account.</td>
 </tr>
 <tr>
+    <td><CopyableCode code="incident_type" /></td>
+    <td><code>object</code></td>
+    <td>The incident type of the incident.</td>
+</tr>
+<tr>
     <td><CopyableCode code="incidents_responders" /></td>
     <td><code>array</code></td>
-    <td></td>
+    <td>The responders on the incident. Only returned if the account has access to the &#91;responder requests&#93;(https:​//support.pagerduty.com/docs/add-responders) feature.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="is_mergeable" /></td>
+    <td><code>boolean</code></td>
+    <td>Whether the incident is mergeable. Only incidents that have alerts, or that are manually created can be merged.</td>
 </tr>
 <tr>
     <td><CopyableCode code="last_status_change_at" /></td>
     <td><code>string (date-time)</code></td>
-    <td>The time at which the status of the incident last changed.</td>
+    <td>The time the status of the incident last changed. If the incident is not currently acknowledged or resolved, this will be the incident's `updated_at`. (example: 2019-12-01T21:01:00Z)</td>
 </tr>
 <tr>
     <td><CopyableCode code="last_status_change_by" /></td>
-    <td><code>object</code></td>
-    <td>The agent (user, service or integration) that created or modified the Incident Log Entry.</td>
+    <td><code></code></td>
+    <td>The entity that last changed the status of the incident. If the `include&#91;&#93;=agents` query parameter is provided, the full user/service/integration definition will be returned.</td>
 </tr>
 <tr>
     <td><CopyableCode code="pending_actions" /></td>
@@ -303,9 +344,14 @@ A paginated array of incidents.
     <td></td>
 </tr>
 <tr>
+    <td><CopyableCode code="resolved_at" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>The time the incident became "resolved" or `null` if the incident is not resolved. (example: 2019-12-01T21:01:00Z)</td>
+</tr>
+<tr>
     <td><CopyableCode code="responder_requests" /></td>
     <td><code>array</code></td>
-    <td></td>
+    <td>Previous responder requests made on this incident. Only returned if the account has access to the &#91;responder requests&#93;(https:​//support.pagerduty.com/docs/add-responders) feature.</td>
 </tr>
 <tr>
     <td><CopyableCode code="self" /></td>
@@ -314,13 +360,13 @@ A paginated array of incidents.
 </tr>
 <tr>
     <td><CopyableCode code="service" /></td>
-    <td><code>object</code></td>
-    <td></td>
+    <td><code></code></td>
+    <td>The service the incident is on. If the `include&#91;&#93;=services` query parameter is provided, the full service definition will be returned.</td>
 </tr>
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>The current status of the incident.</td>
+    <td>The current status of the incident. (triggered, acknowledged, resolved)</td>
 </tr>
 <tr>
     <td><CopyableCode code="summary" /></td>
@@ -330,7 +376,7 @@ A paginated array of incidents.
 <tr>
     <td><CopyableCode code="teams" /></td>
     <td><code>array</code></td>
-    <td>The teams involved in the incident’s lifecycle.</td>
+    <td>The teams involved in the incident’s lifecycle. If the `include&#91;&#93;=teams` query parameter is provided, the full team definitions will be returned.</td>
 </tr>
 <tr>
     <td><CopyableCode code="title" /></td>
@@ -343,9 +389,14 @@ A paginated array of incidents.
     <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 <tr>
+    <td><CopyableCode code="updated_at" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>The time the incident was last modified. (example: 2019-12-01T21:02:00Z)</td>
+</tr>
+<tr>
     <td><CopyableCode code="urgency" /></td>
     <td><code>string</code></td>
-    <td>The current urgency of the incident.</td>
+    <td>The current urgency of the incident. (high, low)</td>
 </tr>
 </tbody>
 </table>
@@ -368,88 +419,53 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_incident"><CopyableCode code="get_incident" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-X-EARLY-ACCESS"><code>X-EARLY-ACCESS</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>Show detailed information about an incident. Accepts either an incident id, or an incident number.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />&lt;!-- theme: warning --&gt;<br />&gt; ### Early Access<br />&gt; The `include[]=field_values` part of this endpoint is in Early Access and may change at any time. You must pass in the X-EARLY-ACCESS header to access it.<br /><br />Scoped OAuth requires: `incidents.read`<br /></td>
+    <td><a href="#parameter-id"><code>id</code></a></td>
+    <td><a href="#parameter-include[]"><code>include[]</code></a></td>
+    <td>Show detailed information about an incident. Accepts either an incident id, or an incident number.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#list_incidents"><CopyableCode code="list_incidents" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-date_range"><code>date_range</code></a>, <a href="#parameter-incident_key"><code>incident_key</code></a>, <a href="#parameter-service_ids[]"><code>service_ids[]</code></a>, <a href="#parameter-team_ids[]"><code>team_ids[]</code></a>, <a href="#parameter-user_ids[]"><code>user_ids[]</code></a>, <a href="#parameter-urgencies[]"><code>urgencies[]</code></a>, <a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-statuses[]"><code>statuses[]</code></a>, <a href="#parameter-sort_by"><code>sort_by</code></a>, <a href="#parameter-include[]"><code>include[]</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a></td>
-    <td>List existing incidents.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.read`<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-date_range"><code>date_range</code></a>, <a href="#parameter-incident_key"><code>incident_key</code></a>, <a href="#parameter-service_ids[]"><code>service_ids[]</code></a>, <a href="#parameter-team_ids[]"><code>team_ids[]</code></a>, <a href="#parameter-user_ids[]"><code>user_ids[]</code></a>, <a href="#parameter-urgencies[]"><code>urgencies[]</code></a>, <a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-statuses[]"><code>statuses[]</code></a>, <a href="#parameter-sort_by"><code>sort_by</code></a>, <a href="#parameter-include[]"><code>include[]</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a></td>
+    <td>List existing incidents.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_incident"><CopyableCode code="create_incident" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-From"><code>From</code></a>, <a href="#parameter-data__incident"><code>data__incident</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Create an incident synchronously without a corresponding event from a monitoring service.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br /></td>
+    <td><a href="#parameter-incident"><code>incident</code></a></td>
+    <td><a href="#parameter-From"><code>From</code></a></td>
+    <td>Create an incident synchronously without a corresponding event from a monitoring service.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;&lt;br /&gt;This API operation has operation specific rate limits. See the &#91;Rate Limits&#93;(https:​//developer.pagerduty.com/docs/72d3b724589e3-rest-api-rate-limits) page for more information.&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#_list_incidents"><CopyableCode code="_list_incidents" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-date_range"><code>date_range</code></a>, <a href="#parameter-incident_key"><code>incident_key</code></a>, <a href="#parameter-service_ids[]"><code>service_ids[]</code></a>, <a href="#parameter-team_ids[]"><code>team_ids[]</code></a>, <a href="#parameter-user_ids[]"><code>user_ids[]</code></a>, <a href="#parameter-urgencies[]"><code>urgencies[]</code></a>, <a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-statuses[]"><code>statuses[]</code></a>, <a href="#parameter-sort_by"><code>sort_by</code></a>, <a href="#parameter-include[]"><code>include[]</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a></td>
-    <td>List existing incidents.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.read`<br /></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-incident"><code>incident</code></a></td>
+    <td><a href="#parameter-From"><code>From</code></a></td>
+    <td>Acknowledge, resolve, escalate or reassign an incident.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#update_incidents"><CopyableCode code="update_incidents" /></a></td>
+    <td><a href="#update_bulk"><CopyableCode code="update_bulk" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-From"><code>From</code></a>, <a href="#parameter-incidents"><code>incidents</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a></td>
-    <td>Acknowledge, resolve, escalate or reassign one or more incidents.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />A maximum of 250 incidents may be updated at a time. If more than this number of incidents are given, the API will respond with status 413 (Request Entity Too Large).<br /><br />Note: the manage incidents API endpoint is rate limited to 500 requests per minute.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br /></td>
+    <td><a href="#parameter-incidents"><code>incidents</code></a></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-From"><code>From</code></a></td>
+    <td>Acknowledge, resolve, escalate or reassign one or more incidents.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;A maximum of 250 incidents may be updated at a time. If more than this number of incidents are given, the API will respond with status 413 (Request Entity Too Large).&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;&lt;br /&gt;This API operation has operation specific rate limits. See the &#91;Rate Limits&#93;(https:​//developer.pagerduty.com/docs/72d3b724589e3-rest-api-rate-limits) page for more information.&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#_get_incident"><CopyableCode code="_get_incident" /></a></td>
+    <td><a href="#merge"><CopyableCode code="merge" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-X-EARLY-ACCESS"><code>X-EARLY-ACCESS</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>Show detailed information about an incident. Accepts either an incident id, or an incident number.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />&lt;!-- theme: warning --&gt;<br />&gt; ### Early Access<br />&gt; The `include[]=field_values` part of this endpoint is in Early Access and may change at any time. You must pass in the X-EARLY-ACCESS header to access it.<br /><br />Scoped OAuth requires: `incidents.read`<br /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-source_incidents"><code>source_incidents</code></a></td>
+    <td><a href="#parameter-From"><code>From</code></a></td>
+    <td>Merge a list of source incidents into the target &#91;incident&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents).&lt;br /&gt;&lt;br /&gt;After the merge is performed the target incident will contain the source incidents' &#91;alerts&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#alerts),&lt;br /&gt;and the source incidents will be resolved.&lt;br /&gt;&lt;br /&gt;Only incidents that have alerts or incidents that were created manually in the UI can be merged.&lt;br /&gt;&lt;br /&gt;Open incidents cannot be merged into a resolved incident. The target incident must be open.&lt;br /&gt;&lt;br /&gt;An incident cannot have more than 1000 alerts. The server will return an error if merging the source incidents&lt;br /&gt;will result in the target incident having more than 1000 alerts.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#update_incident"><CopyableCode code="update_incident" /></a></td>
+    <td><a href="#snooze"><CopyableCode code="snooze" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-From"><code>From</code></a>, <a href="#parameter-incident"><code>incident</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Acknowledge, resolve, escalate or reassign an incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#merge_incidents"><CopyableCode code="merge_incidents" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-From"><code>From</code></a>, <a href="#parameter-source_incidents"><code>source_incidents</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Merge a list of source incidents into this incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#create_incident_responder_request"><CopyableCode code="create_incident_responder_request" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-From"><code>From</code></a>, <a href="#parameter-requester_id"><code>requester_id</code></a>, <a href="#parameter-message"><code>message</code></a>, <a href="#parameter-responder_request_targets"><code>responder_request_targets</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Send a new responder request for the specified incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#create_incident_snooze"><CopyableCode code="create_incident_snooze" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-From"><code>From</code></a>, <a href="#parameter-duration"><code>duration</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Snooze an incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#create_incident_status_update"><CopyableCode code="create_incident_status_update" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-From"><code>From</code></a>, <a href="#parameter-message"><code>message</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Create a new status update for the specified incident. Optionally pass `subject` and `html_message` properties in the request body to override the email notification that gets sent.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#remove_incident_notification_subscribers"><CopyableCode code="remove_incident_notification_subscribers" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-subscribers"><code>subscribers</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a></td>
-    <td>Unsubscribes the matching Subscribers from Incident Status Update Notifications.<br /><br />Scoped OAuth requires: `subscribers.write`<br /></td>
+    <td><a href="#parameter-id"><code>id</code></a></td>
+    <td><a href="#parameter-From"><code>From</code></a></td>
+    <td>Snooze an incident.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;StackQL: call this method with the raw JSON body, for example `EXEC incidents.incidents.snooze @id = '...' @@json='&#123;"duration": &lt;integer&gt;&#125;'` - the duration attribute is integer-typed, which the EXEC parameter form does not accept.</td>
 </tr>
 </tbody>
 </table>
@@ -467,30 +483,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
-<tr id="parameter-From">
-    <td><CopyableCode code="From" /></td>
-    <td><code>string (email)</code></td>
-    <td>The email address of a valid user associated with the account making the request.</td>
-</tr>
-<tr id="parameter-X-EARLY-ACCESS">
-    <td><CopyableCode code="X-EARLY-ACCESS" /></td>
-    <td><code>string</code></td>
-    <td>This header indicates that this API endpoint is __UNDER CONSTRUCTION__ and may change at any time. You __MUST__ pass in this header and the above value. Do not use this endpoint in production, as it may change! </td>
-</tr>
 <tr id="parameter-id">
     <td><CopyableCode code="id" /></td>
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
+<tr id="parameter-From">
+    <td><CopyableCode code="From" /></td>
+    <td><code>string (email)</code></td>
+    <td>The email address of a valid user associated with the account making the request.</td>
 </tr>
 <tr id="parameter-date_range">
     <td><CopyableCode code="date_range" /></td>
@@ -535,7 +536,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-statuses[]">
     <td><CopyableCode code="statuses[]" /></td>
     <td><code>string</code></td>
-    <td>Return only incidents with the given statuses. To query multiple statuses, pass `statuses[]` more than once, for example: `https://api.pagerduty.com/incidents?statuses[]=triggered&statuses[]=acknowledged`. (More status codes may be introduced in the future.)</td>
+    <td>Return only incidents with the given statuses. To query multiple statuses, pass `statuses&#91;&#93;` more than once, for example: `https:​//api.pagerduty.com/incidents?statuses&#91;&#93;=triggered&statuses&#91;&#93;=acknowledged`. (More status codes may be introduced in the future.)</td>
 </tr>
 <tr id="parameter-team_ids[]">
     <td><CopyableCode code="team_ids[]" /></td>
@@ -545,12 +546,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-time_zone">
     <td><CopyableCode code="time_zone" /></td>
     <td><code>string (tzinfo)</code></td>
-    <td>Time zone in which dates in the result will be rendered.</td>
+    <td>Time zone used to render timestamps and to interpret `since/until` values before filtering. Rendering defaults to UTC if omitted. `since/until` default to the account's time zone if omitted.</td>
 </tr>
 <tr id="parameter-total">
     <td><CopyableCode code="total" /></td>
     <td><code>boolean</code></td>
-    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
+    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our &#91;Pagination Docs&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
 </tr>
 <tr id="parameter-until">
     <td><CopyableCode code="until" /></td>
@@ -573,21 +574,22 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_incident"
+    defaultValue="get"
     values={[
-        { label: 'get_incident', value: 'get_incident' },
-        { label: 'list_incidents', value: 'list_incidents' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_incident">
+<TabItem value="get">
 
-Show detailed information about an incident. Accepts either an incident id, or an incident number.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />&lt;!-- theme: warning --&gt;<br />&gt; ### Early Access<br />&gt; The `include[]=field_values` part of this endpoint is in Early Access and may change at any time. You must pass in the X-EARLY-ACCESS header to access it.<br /><br />Scoped OAuth requires: `incidents.read`<br />
+Show detailed information about an incident. Accepts either an incident id, or an incident number.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.read`&lt;br /&gt;
 
 ```sql
 SELECT
 id,
 acknowledgements,
 alert_counts,
+alert_grouping,
 assigned_via,
 assignments,
 body,
@@ -598,12 +600,15 @@ first_trigger_log_entry,
 html_url,
 incident_key,
 incident_number,
+incident_type,
 incidents_responders,
+is_mergeable,
 last_status_change_at,
 last_status_change_by,
 pending_actions,
 priority,
 resolve_reason,
+resolved_at,
 responder_requests,
 self,
 service,
@@ -612,25 +617,24 @@ summary,
 teams,
 title,
 type,
+updated_at,
 urgency
 FROM pagerduty.incidents.incidents
 WHERE id = '{{ id }}' -- required
-AND X-EARLY-ACCESS = '{{ X-EARLY-ACCESS }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 AND include[] = '{{ include[] }}'
 ;
 ```
 </TabItem>
-<TabItem value="list_incidents">
+<TabItem value="list">
 
-List existing incidents.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.read`<br />
+List existing incidents.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.read`&lt;br /&gt;
 
 ```sql
 SELECT
 id,
 acknowledgements,
 alert_counts,
+alert_grouping,
 assigned_via,
 assignments,
 body,
@@ -641,12 +645,15 @@ first_trigger_log_entry,
 html_url,
 incident_key,
 incident_number,
+incident_type,
 incidents_responders,
+is_mergeable,
 last_status_change_at,
 last_status_change_by,
 pending_actions,
 priority,
 resolve_reason,
+resolved_at,
 responder_requests,
 self,
 service,
@@ -655,11 +662,10 @@ summary,
 teams,
 title,
 type,
+updated_at,
 urgency
 FROM pagerduty.incidents.incidents
-WHERE Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-AND limit = '{{ limit }}'
+WHERE limit = '{{ limit }}'
 AND offset = '{{ offset }}'
 AND total = '{{ total }}'
 AND date_range = '{{ date_range }}'
@@ -683,28 +689,24 @@ AND until = '{{ until }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_incident"
+    defaultValue="create"
     values={[
-        { label: 'create_incident', value: 'create_incident' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_incident">
+<TabItem value="create">
 
-Create an incident synchronously without a corresponding event from a monitoring service.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br />
+Create an incident synchronously without a corresponding event from a monitoring service.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;&lt;br /&gt;This API operation has operation specific rate limits. See the &#91;Rate Limits&#93;(https:​//developer.pagerduty.com/docs/72d3b724589e3-rest-api-rate-limits) page for more information.&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.incidents.incidents (
-data__incident,
-From,
-Accept,
-Content-Type
+incident,
+"From"
 )
 SELECT 
 '{{ incident }}' /* required */,
-'{{ From }}',
-'{{ Accept }}',
-'{{ Content-Type }}'
+'{{ From }}'
 RETURNING
 incident
 ;
@@ -712,22 +714,82 @@ incident
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: incidents
   props:
-    - name: From
-      value: string (email)
-      description: Required parameter for the incidents resource.
     - name: incident
-      value: object
       description: |
         Details of the incident to be created.
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-    - name: Content-Type
-      value: string
+      value:
+        type: "{{ type }}"
+        title: "{{ title }}"
+        service:
+          id: "{{ id }}"
+          summary: "{{ summary }}"
+          type: "{{ type }}"
+          self: "{{ self }}"
+          html_url: "{{ html_url }}"
+        priority:
+          id: "{{ id }}"
+          summary: "{{ summary }}"
+          type: "{{ type }}"
+          self: "{{ self }}"
+          html_url: "{{ html_url }}"
+        urgency: "{{ urgency }}"
+        body:
+          details: "{{ details }}"
+        incident_key: "{{ incident_key }}"
+        assignments:
+          - assignee:
+              id: "{{ id }}"
+              summary: "{{ summary }}"
+              type: "{{ type }}"
+              self: "{{ self }}"
+              html_url: "{{ html_url }}"
+        incident_type:
+          id: "{{ id }}"
+          name: "{{ name }}"
+        escalation_policy:
+          id: "{{ id }}"
+          summary: "{{ summary }}"
+          type: "{{ type }}"
+          self: "{{ self }}"
+          html_url: "{{ html_url }}"
+        conference_bridge:
+          conference_number: "{{ conference_number }}"
+          conference_url: "{{ conference_url }}"
+    - name: From
+      value: "{{ From }}"
+      description: The email address of a valid user associated with the account making the request.
+      description: The email address of a valid user associated with the account making the request.
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
+
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Acknowledge, resolve, escalate or reassign an incident.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.incidents.incidents
+SET 
+incident = '{{ incident }}'
+WHERE 
+id = '{{ id }}' --required
+AND incident = '{{ incident }}' --required
+AND From = '{{ From}}'
+RETURNING
+incident;
 ```
 </TabItem>
 </Tabs>
@@ -736,57 +798,23 @@ incident
 ## Lifecycle Methods
 
 <Tabs
-    defaultValue="_list_incidents"
+    defaultValue="update_bulk"
     values={[
-        { label: '_list_incidents', value: '_list_incidents' },
-        { label: 'update_incidents', value: 'update_incidents' },
-        { label: '_get_incident', value: '_get_incident' },
-        { label: 'update_incident', value: 'update_incident' },
-        { label: 'merge_incidents', value: 'merge_incidents' },
-        { label: 'create_incident_responder_request', value: 'create_incident_responder_request' },
-        { label: 'create_incident_snooze', value: 'create_incident_snooze' },
-        { label: 'create_incident_status_update', value: 'create_incident_status_update' },
-        { label: 'remove_incident_notification_subscribers', value: 'remove_incident_notification_subscribers' }
+        { label: 'update_bulk', value: 'update_bulk' },
+        { label: 'merge', value: 'merge' },
+        { label: 'snooze', value: 'snooze' }
     ]}
 >
-<TabItem value="_list_incidents">
+<TabItem value="update_bulk">
 
-List existing incidents.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.read`<br />
+Acknowledge, resolve, escalate or reassign one or more incidents.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;A maximum of 250 incidents may be updated at a time. If more than this number of incidents are given, the API will respond with status 413 (Request Entity Too Large).&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;&lt;br /&gt;This API operation has operation specific rate limits. See the &#91;Rate Limits&#93;(https:​//developer.pagerduty.com/docs/72d3b724589e3-rest-api-rate-limits) page for more information.&lt;br /&gt;
 
 ```sql
-EXEC pagerduty.incidents.incidents._list_incidents 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
+EXEC pagerduty.incidents.incidents.update_bulk 
 @limit='{{ limit }}', 
 @offset='{{ offset }}', 
 @total={{ total }}, 
-@date_range='{{ date_range }}', 
-@incident_key='{{ incident_key }}', 
-@service_ids[]='{{ service_ids[] }}', 
-@team_ids[]='{{ team_ids[] }}', 
-@user_ids[]='{{ user_ids[] }}', 
-@urgencies[]='{{ urgencies[] }}', 
-@time_zone='{{ time_zone }}', 
-@statuses[]='{{ statuses[] }}', 
-@sort_by='{{ sort_by }}', 
-@include[]='{{ include[] }}', 
-@since='{{ since }}', 
-@until='{{ until }}'
-;
-```
-</TabItem>
-<TabItem value="update_incidents">
-
-Acknowledge, resolve, escalate or reassign one or more incidents.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />A maximum of 250 incidents may be updated at a time. If more than this number of incidents are given, the API will respond with status 413 (Request Entity Too Large).<br /><br />Note: the manage incidents API endpoint is rate limited to 500 requests per minute.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br />
-
-```sql
-EXEC pagerduty.incidents.incidents.update_incidents 
-@From='{{ From }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@limit='{{ limit }}', 
-@offset='{{ offset }}', 
-@total={{ total }} 
+@From='{{ From }}' 
 @@json=
 '{
 "incidents": "{{ incidents }}"
@@ -794,47 +822,14 @@ EXEC pagerduty.incidents.incidents.update_incidents
 ;
 ```
 </TabItem>
-<TabItem value="_get_incident">
+<TabItem value="merge">
 
-Show detailed information about an incident. Accepts either an incident id, or an incident number.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />&lt;!-- theme: warning --&gt;<br />&gt; ### Early Access<br />&gt; The `include[]=field_values` part of this endpoint is in Early Access and may change at any time. You must pass in the X-EARLY-ACCESS header to access it.<br /><br />Scoped OAuth requires: `incidents.read`<br />
-
-```sql
-EXEC pagerduty.incidents.incidents._get_incident 
-@id='{{ id }}' --required, 
-@X-EARLY-ACCESS='{{ X-EARLY-ACCESS }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@include[]='{{ include[] }}'
-;
-```
-</TabItem>
-<TabItem value="update_incident">
-
-Acknowledge, resolve, escalate or reassign an incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br />
+Merge a list of source incidents into the target &#91;incident&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents).&lt;br /&gt;&lt;br /&gt;After the merge is performed the target incident will contain the source incidents' &#91;alerts&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#alerts),&lt;br /&gt;and the source incidents will be resolved.&lt;br /&gt;&lt;br /&gt;Only incidents that have alerts or incidents that were created manually in the UI can be merged.&lt;br /&gt;&lt;br /&gt;Open incidents cannot be merged into a resolved incident. The target incident must be open.&lt;br /&gt;&lt;br /&gt;An incident cannot have more than 1000 alerts. The server will return an error if merging the source incidents&lt;br /&gt;will result in the target incident having more than 1000 alerts.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;
 
 ```sql
-EXEC pagerduty.incidents.incidents.update_incident 
+EXEC pagerduty.incidents.incidents.merge 
 @id='{{ id }}' --required, 
-@From='{{ From }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"incident": "{{ incident }}"
-}'
-;
-```
-</TabItem>
-<TabItem value="merge_incidents">
-
-Merge a list of source incidents into this incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br />
-
-```sql
-EXEC pagerduty.incidents.incidents.merge_incidents 
-@id='{{ id }}' --required, 
-@From='{{ From }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
+@From='{{ From }}' 
 @@json=
 '{
 "source_incidents": "{{ source_incidents }}"
@@ -842,72 +837,17 @@ EXEC pagerduty.incidents.incidents.merge_incidents
 ;
 ```
 </TabItem>
-<TabItem value="create_incident_responder_request">
+<TabItem value="snooze">
 
-Send a new responder request for the specified incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br />
-
-```sql
-EXEC pagerduty.incidents.incidents.create_incident_responder_request 
-@id='{{ id }}' --required, 
-@From='{{ From }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"requester_id": "{{ requester_id }}", 
-"message": "{{ message }}", 
-"responder_request_targets": "{{ responder_request_targets }}"
-}'
-;
-```
-</TabItem>
-<TabItem value="create_incident_snooze">
-
-Snooze an incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br />
+Snooze an incident.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;StackQL: call this method with the raw JSON body, for example `EXEC incidents.incidents.snooze @id = '...' @@json='&#123;"duration": &lt;integer&gt;&#125;'` - the duration attribute is integer-typed, which the EXEC parameter form does not accept.
 
 ```sql
-EXEC pagerduty.incidents.incidents.create_incident_snooze 
+EXEC pagerduty.incidents.incidents.snooze 
 @id='{{ id }}' --required, 
-@From='{{ From }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
+@From='{{ From }}' 
 @@json=
 '{
 "duration": {{ duration }}
-}'
-;
-```
-</TabItem>
-<TabItem value="create_incident_status_update">
-
-Create a new status update for the specified incident. Optionally pass `subject` and `html_message` properties in the request body to override the email notification that gets sent.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br />
-
-```sql
-EXEC pagerduty.incidents.incidents.create_incident_status_update 
-@id='{{ id }}' --required, 
-@From='{{ From }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"message": "{{ message }}", 
-"subject": "{{ subject }}", 
-"html_message": "{{ html_message }}"
-}'
-;
-```
-</TabItem>
-<TabItem value="remove_incident_notification_subscribers">
-
-Unsubscribes the matching Subscribers from Incident Status Update Notifications.<br /><br />Scoped OAuth requires: `subscribers.write`<br />
-
-```sql
-EXEC pagerduty.incidents.incidents.remove_incident_notification_subscribers 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}' 
-@@json=
-'{
-"subscribers": "{{ subscribers }}"
 }'
 ;
 ```

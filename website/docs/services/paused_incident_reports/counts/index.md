@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>counts</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>counts</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="counts" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.paused_incident_reports.counts" /></td></tr>
 </tbody></table>
@@ -32,12 +33,12 @@ Creates, updates, deletes, gets or lists a <code>counts</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_paused_incident_report_counts"
+    defaultValue="get"
     values={[
-        { label: 'get_paused_incident_report_counts', value: 'get_paused_incident_report_counts' }
+        { label: 'get', value: 'get' }
     ]}
 >
-<TabItem value="get_paused_incident_report_counts">
+<TabItem value="get">
 
 Paused Incident Reporting counts for the Account or scoped to a Service.
 
@@ -96,18 +97,11 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_paused_incident_report_counts"><CopyableCode code="get_paused_incident_report_counts" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a>, <a href="#parameter-service_id"><code>service_id</code></a>, <a href="#parameter-suspended_by"><code>suspended_by</code></a></td>
-    <td>Returns reporting counts for paused Incident usage for a given reporting period (maximum 6 months lookback period).  Note: This feature is currently available as part of the Event Intelligence package or Digital Operations plan only.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#paused-incident-reports)<br /><br />Scoped OAuth requires: `incidents.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_paused_incident_report_counts"><CopyableCode code="_get_paused_incident_report_counts" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a>, <a href="#parameter-service_id"><code>service_id</code></a>, <a href="#parameter-suspended_by"><code>suspended_by</code></a></td>
-    <td>Returns reporting counts for paused Incident usage for a given reporting period (maximum 6 months lookback period).  Note: This feature is currently available as part of the Event Intelligence package or Digital Operations plan only.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#paused-incident-reports)<br /><br />Scoped OAuth requires: `incidents.read`<br /></td>
+    <td><a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a>, <a href="#parameter-service_id"><code>service_id</code></a>, <a href="#parameter-suspended_by"><code>suspended_by</code></a></td>
+    <td>Returns reporting counts for paused Incident usage for a given reporting period (maximum 6 months lookback period).  Note: This feature is currently available as part of the Event Intelligence package or Digital Operations plan only.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#paused-incident-reports)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.read`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -125,16 +119,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 <tr id="parameter-service_id">
     <td><CopyableCode code="service_id" /></td>
     <td><code>string</code></td>
@@ -161,14 +145,14 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_paused_incident_report_counts"
+    defaultValue="get"
     values={[
-        { label: 'get_paused_incident_report_counts', value: 'get_paused_incident_report_counts' }
+        { label: 'get', value: 'get' }
     ]}
 >
-<TabItem value="get_paused_incident_report_counts">
+<TabItem value="get">
 
-Returns reporting counts for paused Incident usage for a given reporting period (maximum 6 months lookback period).  Note: This feature is currently available as part of the Event Intelligence package or Digital Operations plan only.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#paused-incident-reports)<br /><br />Scoped OAuth requires: `incidents.read`<br />
+Returns reporting counts for paused Incident usage for a given reporting period (maximum 6 months lookback period).  Note: This feature is currently available as part of the Event Intelligence package or Digital Operations plan only.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#paused-incident-reports)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -178,38 +162,10 @@ since,
 triggered_after_pause_count,
 until
 FROM pagerduty.paused_incident_reports.counts
-WHERE Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-AND since = '{{ since }}'
+WHERE since = '{{ since }}'
 AND until = '{{ until }}'
 AND service_id = '{{ service_id }}'
 AND suspended_by = '{{ suspended_by }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_get_paused_incident_report_counts"
-    values={[
-        { label: '_get_paused_incident_report_counts', value: '_get_paused_incident_report_counts' }
-    ]}
->
-<TabItem value="_get_paused_incident_report_counts">
-
-Returns reporting counts for paused Incident usage for a given reporting period (maximum 6 months lookback period).  Note: This feature is currently available as part of the Event Intelligence package or Digital Operations plan only.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#paused-incident-reports)<br /><br />Scoped OAuth requires: `incidents.read`<br />
-
-```sql
-EXEC pagerduty.paused_incident_reports.counts._get_paused_incident_report_counts 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@since='{{ since }}', 
-@until='{{ until }}', 
-@service_id='{{ service_id }}', 
-@suspended_by='{{ suspended_by }}'
 ;
 ```
 </TabItem>

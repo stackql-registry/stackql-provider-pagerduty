@@ -18,14 +18,15 @@ service_dependencies service documentation.
 
 :::info[Service Summary]
 
-total resources: __2__  
+total resources: __3__  
 
 :::
 
 ## Resources
 <div class="row">
 <div class="providerDocColumn">
-<a href="/services/service_dependencies/business_services/">business_services</a>
+<a href="/services/service_dependencies/business_services/">business_services</a><br />
+<a href="/services/service_dependencies/dependencies/">dependencies</a>
 </div>
 <div class="providerDocColumn">
 <a href="/services/service_dependencies/technical_services/">technical_services</a>

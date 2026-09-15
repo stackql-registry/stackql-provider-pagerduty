@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>notification_rules</code> resou
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>notification_rules</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="notification_rules" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.users.notification_rules" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>notification_rules</code> resou
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_user_notification_rule"
+    defaultValue="get"
     values={[
-        { label: 'get_user_notification_rule', value: 'get_user_notification_rule' },
-        { label: 'get_user_notification_rules', value: 'get_user_notification_rules' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_user_notification_rule">
+<TabItem value="get">
 
 The user's notification rule requested.
 
@@ -59,7 +60,7 @@ The user's notification rule requested.
 <tr>
     <td><CopyableCode code="contact_method" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="html_url" /></td>
@@ -84,17 +85,17 @@ The user's notification rule requested.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of object being created. (default: assignment_notification_rule)</td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 <tr>
     <td><CopyableCode code="urgency" /></td>
     <td><code>string</code></td>
-    <td>Which incident urgency this rule is used for. Account must have the `urgencies` ability to have a low urgency notification rule.</td>
+    <td>Which incident urgency this rule is used for. Account must have the `urgencies` ability to have a low urgency notification rule. (high, low)</td>
 </tr>
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_user_notification_rules">
+<TabItem value="list">
 
 A list of notification rules.
 
@@ -107,6 +108,46 @@ A list of notification rules.
     </tr>
 </thead>
 <tbody>
+<tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="contact_method" /></td>
+    <td><code>object</code></td>
+    <td>(opaque JSON object)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="html_url" /></td>
+    <td><code>string (url)</code></td>
+    <td>a URL at which the entity is uniquely displayed in the Web app</td>
+</tr>
+<tr>
+    <td><CopyableCode code="self" /></td>
+    <td><code>string (url)</code></td>
+    <td>the API show URL at which the object is accessible</td>
+</tr>
+<tr>
+    <td><CopyableCode code="start_delay_in_minutes" /></td>
+    <td><code>integer</code></td>
+    <td>The delay before firing the rule, in minutes.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="summary" /></td>
+    <td><code>string</code></td>
+    <td>A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="type" /></td>
+    <td><code>string</code></td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="urgency" /></td>
+    <td><code>string</code></td>
+    <td>Which incident urgency this rule is used for. Account must have the `urgencies` ability to have a low urgency notification rule. (high, low)</td>
+</tr>
 </tbody>
 </table>
 </TabItem>
@@ -128,53 +169,39 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_user_notification_rule"><CopyableCode code="get_user_notification_rule" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-notification_rule_id"><code>notification_rule_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>Get details about a user's notification rule.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.read`<br /></td>
+    <td><a href="#parameter-include[]"><code>include[]</code></a></td>
+    <td>Get details about a user's notification rule.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#get_user_notification_rules"><CopyableCode code="get_user_notification_rules" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-include[]"><code>include[]</code></a>, <a href="#parameter-urgency"><code>urgency</code></a></td>
-    <td>List notification rules of your PagerDuty user.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.read`<br /></td>
+    <td><a href="#parameter-include[]"><code>include[]</code></a>, <a href="#parameter-urgency"><code>urgency</code></a></td>
+    <td>List notification rules of your PagerDuty user.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_user_notification_rule"><CopyableCode code="create_user_notification_rule" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-data__notification_rule"><code>data__notification_rule</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Create a new notification rule.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.write`<br /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-notification_rule"><code>notification_rule</code></a></td>
+    <td></td>
+    <td>Create a new notification rule.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#delete_user_notification_rule"><CopyableCode code="delete_user_notification_rule" /></a></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-notification_rule_id"><code>notification_rule_id</code></a>, <a href="#parameter-notification_rule"><code>notification_rule</code></a></td>
+    <td></td>
+    <td>Update a user's notification rule.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.write`&lt;br /&gt;</td>
+</tr>
+<tr>
+    <td><a href="#delete"><CopyableCode code="delete" /></a></td>
     <td><CopyableCode code="delete" /></td>
     <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-notification_rule_id"><code>notification_rule_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Remove a user's notification rule.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_user_notification_rules"><CopyableCode code="_get_user_notification_rules" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-include[]"><code>include[]</code></a>, <a href="#parameter-urgency"><code>urgency</code></a></td>
-    <td>List notification rules of your PagerDuty user.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_user_notification_rule"><CopyableCode code="_get_user_notification_rule" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-notification_rule_id"><code>notification_rule_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>Get details about a user's notification rule.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#update_user_notification_rule"><CopyableCode code="update_user_notification_rule" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-notification_rule_id"><code>notification_rule_id</code></a>, <a href="#parameter-notification_rule"><code>notification_rule</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Update a user's notification rule.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.write`<br /></td>
+    <td></td>
+    <td>Remove a user's notification rule.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -202,16 +229,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The notification rule ID on the user.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 <tr id="parameter-include[]">
     <td><CopyableCode code="include[]" /></td>
     <td><code>string</code></td>
@@ -228,15 +245,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_user_notification_rule"
+    defaultValue="get"
     values={[
-        { label: 'get_user_notification_rule', value: 'get_user_notification_rule' },
-        { label: 'get_user_notification_rules', value: 'get_user_notification_rules' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_user_notification_rule">
+<TabItem value="get">
 
-Get details about a user's notification rule.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.read`<br />
+Get details about a user's notification rule.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -251,23 +268,26 @@ urgency
 FROM pagerduty.users.notification_rules
 WHERE id = '{{ id }}' -- required
 AND notification_rule_id = '{{ notification_rule_id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 AND include[] = '{{ include[] }}'
 ;
 ```
 </TabItem>
-<TabItem value="get_user_notification_rules">
+<TabItem value="list">
 
-List notification rules of your PagerDuty user.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.read`<br />
+List notification rules of your PagerDuty user.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.read`&lt;br /&gt;
 
 ```sql
 SELECT
-*
+id,
+contact_method,
+html_url,
+self,
+start_delay_in_minutes,
+summary,
+type,
+urgency
 FROM pagerduty.users.notification_rules
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 AND include[] = '{{ include[] }}'
 AND urgency = '{{ urgency }}'
 ;
@@ -279,28 +299,24 @@ AND urgency = '{{ urgency }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_user_notification_rule"
+    defaultValue="create"
     values={[
-        { label: 'create_user_notification_rule', value: 'create_user_notification_rule' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_user_notification_rule">
+<TabItem value="create">
 
-Create a new notification rule.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.write`<br />
+Create a new notification rule.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.write`&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.users.notification_rules (
-data__notification_rule,
-id,
-Accept,
-Content-Type
+notification_rule,
+id
 )
 SELECT 
 '{{ notification_rule }}' /* required */,
-'{{ id }}',
-'{{ Accept }}',
-'{{ Content-Type }}'
+'{{ id }}'
 RETURNING
 notification_rule
 ;
@@ -308,22 +324,57 @@ notification_rule
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: notification_rules
   props:
     - name: id
-      value: string
+      value: "{{ id }}"
       description: Required parameter for the notification_rules resource.
     - name: notification_rule
-      value: object
       description: |
         A rule for contacting the user.
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-    - name: Content-Type
-      value: string
+      value:
+        id: "{{ id }}"
+        summary: "{{ summary }}"
+        type: "{{ type }}"
+        self: "{{ self }}"
+        html_url: "{{ html_url }}"
+        start_delay_in_minutes: {{ start_delay_in_minutes }}
+        contact_method:
+          id: "{{ id }}"
+          summary: "{{ summary }}"
+          type: "{{ type }}"
+          self: "{{ self }}"
+          html_url: "{{ html_url }}"
+        urgency: "{{ urgency }}"
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
+
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Update a user's notification rule.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.write`&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.users.notification_rules
+SET 
+notification_rule = '{{ notification_rule }}'
+WHERE 
+id = '{{ id }}' --required
+AND notification_rule_id = '{{ notification_rule_id }}' --required
+AND notification_rule = '{{ notification_rule }}' --required
+RETURNING
+notification_rule;
 ```
 </TabItem>
 </Tabs>
@@ -332,79 +383,19 @@ notification_rule
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="delete_user_notification_rule"
+    defaultValue="delete"
     values={[
-        { label: 'delete_user_notification_rule', value: 'delete_user_notification_rule' }
+        { label: 'delete', value: 'delete' }
     ]}
 >
-<TabItem value="delete_user_notification_rule">
+<TabItem value="delete">
 
-Remove a user's notification rule.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.write`<br />
+Remove a user's notification rule.&lt;br /&gt;&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:contact_methods.write`&lt;br /&gt;
 
 ```sql
 DELETE FROM pagerduty.users.notification_rules
 WHERE id = '{{ id }}' --required
 AND notification_rule_id = '{{ notification_rule_id }}' --required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_get_user_notification_rules"
-    values={[
-        { label: '_get_user_notification_rules', value: '_get_user_notification_rules' },
-        { label: '_get_user_notification_rule', value: '_get_user_notification_rule' },
-        { label: 'update_user_notification_rule', value: 'update_user_notification_rule' }
-    ]}
->
-<TabItem value="_get_user_notification_rules">
-
-List notification rules of your PagerDuty user.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.read`<br />
-
-```sql
-EXEC pagerduty.users.notification_rules._get_user_notification_rules 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@include[]='{{ include[] }}', 
-@urgency='{{ urgency }}'
-;
-```
-</TabItem>
-<TabItem value="_get_user_notification_rule">
-
-Get details about a user's notification rule.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.read`<br />
-
-```sql
-EXEC pagerduty.users.notification_rules._get_user_notification_rule 
-@id='{{ id }}' --required, 
-@notification_rule_id='{{ notification_rule_id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@include[]='{{ include[] }}'
-;
-```
-</TabItem>
-<TabItem value="update_user_notification_rule">
-
-Update a user's notification rule.<br /><br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users:contact_methods.write`<br />
-
-```sql
-EXEC pagerduty.users.notification_rules.update_user_notification_rule 
-@id='{{ id }}' --required, 
-@notification_rule_id='{{ notification_rule_id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"notification_rule": "{{ notification_rule }}"
-}'
 ;
 ```
 </TabItem>

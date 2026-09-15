@@ -1,0 +1,6 @@
+[
+  {
+    "url": "https://api.pagerduty.com",
+    "description": "PagerDuty REST API v2 (US service region). The EU service region (https://api.eu.pagerduty.com) is documented in NOTES.md - a server variable cannot carry it without becoming a required parameter on every query."
+  }
+]

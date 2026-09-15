@@ -1,0 +1,1489 @@
+openapi: 3.0.2
+info:
+  title: PagerDuty API - Business Services
+  description: Business services model the services an organization provides, their subscribers, impacts and priority thresholds.
+  version: 2.0.0
+paths:
+  /business_services:
+    get:
+      x-pd-requires-scope: services.read
+      tags:
+        - Business Services
+      operationId: listBusinessServices
+      description: |
+        List existing Business Services.
+
+        Business services model capabilities that span multiple technical services and that may be owned by several different teams.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#business-services)
+
+        Scoped OAuth requires: `services.read`
+      summary: List Business Services
+      parameters:
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+      responses:
+        '200':
+          description: A paginated array of services.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  business_services:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BusinessService'
+                required:
+                  - business_services
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    business_services:
+                      - type: business_service
+                        self: https://api.pagerduty.com/business_services/P3U7V58
+                        html_url: null
+                        point_of_contact: PagerDuty Admin
+                        name: stand-alone node
+                        team: null
+                        id: P3U7V58
+                        description: Very important business function
+                        summary: stand-alone node
+                      - type: business_service
+                        self: https://api.pagerduty.com/business_services/P1L1YEE
+                        html_url: null
+                        point_of_contact: PagerDuty Admin
+                        name: Cross-tier business service
+                        id: P1L1YEE
+                        summary: Cross-tier business service
+                        team:
+                          id: PQ9K7I8
+                          type: team_reference
+                          self: https://api.pagerduty.com/teams/PQ9K7I8
+                    limit: 100
+                    offset: 0
+                    total: null
+                    more: false
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      x-pd-requires-scope: services.write
+      tags:
+        - Business Services
+      operationId: createBusinessService
+      description: |
+        Create a new Business Service.
+
+        Business services model capabilities that span multiple technical services and that may be owned by several different teams.
+
+        There is a limit of 5,000 business services per account. If the limit is reached, the API will respond with an error.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#business-services)
+
+        Scoped OAuth requires: `services.write`
+      summary: Create a Business Service
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                business_service:
+                  type: object
+                  description: The Business Service to be created
+                  properties:
+                    name:
+                      type: string
+                      description: The name of the Business Service.
+                    description:
+                      type: string
+                      description: The description of the Business Service.
+                    point_of_contact:
+                      type: string
+                      description: The owner of the Business Service.
+                    team:
+                      type: object
+                      title: Team
+                      description: Reference to the team that owns the Business Service.
+                      properties:
+                        id:
+                          type: string
+                          description: The Team ID
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  business_service:
+                    name: Self-serve mobile checkout
+                    description: Checkout service for our mobile clients
+                    point_of_contact: PagerDuty Admin
+                    team:
+                      id: P3ZQXDF
+      responses:
+        '200':
+          description: The Business Service that was created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  business_service:
+                    $ref: '#/components/schemas/BusinessService'
+                required:
+                  - business_service
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    business_service:
+                      id: P1L1YEE
+                      type: business_service
+                      self: https://api.pagerduty.com/business_services/P1L1YEE
+                      html_url: null
+                      point_of_contact: PagerDuty Admin
+                      name: Self-serve mobile checkout
+                      description: Checkout service for our mobile clients.
+                      summary: Self-serve mobile checkout
+                      team:
+                        id: P3ZQXDF
+                        type: team_reference
+                        self: https://api.pagerduty.com/teams/P3ZQXDF
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    description: List and create Business Services.
+  /business_services/{id}:
+    get:
+      x-pd-requires-scope: services.read
+      tags:
+        - Business Services
+      operationId: getBusinessService
+      description: |
+        Get details about an existing Business Service.
+
+        Business services model capabilities that span multiple technical services and that may be owned by several different teams.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#business-services)
+
+        Scoped OAuth requires: `services.read`
+      summary: Get a Business Service
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: The service business requested.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  business_service:
+                    $ref: '#/components/schemas/BusinessService'
+                required:
+                  - business_service
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    business_service:
+                      id: P1L1YEE
+                      type: business_service
+                      self: https://api.pagerduty.com/business_services/P1L1YEE
+                      html_url: null
+                      name: Cross-tier business service
+                      description: Business service affected by multiple teams
+                      point_of_contact: PagerDuty Admin
+                      summary: Cross-tier business services
+                      team:
+                        id: PQ9K7I8
+                        type: team_reference
+                        self: https://api.pagerduty.com/teams/PQ9K7I8
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      x-pd-requires-scope: services.write
+      tags:
+        - Business Services
+      operationId: deleteBusinessService
+      description: |
+        Delete an existing Business Service.
+
+        Once the service is deleted, it will not be accessible from the web UI and new incidents won't be able to be created for this service.
+
+        Business services model capabilities that span multiple technical services and that may be owned by several different teams.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#business-services)
+
+        Scoped OAuth requires: `services.write`
+      summary: Delete a Business Service
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: The Business Service was deleted successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      x-pd-requires-scope: services.write
+      tags:
+        - Business Services
+      operationId: updateBusinessService
+      description: |
+        Update an existing Business Service. NOTE that this endpoint also accepts the PATCH verb.
+
+        Business services model capabilities that span multiple technical services and that may be owned by several different teams.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#business-services)
+
+        Scoped OAuth requires: `services.write`
+      summary: Update a Business Service
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                business_service:
+                  type: object
+                  description: The Business Service to be created
+                  properties:
+                    name:
+                      type: string
+                      description: The name of the Business Service.
+                    description:
+                      type: string
+                      description: The description of the Business Service.
+                    point_of_contact:
+                      type: string
+                      description: The owner of the Business Service.
+                    team:
+                      type: object
+                      title: Team
+                      description: Reference to the team that owns the Business Service.
+                      properties:
+                        id:
+                          type: string
+                          description: The team ID
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  business_service:
+                    name: Self-serve mobile checkout
+                    description: Checkout service for our mobile clients
+                    point_of_contact: PagerDuty Admin
+                    team:
+                      id: P3ZQXDF
+      responses:
+        '200':
+          description: The Business Service that was updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  business_service:
+                    $ref: '#/components/schemas/BusinessService'
+                required:
+                  - business_service
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    business_service:
+                      id: P1L1YEE
+                      type: business_service
+                      self: https://api.pagerduty.com/business_services/P1L1YEE
+                      html_url: null
+                      point_of_contact: PagerDuty Admin
+                      name: Self-serve mobile checkout
+                      description: Checkout service for our mobile clients.
+                      summary: Self-serve mobile checkout
+                      team:
+                        id: P3ZQXDF
+                        type: team_reference
+                        self: https://api.pagerduty.com/teams/P3ZQXDF
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    description: Manage a Business Service.
+  /business_services/{id}/account_subscription:
+    post:
+      x-pd-requires-scope: subscribers.write
+      summary: Create Business Service Account Subscription
+      tags:
+        - Business Services
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  account_is_subscribed:
+                    type: boolean
+                required:
+                  - account_is_subscribed
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    account_is_subscribed: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      operationId: createBusinessServiceAccountSubscription
+      description: |
+        Subscribe your Account to a Business Service.
+
+        Scoped OAuth requires: `subscribers.write`
+      parameters:
+        - $ref: '#/components/parameters/id'
+    delete:
+      x-pd-requires-scope: subscribers.write
+      summary: Delete Business Service Account Subscription
+      tags:
+        - Business Services
+      operationId: removeBusinessServiceAccountSubscription
+      responses:
+        '204':
+          description: The account was unsubscribed successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      description: |
+        Unsubscribe your Account from a Business Service.
+
+        Scoped OAuth requires: `subscribers.write`
+      parameters:
+        - $ref: '#/components/parameters/id'
+  /business_services/{id}/subscribers:
+    get:
+      x-pd-requires-scope: subscribers.read
+      summary: List Business Service Subscribers
+      tags:
+        - Business Services
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  subscribers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/NotificationSubscriber'
+                  account_id:
+                    type: string
+                    description: The ID of the account belonging to the subscriber entity
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    limit: 100
+                    more: false
+                    offset: 0
+                    subscribers:
+                      - subscriber_id: PD1234
+                        subscriber_type: user
+                      - subscriber_id: PD1234
+                        subscriber_type: team
+                    account_id: PD1234
+                    total: 2
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+      operationId: getBusinessServiceSubscribers
+      description: |
+        Retrieve a list of Notification Subscribers on the Business Service.
+
+        <!-- theme: warning -->
+        > Users must be added through `POST /business_services/{id}/subscribers` to be returned from this endpoint.
+        Scoped OAuth requires: `subscribers.read`
+      parameters:
+        - $ref: '#/components/parameters/id'
+    post:
+      x-pd-requires-scope: subscribers.write
+      summary: Create Business Service Subscribers
+      tags:
+        - Business Services
+      operationId: createBusinessServiceNotificationSubscribers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subscriptions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/NotificationSubscriptionWithContext'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    subscriptions:
+                      - account_id: PD1234
+                        subscribable_id: PD1234
+                        subscribable_type: business_service
+                        subscriber_id: PD1234
+                        subscriber_type: user
+                        result: success
+                      - account_id: PD1234
+                        subscribable_id: PD1234
+                        subscribable_type: business_service
+                        subscriber_id: PD1234
+                        subscriber_type: team
+                        result: duplicate
+                      - account_id: PD1234
+                        subscribable_id: PD1235
+                        subscribable_type: business_service
+                        subscriber_id: PD1234
+                        subscriber_type: team
+                        result: unauthorized
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      description: |
+        Subscribe the given entities to the given Business Service.
+
+        Scoped OAuth requires: `subscribers.write`
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subscribers:
+                  type: array
+                  uniqueItems: true
+                  minItems: 1
+                  items:
+                    $ref: '#/components/schemas/NotificationSubscriber'
+              required:
+                - subscribers
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  subscribers:
+                    - subscriber_id: PD1234
+                      subscriber_type: team
+                    - subscriber_id: PD1235
+                      subscriber_type: team
+                    - subscriber_id: PD1234
+                      subscriber_type: user
+        description: The entities to subscribe.
+  /business_services/{id}/supporting_services/impacts:
+    get:
+      x-pd-requires-scope: services.read
+      summary: List the supporting Business Services for the given Business Service Id, sorted by impacted status.
+      tags:
+        - Business Services
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  services:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Impact'
+                  additional_fields:
+                    type: object
+                    properties:
+                      total_impacted_count:
+                        type: integer
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    limit: 100
+                    more: false
+                    services:
+                      - id: PD1234
+                        name: Web API
+                        type: business_service
+                        status: impacted
+                        additional_fields:
+                          highest_impacting_priority:
+                            id: PQOMK4S
+                            order: 128
+                      - id: PF9KMXH
+                        name: Analytics Backend
+                        type: business_service
+                        status: not_impacted
+                        additional_fields:
+                          highest_impacting_priority: null
+                    additional_fields:
+                      total_impacted_count: 1
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+      operationId: getBusinessServiceSupportingServiceImpacts
+      description: |
+        Retrieve of Business Services that support the given Business Service sorted by highest Impact with `status` included.
+        This endpoint does not return an exhaustive list of Business Services but rather provides access to the most impacted up to the limit of 200.
+
+        The returned Business Services are sorted first by Impact, secondarily by most recently impacted, and finally by name.
+
+        To get impact information about a specific set of Business Services, use the `ids[]` parameter on the `/business_services/impacts` endpoint.
+        Scoped OAuth requires: `services.read`
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/impacts_additional_fields'
+        - $ref: '#/components/parameters/ids'
+  /business_services/{id}/unsubscribe:
+    post:
+      x-pd-requires-scope: subscribers.write
+      summary: Remove Business Service Subscribers
+      tags:
+        - Business Services
+      operationId: removeBusinessServiceNotificationSubscriber
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deleted_count:
+                    type: number
+                  unauthorized_count:
+                    type: number
+                  non_existent_count:
+                    type: number
+                required:
+                  - deleted_count
+                  - unauthorized_count
+                  - non_existent_count
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    deleted_count: 1
+                    unauthorized_count: 1
+                    non_existent_count: 0
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      description: |
+        Unsubscribes the matching Subscribers from a Business Service.
+
+        Scoped OAuth requires: `subscribers.write`
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subscribers:
+                  type: array
+                  uniqueItems: true
+                  minItems: 1
+                  items:
+                    $ref: '#/components/schemas/NotificationSubscriber'
+              required:
+                - subscribers
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  subscribers:
+                    - subscriber_id: PD1234
+                      subscriber_type: team
+                    - subscriber_id: PD1234
+                      subscriber_type: user
+        description: The entities to unsubscribe.
+  /business_services/impactors:
+    get:
+      x-pd-requires-scope: services.read
+      summary: List Impactors affecting Business Services
+      tags:
+        - Business Services
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  impactors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Impactor'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    limit: 100
+                    more: false
+                    impactors:
+                      - id: PD1234
+                        type: incident
+                      - id: PF9KMXH
+                        type: incident
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+      operationId: getBusinessServiceTopLevelImpactors
+      description: |
+        Retrieve a list of Impactors for the top-level Business Services on the account. Impactors are currently limited to Incidents.
+
+        This endpoint does not return an exhaustive list of Impactors but rather provides access to the highest priority Impactors for the Business Services in question up to the limit of 200.
+
+        To get Impactors for a specific set of Business Services, use the `ids[]` parameter.
+
+        The returned Impactors are sorted first by priority and secondarily by their creation date.
+        Scoped OAuth requires: `services.read`
+      parameters:
+        - $ref: '#/components/parameters/ids'
+  /business_services/impacts:
+    get:
+      x-pd-requires-scope: services.read
+      summary: List Business Services sorted by impacted status
+      tags:
+        - Business Services
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  services:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Impact'
+                  additional_fields:
+                    type: object
+                    properties:
+                      total_impacted_count:
+                        type: integer
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    limit: 100
+                    more: false
+                    services:
+                      - id: PD1234
+                        name: Web API
+                        type: business_service
+                        status: impacted
+                        additional_fields:
+                          highest_impacting_priority:
+                            id: PQOMK4S
+                            order: 128
+                      - id: PF9KMXH
+                        name: Analytics Backend
+                        type: business_service
+                        status: not_impacted
+                        additional_fields:
+                          highest_impacting_priority: null
+                    additional_fields:
+                      total_impacted_count: 1
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+      operationId: getBusinessServiceImpacts
+      description: |
+        Retrieve a list top-level Business Services sorted by highest Impact with `status` included.
+        When called without the `ids[]` parameter, this endpoint does not return an exhaustive list of Business Services but rather provides access to the most impacted up to the limit of 200.
+
+        The returned Business Services are sorted first by Impact, secondarily by most recently impacted, and finally by name.
+
+        To get impact information about a specific set of Business Services, use the `ids[]` parameter.
+        Scoped OAuth requires: `services.read`
+      parameters:
+        - $ref: '#/components/parameters/impacts_additional_fields'
+        - $ref: '#/components/parameters/ids'
+  /business_services/priority_thresholds:
+    get:
+      x-pd-requires-scope: services.read
+      summary: Get the global priority threshold for a Business Service to be considered impacted by an Incident
+      tags:
+        - Business Services
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  global_threshold:
+                    type: object
+                    nullable: true
+                    properties:
+                      id:
+                        type: string
+                      order:
+                        type: integer
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    limit: 100
+                    more: false
+                    global_threshold: null
+                    type: object
+                    properties:
+                      id: string
+                      order: integer
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+      operationId: getBusinessServicePriorityThresholds
+      description: |
+        Retrieves the priority threshold information for an account.  Currently, there is a `global_threshold` that can be set for the account.  Incidents that have a priority meeting or exceeding this threshold will be considered impacting on any Business Service that depends on the Service to which the Incident belongs.
+        Scoped OAuth requires: `services.read`
+      parameters: []
+    delete:
+      x-pd-requires-scope: services.write
+      summary: Deletes the account-level priority threshold for Business Service impact
+      tags:
+        - Business Services
+      responses:
+        '204':
+          description: The Priority Threshold for the account was successfully cleared.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+      operationId: deleteBusinessServicePriorityThresholds
+      description: |
+        Clears the Priority Threshold for the account.  If the priority threshold is cleared, any Incident with a Priority set will be able to impact Business Services.
+        Scoped OAuth requires: `services.write`
+      parameters: []
+    put:
+      x-pd-requires-scope: services.write
+      summary: Set the Account-level priority threshold for Business Service impact.
+      tags:
+        - Business Services
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  global_threshold:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      order:
+                        type: number
+                    required:
+                      - id
+                      - order
+                required:
+                  - global_threshold
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    global_threshold:
+                      id: PTLNKGF
+                      order: 256
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          description: Internal Server Error
+      operationId: putBusinessServicePriorityThresholds
+      description: |
+        Set the Account-level priority threshold for Business Service.
+        Scoped OAuth requires: `services.write`
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                global_threshold:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      minLength: 1
+                    order:
+                      type: number
+                  required:
+                    - id
+                    - order
+              required:
+                - global_threshold
+            examples:
+              example:
+                value:
+                  global_threshold:
+                    id: PTLNKGF
+                    order: 256
+        description: |-
+          Set the `id` and `order` of the global Priority Threshold. These values can be obtained by calling the `/priorities` endpoint.
+
+          Once set, Incidents must be at or above the specified level in order to impact Business Services.  An exception to this rule is if the Incident has been added to the incident directly using the `PUT /incidents/{id}/business_services/{business_service_id}/impacts` endpoint.
+components:
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        offset:
+          type: integer
+          description: Echoes offset pagination property.
+          readOnly: true
+        limit:
+          type: integer
+          description: Echoes limit pagination property.
+          readOnly: true
+        more:
+          type: boolean
+          description: Indicates if there are additional records to return
+          readOnly: true
+        total:
+          type: integer
+          description: The total number of records matching the given query.
+          nullable: true
+          readOnly: true
+    BusinessService:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        name:
+          type: string
+          description: The name of the business service.
+        description:
+          type: string
+          description: The user-provided description of the business service.
+        point_of_contact:
+          type: string
+          description: The point of contact assigned to this service.
+        team:
+          type: object
+          nullable: true
+          title: Team
+          description: Reference to the team that owns the business service.
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              description: A string that determines the schema of the object.
+              readOnly: true
+            self:
+              type: string
+              format: url
+              description: The API show URL at which the object is accessible.
+              readOnly: true
+          required:
+            - id
+      example:
+        id: P3X2XX3
+        type: business_service
+        name: Self-serve mobile checkout
+        description: Checkout service for our mobile clients
+        point_of_contact: PagerDuty Admin
+        team:
+          type: team_reference
+          self: https://api.pagerduty.com/teams/P3ZQXDF
+          id: P3ZQXDF
+    NotificationSubscriber:
+      title: NotificationSubscriber
+      description: A reference of a subscriber entity.
+      type: object
+      properties:
+        subscriber_id:
+          type: string
+          description: The ID of the entity being subscribed
+        subscriber_type:
+          type: string
+          description: The type of the entity being subscribed
+          enum:
+            - user
+            - team
+      example:
+        subscriber_id: PD1234
+        subscriber_type: user
+    NotificationSubscriptionWithContext:
+      title: NotificationSubscriptionWithContext
+      type: object
+      description: An object describing the relationship of a NotificationSubscriber and a NotificationSubscribable with additional context on status of subscription attempt.
+      x-examples:
+        example-1:
+          subscriber_id: string
+          subscriber_type: user
+          subscribable_id: string
+          subscribable_type: incident
+          account_id: string
+          result: success
+      properties:
+        subscriber_id:
+          type: string
+          description: The ID of the entity being subscribed
+        subscriber_type:
+          type: string
+          enum:
+            - user
+            - team
+          description: The type of the entity being subscribed
+        subscribable_id:
+          type: string
+          description: The ID of the entity being subscribed to
+        subscribable_type:
+          type: string
+          enum:
+            - incident
+            - business_service
+          description: The type of the entity being subscribed to
+        account_id:
+          type: string
+          description: The type of the entity being subscribed to
+        result:
+          type: string
+          enum:
+            - success
+            - duplicate
+            - unauthorized
+          description: The resulting status of the subscription
+    LiveListResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Echoes limit pagination property.
+          readOnly: true
+        more:
+          type: boolean
+          description: Indicates if there are additional records to return
+          readOnly: true
+    Impact:
+      title: Impact
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          description: The kind of object that has been impacted
+          enum:
+            - business_service
+        status:
+          type: string
+          description: The current impact status of the object
+          enum:
+            - impacted
+            - not_impacted
+        additional_fields:
+          type: object
+          properties:
+            highest_impacting_priority:
+              type: object
+              nullable: true
+              description: Priority information for the highest priority level that is affecting the impacted object.
+              properties:
+                id:
+                  type: string
+                  readOnly: true
+                order:
+                  type: integer
+                  readOnly: true
+    Impactor:
+      title: Impactor
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          description: The kind of object that is impacting
+          enum:
+            - incident
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        label:
+          type: string
+          description: The label of the tag.
+          maxLength: 191
+      required:
+        - label
+        - type
+      example:
+        type: tag
+        label: Batman
+  responses:
+    ArgumentError:
+      description: Caller provided invalid arguments. Please review the response for error details. Retrying with the same arguments will *not* work.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Unauthorized:
+      description: |
+        Caller did not supply credentials or did not provide the correct credentials.
+        If you are using an API key, it may be invalid or your Authorization header may be malformed.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Forbidden:
+      description: |
+        Caller is not authorized to view the requested resource.
+        While your authentication is valid, the authenticated user or token does not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    UnprocessableEntity:
+      description: Unprocessable Entity. Some arguments failed validation checks.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    TooManyRequests:
+      description: Too many requests have been made, the rate limit has been reached.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Conflict:
+      description: The request conflicts with the current state of the server.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+  parameters:
+    offset_limit:
+      name: limit
+      in: query
+      required: false
+      description: The number of results per page.
+      schema:
+        type: integer
+    offset_offset:
+      name: offset
+      in: query
+      required: false
+      description: Offset to start pagination search results.
+      schema:
+        type: integer
+    offset_total:
+      name: total
+      in: query
+      required: false
+      description: |
+        By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.
+
+        See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information.
+      schema:
+        default: false
+        type: boolean
+    id:
+      name: id
+      description: The ID of the resource.
+      in: path
+      required: true
+      schema:
+        type: string
+    impacts_additional_fields:
+      name: additional_fields[]
+      in: query
+      description: Provides access to additional fields such as highest priority per business service and total impacted count
+      explode: true
+      schema:
+        type: string
+        enum:
+          - services.highest_impacting_priority
+          - total_impacted_count
+    ids:
+      name: ids[]
+      description: The IDs of the resources.
+      in: query
+      explode: true
+      schema:
+        type: string
+servers:
+  - url: https://api.pagerduty.com
+    description: PagerDuty V2 API.

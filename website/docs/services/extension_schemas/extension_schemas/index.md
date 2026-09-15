@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>extension_schemas</code> resou
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>extension_schemas</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="extension_schemas" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.extension_schemas.extension_schemas" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists an <code>extension_schemas</code> resou
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_extension_schema"
+    defaultValue="get"
     values={[
-        { label: 'get_extension_schema', value: 'get_extension_schema' },
-        { label: 'list_extension_schemas', value: 'list_extension_schemas' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_extension_schema">
+<TabItem value="get">
 
 The extension vendor requested
 
@@ -94,7 +95,7 @@ The extension vendor requested
 </tbody>
 </table>
 </TabItem>
-<TabItem value="list_extension_schemas">
+<TabItem value="list">
 
 A paginated array of extension schemas.
 
@@ -168,32 +169,18 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_extension_schema"><CopyableCode code="get_extension_schema" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get details about one specific extension vendor.<br /><br />A PagerDuty extension vendor represents a specific type of outbound extension such as Generic Webhook, Slack, ServiceNow.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extension-schemas)<br /><br />Scoped OAuth requires: `extension_schemas.read`<br /></td>
+    <td></td>
+    <td>Get details about one specific extension vendor.&lt;br /&gt;&lt;br /&gt;A PagerDuty extension vendor represents a specific type of outbound extension such as Generic Webhook, Slack, ServiceNow.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extension-schemas)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `extension_schemas.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#list_extension_schemas"><CopyableCode code="list_extension_schemas" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>List all extension schemas.<br /><br />A PagerDuty extension vendor represents a specific type of outbound extension such as Generic Webhook, Slack, ServiceNow.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extension-schemas)<br /><br />Scoped OAuth requires: `extension_schemas.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_extension_schemas"><CopyableCode code="_list_extension_schemas" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td></td>
-    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>List all extension schemas.<br /><br />A PagerDuty extension vendor represents a specific type of outbound extension such as Generic Webhook, Slack, ServiceNow.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extension-schemas)<br /><br />Scoped OAuth requires: `extension_schemas.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_extension_schema"><CopyableCode code="_get_extension_schema" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get details about one specific extension vendor.<br /><br />A PagerDuty extension vendor represents a specific type of outbound extension such as Generic Webhook, Slack, ServiceNow.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extension-schemas)<br /><br />Scoped OAuth requires: `extension_schemas.read`<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a></td>
+    <td>List all extension schemas.&lt;br /&gt;&lt;br /&gt;A PagerDuty extension vendor represents a specific type of outbound extension such as Generic Webhook, Slack, ServiceNow.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extension-schemas)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `extension_schemas.read`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -216,16 +203,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 <tr id="parameter-limit">
     <td><CopyableCode code="limit" /></td>
     <td><code>integer</code></td>
@@ -239,7 +216,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-total">
     <td><CopyableCode code="total" /></td>
     <td><code>boolean</code></td>
-    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
+    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our &#91;Pagination Docs&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
 </tr>
 </tbody>
 </table>
@@ -247,15 +224,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_extension_schema"
+    defaultValue="get"
     values={[
-        { label: 'get_extension_schema', value: 'get_extension_schema' },
-        { label: 'list_extension_schemas', value: 'list_extension_schemas' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_extension_schema">
+<TabItem value="get">
 
-Get details about one specific extension vendor.<br /><br />A PagerDuty extension vendor represents a specific type of outbound extension such as Generic Webhook, Slack, ServiceNow.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extension-schemas)<br /><br />Scoped OAuth requires: `extension_schemas.read`<br />
+Get details about one specific extension vendor.&lt;br /&gt;&lt;br /&gt;A PagerDuty extension vendor represents a specific type of outbound extension such as Generic Webhook, Slack, ServiceNow.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extension-schemas)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `extension_schemas.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -269,14 +246,12 @@ send_types,
 url
 FROM pagerduty.extension_schemas.extension_schemas
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
-<TabItem value="list_extension_schemas">
+<TabItem value="list">
 
-List all extension schemas.<br /><br />A PagerDuty extension vendor represents a specific type of outbound extension such as Generic Webhook, Slack, ServiceNow.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extension-schemas)<br /><br />Scoped OAuth requires: `extension_schemas.read`<br />
+List all extension schemas.&lt;br /&gt;&lt;br /&gt;A PagerDuty extension vendor represents a specific type of outbound extension such as Generic Webhook, Slack, ServiceNow.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extension-schemas)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `extension_schemas.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -292,46 +267,6 @@ FROM pagerduty.extension_schemas.extension_schemas
 WHERE limit = '{{ limit }}'
 AND offset = '{{ offset }}'
 AND total = '{{ total }}'
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_list_extension_schemas"
-    values={[
-        { label: '_list_extension_schemas', value: '_list_extension_schemas' },
-        { label: '_get_extension_schema', value: '_get_extension_schema' }
-    ]}
->
-<TabItem value="_list_extension_schemas">
-
-List all extension schemas.<br /><br />A PagerDuty extension vendor represents a specific type of outbound extension such as Generic Webhook, Slack, ServiceNow.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extension-schemas)<br /><br />Scoped OAuth requires: `extension_schemas.read`<br />
-
-```sql
-EXEC pagerduty.extension_schemas.extension_schemas._list_extension_schemas 
-@limit='{{ limit }}', 
-@offset='{{ offset }}', 
-@total={{ total }}, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
-;
-```
-</TabItem>
-<TabItem value="_get_extension_schema">
-
-Get details about one specific extension vendor.<br /><br />A PagerDuty extension vendor represents a specific type of outbound extension such as Generic Webhook, Slack, ServiceNow.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extension-schemas)<br /><br />Scoped OAuth requires: `extension_schemas.read`<br />
-
-```sql
-EXEC pagerduty.extension_schemas.extension_schemas._get_extension_schema 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
 ;
 ```
 </TabItem>

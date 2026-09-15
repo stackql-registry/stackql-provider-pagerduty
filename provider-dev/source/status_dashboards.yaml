@@ -1,0 +1,576 @@
+openapi: 3.0.2
+info:
+  title: PagerDuty API - Status Dashboards
+  description: Status dashboards and their service impacts.
+  version: 2.0.0
+paths:
+  /status_dashboards:
+    get:
+      x-pd-requires-scope: status_dashboards.read
+      tags:
+        - Status Dashboards
+      operationId: listStatusDashboards
+      description: |
+        Get all your account's custom Status Dashboard views.
+
+        Scoped OAuth requires: `status_dashboards.read`
+      summary: List Status Dashboards
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  limit:
+                    type: integer
+                    description: The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+                    readOnly: true
+                  next_cursor:
+                    type: string
+                    description: |
+                      An opaque string than will deliver the next set of results when provided as the `cursor` parameter in a subsequent request.  A `null` value for this field indicates that there are no additional results.
+                    example: dXNlcjaVMzc5V0ZYTlo=
+                    nullable: true
+                    readOnly: true
+                  status_dashboards:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/StatusDashboard'
+                required:
+                  - limit
+                  - next_cursor
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    limit: 100
+                    next_cursor: null
+                    status_dashboards:
+                      - id: PFCVPS0
+                        url_slug: analytics-api
+                        name: Analytics API
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+      parameters: []
+  /status_dashboards/{id}:
+    get:
+      x-pd-requires-scope: status_dashboards.read
+      tags:
+        - Status Dashboards
+      operationId: getStatusDashboardById
+      description: |
+        Get a Status Dashboard by its PagerDuty `id`.
+
+        Scoped OAuth requires: `status_dashboards.read`
+      summary: Get a single Status Dashboard by `id`
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_dashboard:
+                    $ref: '#/components/schemas/StatusDashboard'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    status_dashboard:
+                      id: PFCVPS0
+                      url_slug: analytics-api
+                      name: Analytics API
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+      parameters:
+        - $ref: '#/components/parameters/id'
+  /status_dashboards/{id}/service_impacts:
+    get:
+      x-pd-requires-scope: status_dashboards.read
+      tags:
+        - Status Dashboards
+      operationId: getStatusDashboardServiceImpactsById
+      description: |
+        Get impacted Business Services for a Status Dashboard by `id`
+
+        This endpoint does not return an exhaustive list of Business Services but rather provides access to the most impacted on the specified Status Dashboard up to the limit of 200.
+
+        The returned Business Services are sorted first by Impact, secondarily by most recently impacted, and finally by name.
+
+        To get Impact information about a specific Business Service on the Status Dashboard that does not appear in the Impact-sorted response, use the `ids[]` parameter on the `/business_services/impacts` endpoint.
+
+        Scoped OAuth requires: `status_dashboards.read`
+      summary: Get impacted Business Services for a Status Dashboard by `id`.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  services:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Impact'
+                  additional_fields:
+                    type: object
+                    properties:
+                      total_impacted_count:
+                        type: integer
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    limit: 100
+                    more: false
+                    services:
+                      - id: PD1234
+                        name: Web API
+                        type: business_service
+                        status: impacted
+                        additional_fields:
+                          highest_impacting_priority:
+                            id: PQOMK4S
+                            order: 128
+                      - id: PF9KMXH
+                        name: Analytics Backend
+                        type: business_service
+                        status: not_impacted
+                        additional_fields:
+                          highest_impacting_priority: null
+                    additional_fields:
+                      total_impacted_count: 1
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/impacts_additional_fields'
+  /status_dashboards/url_slugs/{url_slug}:
+    get:
+      x-pd-requires-scope: status_dashboards.read
+      tags:
+        - Status Dashboards
+      operationId: getStatusDashboardByUrlSlug
+      description: |
+        Get a Status Dashboard by its PagerDuty `url_slug`.  A `url_slug` is a human-readable reference
+        for a custom Status Dashboard that may be created or changed in the UI. It will generally be a `dash-separated-string-like-this`.
+
+        Scoped OAuth requires: `status_dashboards.read`
+      summary: Get a single Status Dashboard by `url_slug`
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_dashboard:
+                    $ref: '#/components/schemas/StatusDashboard'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    status_dashboard:
+                      id: PFCVPS0
+                      url_slug: analytics-api
+                      name: Analytics API
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+      parameters:
+        - $ref: '#/components/parameters/url_slug'
+  /status_dashboards/url_slugs/{url_slug}/service_impacts:
+    get:
+      x-pd-requires-scope: status_dashboards.read
+      tags:
+        - Status Dashboards
+      operationId: getStatusDashboardServiceImpactsByUrlSlug
+      description: |
+        Get Business Service Impacts for the Business Services on a Status Dashboard by its `url_slug`. A `url_slug` is a human-readable reference
+        for a custom Status Dashboard that may be created or changed in the UI. It will generally be a `dash-separated-string-like-this`.
+
+        This endpoint does not return an exhaustive list of Business Services but rather provides access to the most impacted on the Status Dashboard up to the limit of 200.
+
+        The returned Business Services are sorted first by Impact, secondarily by most recently impacted, and finally by name.
+
+        To get impact information about a specific Business Service on the Status Dashboard that does not appear in the Impact-sored response, use the `ids[]` parameter on the `/business_services/impacts` endpoint.
+
+        Scoped OAuth requires: `status_dashboards.read`
+      summary: Get impacted Business Services for a  Status Dashboard by `url_slug`
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  services:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Impact'
+                  additional_fields:
+                    type: object
+                    properties:
+                      total_impacted_count:
+                        type: integer
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    limit: 100
+                    more: false
+                    services:
+                      - id: PD1234
+                        name: Web API
+                        type: business_service
+                        status: impacted
+                        additional_fields:
+                          highest_impacting_priority:
+                            id: PQOMK4S
+                            order: 128
+                      - id: PF9KMXH
+                        name: Analytics Backend
+                        type: business_service
+                        status: not_impacted
+                        additional_fields:
+                          highest_impacting_priority: null
+                    additional_fields:
+                      total_impacted_count: 1
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+      parameters:
+        - $ref: '#/components/parameters/url_slug'
+        - $ref: '#/components/parameters/impacts_additional_fields'
+components:
+  schemas:
+    CursorPagination:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+          readOnly: true
+        next_cursor:
+          type: string
+          description: |
+            An opaque string than will deliver the next set of results when provided as the `cursor` parameter in a subsequent request.  A `null` value for this field indicates that there are no additional results.
+          example: dXNlcjaVMzc5V0ZYTlo=
+          nullable: true
+          readOnly: true
+      required:
+        - limit
+        - next_cursor
+    StatusDashboard:
+      title: StatusDashboard
+      type: object
+      properties:
+        id:
+          type: string
+        url_slug:
+          type: string
+        name:
+          type: string
+    LiveListResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Echoes limit pagination property.
+          readOnly: true
+        more:
+          type: boolean
+          description: Indicates if there are additional records to return
+          readOnly: true
+    Impact:
+      title: Impact
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          description: The kind of object that has been impacted
+          enum:
+            - business_service
+        status:
+          type: string
+          description: The current impact status of the object
+          enum:
+            - impacted
+            - not_impacted
+        additional_fields:
+          type: object
+          properties:
+            highest_impacting_priority:
+              type: object
+              nullable: true
+              description: Priority information for the highest priority level that is affecting the impacted object.
+              properties:
+                id:
+                  type: string
+                  readOnly: true
+                order:
+                  type: integer
+                  readOnly: true
+  responses:
+    Unauthorized:
+      description: |
+        Caller did not supply credentials or did not provide the correct credentials.
+        If you are using an API key, it may be invalid or your Authorization header may be malformed.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Forbidden:
+      description: |
+        Caller is not authorized to view the requested resource.
+        While your authentication is valid, the authenticated user or token does not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    TooManyRequests:
+      description: Too many requests have been made, the rate limit has been reached.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    ArgumentError:
+      description: Caller provided invalid arguments. Please review the response for error details. Retrying with the same arguments will *not* work.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    UnprocessableEntity:
+      description: Unprocessable Entity. Some arguments failed validation checks.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Conflict:
+      description: The request conflicts with the current state of the server.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+  parameters:
+    id:
+      name: id
+      description: The ID of the resource.
+      in: path
+      required: true
+      schema:
+        type: string
+    impacts_additional_fields:
+      name: additional_fields[]
+      in: query
+      description: Provides access to additional fields such as highest priority per business service and total impacted count
+      explode: true
+      schema:
+        type: string
+        enum:
+          - services.highest_impacting_priority
+          - total_impacted_count
+    url_slug:
+      name: url_slug
+      in: path
+      description: The `url_slug` for a status dashboard
+      required: true
+      schema:
+        type: string
+servers:
+  - url: https://api.pagerduty.com
+    description: PagerDuty V2 API.

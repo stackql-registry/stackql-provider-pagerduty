@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>oncall_handoff_notification_ru
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>oncall_handoff_notification_rules</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="oncall_handoff_notification_rules" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.users.oncall_handoff_notification_rules" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists an <code>oncall_handoff_notification_ru
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_user_handoff_notifiaction_rule"
+    defaultValue="get"
     values={[
-        { label: 'get_user_handoff_notifiaction_rule', value: 'get_user_handoff_notifiaction_rule' },
-        { label: 'get_user_handoff_notification_rules', value: 'get_user_handoff_notification_rules' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_user_handoff_notifiaction_rule">
+<TabItem value="get">
 
 The user's handoff notification rule requested.
 
@@ -59,12 +60,12 @@ The user's handoff notification rule requested.
 <tr>
     <td><CopyableCode code="contact_method" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="handoff_type" /></td>
     <td><code>string</code></td>
-    <td>The type of handoff being created. (default: both)</td>
+    <td>The type of handoff being created. (both, oncall, offcall) (default: both)</td>
 </tr>
 <tr>
     <td><CopyableCode code="notify_advance_in_minutes" /></td>
@@ -74,7 +75,7 @@ The user's handoff notification rule requested.
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_user_handoff_notification_rules">
+<TabItem value="list">
 
 A list of Handoff Notification Rules.
 
@@ -95,12 +96,12 @@ A list of Handoff Notification Rules.
 <tr>
     <td><CopyableCode code="contact_method" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="handoff_type" /></td>
     <td><code>string</code></td>
-    <td>The type of handoff being created. (default: both)</td>
+    <td>The type of handoff being created. (both, oncall, offcall) (default: both)</td>
 </tr>
 <tr>
     <td><CopyableCode code="notify_advance_in_minutes" /></td>
@@ -128,53 +129,39 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_user_handoff_notifiaction_rule"><CopyableCode code="get_user_handoff_notifiaction_rule" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-oncall_handoff_notification_rule_id"><code>oncall_handoff_notification_rule_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get details about a User's Handoff Notification Rule.<br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users.read`<br /></td>
+    <td></td>
+    <td>Get details about a User's Handoff Notification Rule.&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#get_user_handoff_notification_rules"><CopyableCode code="get_user_handoff_notification_rules" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>List Handoff Notification Rules of your PagerDuty User.<br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users.read`<br /></td>
+    <td></td>
+    <td>List Handoff Notification Rules of your PagerDuty User.&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_user_handoff_notification_rule"><CopyableCode code="create_user_handoff_notification_rule" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-data__oncall_handoff_notification_rule"><code>data__oncall_handoff_notification_rule</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Create a new Handoff Notification Rule.<br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users.write`<br /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-oncall_handoff_notification_rule"><code>oncall_handoff_notification_rule</code></a></td>
+    <td></td>
+    <td>Create a new Handoff Notification Rule.&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#delete_user_handoff_notification_rule"><CopyableCode code="delete_user_handoff_notification_rule" /></a></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-oncall_handoff_notification_rule_id"><code>oncall_handoff_notification_rule_id</code></a>, <a href="#parameter-oncall_handoff_notification_rule"><code>oncall_handoff_notification_rule</code></a></td>
+    <td></td>
+    <td>Update a User's Handoff Notification Rule.&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users.write`&lt;br /&gt;</td>
+</tr>
+<tr>
+    <td><a href="#delete"><CopyableCode code="delete" /></a></td>
     <td><CopyableCode code="delete" /></td>
     <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-oncall_handoff_notification_rule_id"><code>oncall_handoff_notification_rule_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Remove a User's Handoff Notification Rule.<br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_user_handoff_notification_rules"><CopyableCode code="_get_user_handoff_notification_rules" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>List Handoff Notification Rules of your PagerDuty User.<br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_user_handoff_notifiaction_rule"><CopyableCode code="_get_user_handoff_notifiaction_rule" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-oncall_handoff_notification_rule_id"><code>oncall_handoff_notification_rule_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get details about a User's Handoff Notification Rule.<br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#update_user_handoff_notification"><CopyableCode code="update_user_handoff_notification" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-oncall_handoff_notification_rule_id"><code>oncall_handoff_notification_rule_id</code></a>, <a href="#parameter-oncall_handoff_notification_rule"><code>oncall_handoff_notification_rule</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Update a User's Handoff Notification Rule.<br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users.write`<br /></td>
+    <td></td>
+    <td>Remove a User's Handoff Notification Rule.&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -202,31 +189,21 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The oncall handoff notification rule ID on the user.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 </tbody>
 </table>
 
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_user_handoff_notifiaction_rule"
+    defaultValue="get"
     values={[
-        { label: 'get_user_handoff_notifiaction_rule', value: 'get_user_handoff_notifiaction_rule' },
-        { label: 'get_user_handoff_notification_rules', value: 'get_user_handoff_notification_rules' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_user_handoff_notifiaction_rule">
+<TabItem value="get">
 
-Get details about a User's Handoff Notification Rule.<br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users.read`<br />
+Get details about a User's Handoff Notification Rule.&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -237,14 +214,12 @@ notify_advance_in_minutes
 FROM pagerduty.users.oncall_handoff_notification_rules
 WHERE id = '{{ id }}' -- required
 AND oncall_handoff_notification_rule_id = '{{ oncall_handoff_notification_rule_id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
-<TabItem value="get_user_handoff_notification_rules">
+<TabItem value="list">
 
-List Handoff Notification Rules of your PagerDuty User.<br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users.read`<br />
+List Handoff Notification Rules of your PagerDuty User.&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -254,8 +229,6 @@ handoff_type,
 notify_advance_in_minutes
 FROM pagerduty.users.oncall_handoff_notification_rules
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
@@ -265,28 +238,24 @@ AND Content-Type = '{{ Content-Type }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_user_handoff_notification_rule"
+    defaultValue="create"
     values={[
-        { label: 'create_user_handoff_notification_rule', value: 'create_user_handoff_notification_rule' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_user_handoff_notification_rule">
+<TabItem value="create">
 
-Create a new Handoff Notification Rule.<br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users.write`<br />
+Create a new Handoff Notification Rule.&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users.write`&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.users.oncall_handoff_notification_rules (
-data__oncall_handoff_notification_rule,
-id,
-Accept,
-Content-Type
+oncall_handoff_notification_rule,
+id
 )
 SELECT 
 '{{ oncall_handoff_notification_rule }}' /* required */,
-'{{ id }}',
-'{{ Accept }}',
-'{{ Content-Type }}'
+'{{ id }}'
 RETURNING
 oncall_handoff_notification_rule
 ;
@@ -294,22 +263,53 @@ oncall_handoff_notification_rule
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: oncall_handoff_notification_rules
   props:
     - name: id
-      value: string
+      value: "{{ id }}"
       description: Required parameter for the oncall_handoff_notification_rules resource.
     - name: oncall_handoff_notification_rule
-      value: object
       description: |
         A rule for contacting the user for Handoff Notifications.
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-    - name: Content-Type
-      value: string
+      value:
+        id: "{{ id }}"
+        notify_advance_in_minutes: {{ notify_advance_in_minutes }}
+        handoff_type: "{{ handoff_type }}"
+        contact_method:
+          id: "{{ id }}"
+          summary: "{{ summary }}"
+          type: "{{ type }}"
+          self: "{{ self }}"
+          html_url: "{{ html_url }}"
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
+
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Update a User's Handoff Notification Rule.&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users.write`&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.users.oncall_handoff_notification_rules
+SET 
+oncall_handoff_notification_rule = '{{ oncall_handoff_notification_rule }}'
+WHERE 
+id = '{{ id }}' --required
+AND oncall_handoff_notification_rule_id = '{{ oncall_handoff_notification_rule_id }}' --required
+AND oncall_handoff_notification_rule = '{{ oncall_handoff_notification_rule }}' --required
+RETURNING
+oncall_handoff_notification_rule;
 ```
 </TabItem>
 </Tabs>
@@ -318,76 +318,19 @@ oncall_handoff_notification_rule
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="delete_user_handoff_notification_rule"
+    defaultValue="delete"
     values={[
-        { label: 'delete_user_handoff_notification_rule', value: 'delete_user_handoff_notification_rule' }
+        { label: 'delete', value: 'delete' }
     ]}
 >
-<TabItem value="delete_user_handoff_notification_rule">
+<TabItem value="delete">
 
-Remove a User's Handoff Notification Rule.<br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users.write`<br />
+Remove a User's Handoff Notification Rule.&lt;br /&gt;Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users.write`&lt;br /&gt;
 
 ```sql
 DELETE FROM pagerduty.users.oncall_handoff_notification_rules
 WHERE id = '{{ id }}' --required
 AND oncall_handoff_notification_rule_id = '{{ oncall_handoff_notification_rule_id }}' --required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_get_user_handoff_notification_rules"
-    values={[
-        { label: '_get_user_handoff_notification_rules', value: '_get_user_handoff_notification_rules' },
-        { label: '_get_user_handoff_notifiaction_rule', value: '_get_user_handoff_notifiaction_rule' },
-        { label: 'update_user_handoff_notification', value: 'update_user_handoff_notification' }
-    ]}
->
-<TabItem value="_get_user_handoff_notification_rules">
-
-List Handoff Notification Rules of your PagerDuty User.<br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users.read`<br />
-
-```sql
-EXEC pagerduty.users.oncall_handoff_notification_rules._get_user_handoff_notification_rules 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
-;
-```
-</TabItem>
-<TabItem value="_get_user_handoff_notifiaction_rule">
-
-Get details about a User's Handoff Notification Rule.<br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users.read`<br />
-
-```sql
-EXEC pagerduty.users.oncall_handoff_notification_rules._get_user_handoff_notifiaction_rule 
-@id='{{ id }}' --required, 
-@oncall_handoff_notification_rule_id='{{ oncall_handoff_notification_rule_id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
-;
-```
-</TabItem>
-<TabItem value="update_user_handoff_notification">
-
-Update a User's Handoff Notification Rule.<br />Users are members of a PagerDuty account that have the ability to interact with Incidents and other data on the account.<br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#users)<br /><br />Scoped OAuth requires: `users.write`<br />
-
-```sql
-EXEC pagerduty.users.oncall_handoff_notification_rules.update_user_handoff_notification 
-@id='{{ id }}' --required, 
-@oncall_handoff_notification_rule_id='{{ oncall_handoff_notification_rule_id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"oncall_handoff_notification_rule": "{{ oncall_handoff_notification_rule }}"
-}'
 ;
 ```
 </TabItem>

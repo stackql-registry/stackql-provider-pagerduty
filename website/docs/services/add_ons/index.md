@@ -25,7 +25,7 @@ total resources: __1__
 ## Resources
 <div class="row">
 <div class="providerDocColumn">
-<a href="/services/add_ons/addons/">addons</a>
+<a href="/services/add_ons/add_ons/">add_ons</a>
 </div>
 <div class="providerDocColumn">
 

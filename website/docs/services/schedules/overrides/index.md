@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>overrides</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>overrides</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="overrides" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.schedules.overrides" /></td></tr>
 </tbody></table>
@@ -32,12 +33,12 @@ Creates, updates, deletes, gets or lists an <code>overrides</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_schedule_overrides"
+    defaultValue="list"
     values={[
-        { label: 'list_schedule_overrides', value: 'list_schedule_overrides' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="list_schedule_overrides">
+<TabItem value="list">
 
 The collection of override objects returned by the query.
 
@@ -88,7 +89,7 @@ The collection of override objects returned by the query.
 <tr>
     <td><CopyableCode code="user" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 </tbody>
 </table>
@@ -111,32 +112,25 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_schedule_overrides"><CopyableCode code="list_schedule_overrides" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-editable"><code>editable</code></a>, <a href="#parameter-overflow"><code>overflow</code></a></td>
-    <td>List overrides for a given time range.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.read`<br /></td>
+    <td><a href="#parameter-editable"><code>editable</code></a>, <a href="#parameter-overflow"><code>overflow</code></a></td>
+    <td>List overrides for a given time range.&lt;br /&gt;&lt;br /&gt;A Schedule determines the time periods that users are On-Call.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `schedules.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_schedule_override"><CopyableCode code="create_schedule_override" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Create one or more overrides, each for a specific user covering a specified time range. If you create an override on top of an existing override, the last created override will have priority.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />Note: An older implementation of this endpoint only supported creating a single ocverride per request. That functionality is still supported, but deprecated and may be removed in the future.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.write`<br /></td>
+    <td></td>
+    <td>Create one or more overrides, each for a specific user covering a specified time range. If you create an override on top of an existing override, the last created override will have priority.&lt;br /&gt;&lt;br /&gt;A Schedule determines the time periods that users are On-Call.&lt;br /&gt;&lt;br /&gt;Note: An older implementation of this endpoint only supported creating a single ocverride per request. That functionality is still supported, but deprecated and may be removed in the future.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `schedules.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#delete_schedule_override"><CopyableCode code="delete_schedule_override" /></a></td>
+    <td><a href="#delete"><CopyableCode code="delete" /></a></td>
     <td><CopyableCode code="delete" /></td>
     <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-override_id"><code>override_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Remove an override.<br /><br />You cannot remove a past override.<br /><br />If the override start time is before the current time, but the end time is after the current time, the override will be truncated to the current time.<br /><br />If the override is truncated, the status code will be 200 OK, as opposed to a 204 No Content for a successful delete.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_schedule_overrides"><CopyableCode code="_list_schedule_overrides" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-editable"><code>editable</code></a>, <a href="#parameter-overflow"><code>overflow</code></a></td>
-    <td>List overrides for a given time range.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.read`<br /></td>
+    <td></td>
+    <td>Remove an override.&lt;br /&gt;&lt;br /&gt;You cannot remove a past override.&lt;br /&gt;&lt;br /&gt;If the override start time is before the current time, but the end time is after the current time, the override will be truncated to the current time.&lt;br /&gt;&lt;br /&gt;If the override is truncated, the status code will be 200 OK, as opposed to a 204 No Content for a successful delete.&lt;br /&gt;&lt;br /&gt;A Schedule determines the time periods that users are On-Call.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `schedules.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -162,27 +156,17 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-override_id">
     <td><CopyableCode code="override_id" /></td>
     <td><code>string</code></td>
-    <td>The override ID on the schedule.</td>
+    <td>The override ID on the schedule. (example: Q2MCMG5TVIV6LQ)</td>
 </tr>
 <tr id="parameter-since">
     <td><CopyableCode code="since" /></td>
     <td><code>string (date-time)</code></td>
-    <td>The start of the date range over which you want to search.</td>
+    <td>The start of the date range over which you want to search. (example: 2026-04-01T00:00:00Z)</td>
 </tr>
 <tr id="parameter-until">
     <td><CopyableCode code="until" /></td>
     <td><code>string (date-time)</code></td>
-    <td>The end of the date range over which you want to search.</td>
-</tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
+    <td>The end of the date range over which you want to search. (example: 2026-05-30T00:00:00Z)</td>
 </tr>
 <tr id="parameter-editable">
     <td><CopyableCode code="editable" /></td>
@@ -200,14 +184,14 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_schedule_overrides"
+    defaultValue="list"
     values={[
-        { label: 'list_schedule_overrides', value: 'list_schedule_overrides' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="list_schedule_overrides">
+<TabItem value="list">
 
-List overrides for a given time range.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.read`<br />
+List overrides for a given time range.&lt;br /&gt;&lt;br /&gt;A Schedule determines the time periods that users are On-Call.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `schedules.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -223,8 +207,6 @@ FROM pagerduty.schedules.overrides
 WHERE id = '{{ id }}' -- required
 AND since = '{{ since }}' -- required
 AND until = '{{ until }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 AND editable = '{{ editable }}'
 AND overflow = '{{ overflow }}'
 ;
@@ -236,28 +218,24 @@ AND overflow = '{{ overflow }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_schedule_override"
+    defaultValue="create"
     values={[
-        { label: 'create_schedule_override', value: 'create_schedule_override' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_schedule_override">
+<TabItem value="create">
 
-Create one or more overrides, each for a specific user covering a specified time range. If you create an override on top of an existing override, the last created override will have priority.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />Note: An older implementation of this endpoint only supported creating a single ocverride per request. That functionality is still supported, but deprecated and may be removed in the future.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.write`<br />
+Create one or more overrides, each for a specific user covering a specified time range. If you create an override on top of an existing override, the last created override will have priority.&lt;br /&gt;&lt;br /&gt;A Schedule determines the time periods that users are On-Call.&lt;br /&gt;&lt;br /&gt;Note: An older implementation of this endpoint only supported creating a single ocverride per request. That functionality is still supported, but deprecated and may be removed in the future.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `schedules.write`&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.schedules.overrides (
-data__overrides,
-id,
-Accept,
-Content-Type
+overrides,
+id
 )
 SELECT 
 '{{ overrides }}',
-'{{ id }}',
-'{{ Accept }}',
-'{{ Content-Type }}'
+'{{ id }}'
 RETURNING
 errors,
 override,
@@ -267,21 +245,29 @@ status
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: overrides
   props:
     - name: id
-      value: string
+      value: "{{ id }}"
       description: Required parameter for the overrides resource.
     - name: overrides
-      value: array
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-    - name: Content-Type
-      value: string
-```
+      value:
+        - id: "{{ id }}"
+          summary: "{{ summary }}"
+          type: "{{ type }}"
+          self: "{{ self }}"
+          html_url: "{{ html_url }}"
+          start: "{{ start }}"
+          end: "{{ end }}"
+          user:
+            id: "{{ id }}"
+            summary: "{{ summary }}"
+            type: "{{ type }}"
+            self: "{{ self }}"
+            html_url: "{{ html_url }}"
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -289,48 +275,19 @@ status
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="delete_schedule_override"
+    defaultValue="delete"
     values={[
-        { label: 'delete_schedule_override', value: 'delete_schedule_override' }
+        { label: 'delete', value: 'delete' }
     ]}
 >
-<TabItem value="delete_schedule_override">
+<TabItem value="delete">
 
-Remove an override.<br /><br />You cannot remove a past override.<br /><br />If the override start time is before the current time, but the end time is after the current time, the override will be truncated to the current time.<br /><br />If the override is truncated, the status code will be 200 OK, as opposed to a 204 No Content for a successful delete.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.write`<br />
+Remove an override.&lt;br /&gt;&lt;br /&gt;You cannot remove a past override.&lt;br /&gt;&lt;br /&gt;If the override start time is before the current time, but the end time is after the current time, the override will be truncated to the current time.&lt;br /&gt;&lt;br /&gt;If the override is truncated, the status code will be 200 OK, as opposed to a 204 No Content for a successful delete.&lt;br /&gt;&lt;br /&gt;A Schedule determines the time periods that users are On-Call.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `schedules.write`&lt;br /&gt;
 
 ```sql
 DELETE FROM pagerduty.schedules.overrides
 WHERE id = '{{ id }}' --required
 AND override_id = '{{ override_id }}' --required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_list_schedule_overrides"
-    values={[
-        { label: '_list_schedule_overrides', value: '_list_schedule_overrides' }
-    ]}
->
-<TabItem value="_list_schedule_overrides">
-
-List overrides for a given time range.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.read`<br />
-
-```sql
-EXEC pagerduty.schedules.overrides._list_schedule_overrides 
-@id='{{ id }}' --required, 
-@since='{{ since }}' --required, 
-@until='{{ until }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@editable={{ editable }}, 
-@overflow={{ overflow }}
 ;
 ```
 </TabItem>

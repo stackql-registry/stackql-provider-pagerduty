@@ -1,0 +1,472 @@
+openapi: 3.0.2
+info:
+  title: PagerDuty API - Vendors
+  description: Vendors are integration types (AWS CloudWatch, Splunk, Datadog).
+  version: 2.0.0
+paths:
+  /vendors:
+    get:
+      x-pd-requires-scope: vendors.read
+      tags:
+        - Vendors
+      operationId: listVendors
+      description: |
+        List all vendors.
+
+        A PagerDuty Vendor represents a specific type of integration. AWS Cloudwatch, Splunk, Datadog are all examples of vendors
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#vendors)
+
+        Scoped OAuth requires: `vendors.read`
+      summary: List vendors
+      parameters:
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+      responses:
+        '200':
+          description: A paginated array of vendors.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  vendors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Vendor'
+                required:
+                  - vendors
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    vendors:
+                      - id: PZQ6AUS
+                        type: vendor
+                        summary: Amazon CloudWatch
+                        self: https://api.pagerduty.com/vendors/PZQ6AUS
+                        name: Amazon CloudWatch
+                        website_url: https://aws.amazon.com/cloudwatch
+                        logo_url: https://s3.amazonaws.com/pdpartner/cloudwatch_large.png
+                        thumbnail_url: https://s3.amazonaws.com/pdpartner/cloudwatch_thumb.png
+                        description: Amazon Web Services CloudWatch provides monitoring for AWS cloud resources and customer-run applications. AWS can collect data, gain insight, and alert users to fix problems within applications and organizations. AWS CloudWatch gives system-wide visibility into resource utilization and notifications can be set for when any metrics cross a specified threshold.
+                        integration_guide_url: http://www.pagerduty.com/docs/guides/aws-cloudwatch-integration-guide/
+                    limit: 25
+                    offset: 0
+                    more: false
+                    total: null
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: List vendors.
+  /vendors/{id}:
+    get:
+      x-pd-requires-scope: vendors.read
+      tags:
+        - Vendors
+      operationId: getVendor
+      description: |
+        Get details about one specific vendor.
+
+        A PagerDuty Vendor represents a specific type of integration. AWS Cloudwatch, Splunk, Datadog are all examples of vendors
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#vendors)
+
+        Scoped OAuth requires: `vendors.read`
+      summary: Get a vendor
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: The vendor requested
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vendor:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Vendor'
+                required:
+                  - vendor
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    vendor:
+                      - id: PZQ6AUS
+                        type: vendor
+                        summary: Amazon CloudWatch
+                        self: https://api.pagerduty.com/vendors/PZQ6AUS
+                        name: Amazon CloudWatch
+                        website_url: https://aws.amazon.com/cloudwatch
+                        logo_url: https://s3.amazonaws.com/pdpartner/cloudwatch_large.png
+                        thumbnail_url: https://s3.amazonaws.com/pdpartner/cloudwatch_thumb.png
+                        description: Amazon Web Services CloudWatch provides monitoring for AWS cloud resources and customer-run applications. AWS can collect data, gain insight, and alert users to fix problems within applications and organizations. AWS CloudWatch gives system-wide visibility into resource utilization and notifications can be set for when any metrics cross a specified threshold.
+                        integration_guide_url: http://www.pagerduty.com/docs/guides/aws-cloudwatch-integration-guide/
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: Get details about one specific vendor.
+components:
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        offset:
+          type: integer
+          description: Echoes offset pagination property.
+          readOnly: true
+        limit:
+          type: integer
+          description: Echoes limit pagination property.
+          readOnly: true
+        more:
+          type: boolean
+          description: Indicates if there are additional records to return
+          readOnly: true
+        total:
+          type: integer
+          description: The total number of records matching the given query.
+          nullable: true
+          readOnly: true
+    Vendor:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        name:
+          type: string
+          readOnly: true
+          description: The short name of the vendor
+        website_url:
+          type: string
+          format: url
+          readOnly: true
+          description: URL of the vendor's main website
+        logo_url:
+          type: string
+          format: url
+          readOnly: true
+          description: URL of a logo identifying the vendor
+        thumbnail_url:
+          type: string
+          format: url
+          readOnly: true
+          description: URL of a small thumbnail image identifying the vendor
+        description:
+          type: string
+          readOnly: true
+          description: A short description of this vendor, and common use-cases of integrations for this vendor.
+        integration_guide_url:
+          type: string
+          format: url
+          readOnly: true
+          description: URL of an integration guide for this vendor
+      example:
+        type: vendor
+        name: Amazon CloudWatch
+        website_url: https://aws.amazon.com/cloudwatch
+        logo_url: https://s3.amazonaws.com/pdpartner/cloudwatch_large.png
+        thumbnail_url: https://s3.amazonaws.com/pdpartner/cloudwatch_thumb.png
+        description: Amazon Web Services CloudWatch provides monitoring for AWS cloud resources and customer-run applications. AWS can collect data, gain insight, and alert users to fix problems within applications and organizations. AWS CloudWatch gives system-wide visibility into resource utilization and notifications can be set for when any metrics cross a specified threshold.
+        integration_guide_url: http://www.pagerduty.com/docs/guides/aws-cloudwatch-integration-guide/
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        label:
+          type: string
+          description: The label of the tag.
+          maxLength: 191
+      required:
+        - label
+        - type
+      example:
+        type: tag
+        label: Batman
+  responses:
+    ArgumentError:
+      description: Caller provided invalid arguments. Please review the response for error details. Retrying with the same arguments will *not* work.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Unauthorized:
+      description: |
+        Caller did not supply credentials or did not provide the correct credentials.
+        If you are using an API key, it may be invalid or your Authorization header may be malformed.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Forbidden:
+      description: |
+        Caller is not authorized to view the requested resource.
+        While your authentication is valid, the authenticated user or token does not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    TooManyRequests:
+      description: Too many requests have been made, the rate limit has been reached.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Conflict:
+      description: The request conflicts with the current state of the server.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+  parameters:
+    offset_limit:
+      name: limit
+      in: query
+      required: false
+      description: The number of results per page.
+      schema:
+        type: integer
+    offset_offset:
+      name: offset
+      in: query
+      required: false
+      description: Offset to start pagination search results.
+      schema:
+        type: integer
+    offset_total:
+      name: total
+      in: query
+      required: false
+      description: |
+        By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.
+
+        See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information.
+      schema:
+        default: false
+        type: boolean
+    id:
+      name: id
+      description: The ID of the resource.
+      in: path
+      required: true
+      schema:
+        type: string
+servers:
+  - url: https://api.pagerduty.com
+    description: PagerDuty V2 API.

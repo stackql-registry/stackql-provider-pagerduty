@@ -1,0 +1,7 @@
+{
+  "auth": {
+    "type": "api_key",
+    "valuePrefix": "Token token=",
+    "credentialsenvvar": "PAGERDUTY_TOKEN"
+  }
+}

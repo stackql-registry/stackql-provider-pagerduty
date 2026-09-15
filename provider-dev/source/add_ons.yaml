@@ -1,0 +1,717 @@
+openapi: 3.0.2
+info:
+  title: PagerDuty API - Add Ons
+  description: Add-ons let developers insert their own functionality into the PagerDuty UI.
+  version: 2.0.0
+paths:
+  /addons:
+    get:
+      x-pd-requires-scope: addons.read
+      tags:
+        - Add-ons
+      operationId: listAddon
+      description: |
+        List all of the Add-ons installed on your account.
+
+        Addon's are pieces of functionality that developers can write to insert new functionality into PagerDuty's UI.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#add-ons)
+
+        Scoped OAuth requires: `addons.read`
+      summary: List installed Add-ons
+      parameters:
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+        - $ref: '#/components/parameters/include_addon'
+        - $ref: '#/components/parameters/addon_services'
+        - $ref: '#/components/parameters/addon_filter'
+      responses:
+        '200':
+          description: A paginated array of installed Add-ons.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  addons:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AddonReference'
+                required:
+                  - addons
+              examples:
+                response:
+                  summary: Example Response
+                  value:
+                    addons:
+                      - id: PKX7619
+                        type: full_page_addon_reference
+                        summary: Internal Status Page
+                        self: https://api.pagerduty.com/addons/PKX7619
+                        html_url: null
+                        name: Internal Status Page
+                        src: https://intranet.example.com/status
+                    limit: 25
+                    offset: 0
+                    more: false
+                    total: null
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      x-pd-requires-scope: addons.write
+      tags:
+        - Add-ons
+      operationId: createAddon
+      description: |
+        Install an Add-on for your account.
+
+        Addon's are pieces of functionality that developers can write to insert new functionality into PagerDuty's UI.
+
+        Given a configuration containing a `src` parameter, that URL will be embedded in an `iframe` on a page that's available to users from a drop-down menu.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#add-ons)
+
+        Scoped OAuth requires: `addons.write`
+      summary: Install an Add-on
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                addon:
+                  $ref: '#/components/schemas/Addon'
+              required:
+                - addon
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  addon:
+                    type: full_page_addon
+                    name: Internal Status Page
+                    src: https://intranet.example.com/status
+        description: The Add-on to be installed.
+      responses:
+        '201':
+          description: The Add-on that was installed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  addon:
+                    $ref: '#/components/schemas/AddonReference'
+                required:
+                  - addon
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    addon:
+                      id: PKX7619
+                      type: full_page_addon_reference
+                      summary: Internal Status Page
+                      self: https://api.pagerduty.com/addons/PKX7619
+                      html_url: null
+                      name: Internal Status Page
+                      src: https://intranet.example.com/status
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: List and add Add-ons to your account.
+  /addons/{id}:
+    get:
+      x-pd-requires-scope: addons.read
+      tags:
+        - Add-ons
+      operationId: getAddon
+      description: |
+        Get details about an existing Add-on.
+
+        Addon's are pieces of functionality that developers can write to insert new functionality into PagerDuty's UI.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#add-ons)
+
+        Scoped OAuth requires: `addons.read`
+      summary: Get an Add-on
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: The requested Add-on.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  addon:
+                    $ref: '#/components/schemas/Addon'
+                required:
+                  - addon
+              examples:
+                response:
+                  summary: Example Response
+                  value:
+                    addon:
+                      id: PKX7F81
+                      type: incident_show_addon
+                      name: Service Runbook
+                      src: https://intranet.example.com/runbook.html
+                      services:
+                        - id: PIJ90N7
+                          type: service
+                          summary: My Application Service
+                          self: https://api.pagerduty.com/services/PIJ90N7
+                          html_url: https://subdomain.pagerduty.com/service-directory/PIJ90N7
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      x-pd-requires-scope: addons.write
+      tags:
+        - Add-ons
+      operationId: deleteAddon
+      description: |
+        Remove an existing Add-on.
+
+        Addon's are pieces of functionality that developers can write to insert new functionality into PagerDuty's UI.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#add-ons)
+
+        Scoped OAuth requires: `addons.write`
+      summary: Delete an Add-on
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: The Add-on was deleted successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    put:
+      x-pd-requires-scope: addons.write
+      tags:
+        - Add-ons
+      operationId: updateAddon
+      description: |
+        Update an existing Add-on.
+
+        Addon's are pieces of functionality that developers can write to insert new functionality into PagerDuty's UI.
+
+        Given a configuration containing a `src` parameter, that URL will be embedded in an `iframe` on a page that's available to users from a drop-down menu.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#add-ons)
+
+        Scoped OAuth requires: `addons.write`
+      summary: Update an Add-on
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                addon:
+                  $ref: '#/components/schemas/Addon'
+              required:
+                - addon
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  addon:
+                    type: full_page_addon
+                    name: Internal Status Page
+                    src: https://intranet.example.com/status
+        description: The Add-on to be updated.
+      responses:
+        '200':
+          description: The Add-on that was updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  addon:
+                    $ref: '#/components/schemas/Addon'
+                required:
+                  - addon
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    addon:
+                      id: PKX7F81
+                      type: incident_show_addon
+                      name: Service Runbook
+                      src: https://intranet.example.com/runbook.html
+                      services:
+                        - id: PIJ90N7
+                          type: service
+                          summary: My Application Service
+                          self: https://api.pagerduty.com/services/PIJ90N7
+                          html_url: https://subdomain.pagerduty.com/service-directory/PIJ90N7
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: Perform actions on the specified Add-on.
+components:
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        offset:
+          type: integer
+          description: Echoes offset pagination property.
+          readOnly: true
+        limit:
+          type: integer
+          description: Echoes limit pagination property.
+          readOnly: true
+        more:
+          type: boolean
+          description: Indicates if there are additional records to return
+          readOnly: true
+        total:
+          type: integer
+          description: The total number of records matching the given query.
+          nullable: true
+          readOnly: true
+    AddonReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        src:
+          type: string
+          format: url
+          description: The URL source of the Addon
+        name:
+          type: string
+          description: The user entered name of the Addon.
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    Addon:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        name:
+          type: string
+          description: The name of the Add-on.
+          maxLength: 100
+        src:
+          type: string
+          format: url
+          description: The source URL to display in a frame in the PagerDuty UI. HTTPS is required.
+      required:
+        - type
+        - name
+        - src
+      example:
+        type: full_page_addon
+        name: Internal Status Page
+        src: https://intranet.example.com/status
+    Reference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        label:
+          type: string
+          description: The label of the tag.
+          maxLength: 191
+      required:
+        - label
+        - type
+      example:
+        type: tag
+        label: Batman
+  responses:
+    ArgumentError:
+      description: Caller provided invalid arguments. Please review the response for error details. Retrying with the same arguments will *not* work.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Unauthorized:
+      description: |
+        Caller did not supply credentials or did not provide the correct credentials.
+        If you are using an API key, it may be invalid or your Authorization header may be malformed.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Forbidden:
+      description: |
+        Caller is not authorized to view the requested resource.
+        While your authentication is valid, the authenticated user or token does not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    TooManyRequests:
+      description: Too many requests have been made, the rate limit has been reached.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Conflict:
+      description: The request conflicts with the current state of the server.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+  parameters:
+    offset_limit:
+      name: limit
+      in: query
+      required: false
+      description: The number of results per page.
+      schema:
+        type: integer
+    offset_offset:
+      name: offset
+      in: query
+      required: false
+      description: Offset to start pagination search results.
+      schema:
+        type: integer
+    offset_total:
+      name: total
+      in: query
+      required: false
+      description: |
+        By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.
+
+        See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information.
+      schema:
+        default: false
+        type: boolean
+    include_addon:
+      name: include[]
+      in: query
+      description: Array of additional Models to include in response.
+      explode: true
+      schema:
+        type: string
+        enum:
+          - services
+        uniqueItems: true
+    addon_services:
+      name: service_ids[]
+      in: query
+      description: Filters the results, showing only Add-ons for the given services
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+    addon_filter:
+      name: filter
+      in: query
+      description: Filters the results, showing only Add-ons of the given type
+      schema:
+        type: string
+        enum:
+          - full_page_addon
+          - incident_show_addon
+    id:
+      name: id
+      description: The ID of the resource.
+      in: path
+      required: true
+      schema:
+        type: string
+servers:
+  - url: https://api.pagerduty.com
+    description: PagerDuty V2 API.

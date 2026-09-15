@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>notification_subscriptions</cod
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>notification_subscriptions</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="notification_subscriptions" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.teams.notification_subscriptions" /></td></tr>
 </tbody></table>
@@ -32,12 +33,12 @@ Creates, updates, deletes, gets or lists a <code>notification_subscriptions</cod
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_team_notification_subscriptions"
+    defaultValue="list"
     values={[
-        { label: 'get_team_notification_subscriptions', value: 'get_team_notification_subscriptions' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_team_notification_subscriptions">
+<TabItem value="list">
 
 <table>
 <thead>
@@ -79,32 +80,25 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_team_notification_subscriptions"><CopyableCode code="get_team_notification_subscriptions" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a></td>
-    <td>Retrieve a list of Notification Subscriptions the given Team has.<br /><br />&lt;!-- theme: warning --&gt;<br />&gt; Teams must be added through `POST /teams/&#123;id&#125;/notification_subscriptions` to be returned from this endpoint.<br /><br />Scoped OAuth requires: `subscribers.read`<br /></td>
+    <td></td>
+    <td>Retrieve a list of Notification Subscriptions the given Team has.&lt;br /&gt;&lt;br /&gt;&lt;!-- theme: warning --&gt;&lt;br /&gt;&gt; Teams must be added through `POST /teams/&#123;id&#125;/notification_subscriptions` to be returned from this endpoint.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `subscribers.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_team_notification_subscriptions"><CopyableCode code="create_team_notification_subscriptions" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-data__subscribables"><code>data__subscribables</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a></td>
-    <td>Create new Notification Subscriptions for the given Team.<br /><br />Scoped OAuth requires: `subscribers.write`<br /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-subscribables"><code>subscribables</code></a></td>
+    <td></td>
+    <td>Create new Notification Subscriptions for the given Team.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `subscribers.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#_get_team_notification_subscriptions"><CopyableCode code="_get_team_notification_subscriptions" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a></td>
-    <td>Retrieve a list of Notification Subscriptions the given Team has.<br /><br />&lt;!-- theme: warning --&gt;<br />&gt; Teams must be added through `POST /teams/&#123;id&#125;/notification_subscriptions` to be returned from this endpoint.<br /><br />Scoped OAuth requires: `subscribers.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#remove_team_notification_subscriptions"><CopyableCode code="remove_team_notification_subscriptions" /></a></td>
+    <td><a href="#unsubscribe"><CopyableCode code="unsubscribe" /></a></td>
     <td><CopyableCode code="exec" /></td>
     <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-subscribables"><code>subscribables</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a></td>
-    <td>Unsubscribe the given Team from Notifications on the matching Subscribable entities.<br /><br />Scoped OAuth requires: `subscribers.write`<br /></td>
+    <td></td>
+    <td>Unsubscribe the given Team from Notifications on the matching Subscribable entities.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `subscribers.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -127,25 +121,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
 </tbody>
 </table>
 
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_team_notification_subscriptions"
+    defaultValue="list"
     values={[
-        { label: 'get_team_notification_subscriptions', value: 'get_team_notification_subscriptions' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_team_notification_subscriptions">
+<TabItem value="list">
 
-Retrieve a list of Notification Subscriptions the given Team has.<br /><br />&lt;!-- theme: warning --&gt;<br />&gt; Teams must be added through `POST /teams/&#123;id&#125;/notification_subscriptions` to be returned from this endpoint.<br /><br />Scoped OAuth requires: `subscribers.read`<br />
+Retrieve a list of Notification Subscriptions the given Team has.&lt;br /&gt;&lt;br /&gt;&lt;!-- theme: warning --&gt;&lt;br /&gt;&gt; Teams must be added through `POST /teams/&#123;id&#125;/notification_subscriptions` to be returned from this endpoint.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `subscribers.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -153,7 +142,6 @@ subscribable_name,
 subscription
 FROM pagerduty.teams.notification_subscriptions
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
 ;
 ```
 </TabItem>
@@ -163,26 +151,24 @@ AND Accept = '{{ Accept }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_team_notification_subscriptions"
+    defaultValue="create"
     values={[
-        { label: 'create_team_notification_subscriptions', value: 'create_team_notification_subscriptions' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_team_notification_subscriptions">
+<TabItem value="create">
 
-Create new Notification Subscriptions for the given Team.<br /><br />Scoped OAuth requires: `subscribers.write`<br />
+Create new Notification Subscriptions for the given Team.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `subscribers.write`&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.teams.notification_subscriptions (
-data__subscribables,
-id,
-Accept
+subscribables,
+id
 )
 SELECT 
 '{{ subscribables }}' /* required */,
-'{{ id }}',
-'{{ Accept }}'
+'{{ id }}'
 RETURNING
 subscriptions
 ;
@@ -190,19 +176,18 @@ subscriptions
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: notification_subscriptions
   props:
     - name: id
-      value: string
+      value: "{{ id }}"
       description: Required parameter for the notification_subscriptions resource.
     - name: subscribables
-      value: array
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-```
+      value:
+        - subscribable_id: "{{ subscribable_id }}"
+          subscribable_type: "{{ subscribable_type }}"
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -210,31 +195,18 @@ subscriptions
 ## Lifecycle Methods
 
 <Tabs
-    defaultValue="_get_team_notification_subscriptions"
+    defaultValue="unsubscribe"
     values={[
-        { label: '_get_team_notification_subscriptions', value: '_get_team_notification_subscriptions' },
-        { label: 'remove_team_notification_subscriptions', value: 'remove_team_notification_subscriptions' }
+        { label: 'unsubscribe', value: 'unsubscribe' }
     ]}
 >
-<TabItem value="_get_team_notification_subscriptions">
+<TabItem value="unsubscribe">
 
-Retrieve a list of Notification Subscriptions the given Team has.<br /><br />&lt;!-- theme: warning --&gt;<br />&gt; Teams must be added through `POST /teams/&#123;id&#125;/notification_subscriptions` to be returned from this endpoint.<br /><br />Scoped OAuth requires: `subscribers.read`<br />
-
-```sql
-EXEC pagerduty.teams.notification_subscriptions._get_team_notification_subscriptions 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}'
-;
-```
-</TabItem>
-<TabItem value="remove_team_notification_subscriptions">
-
-Unsubscribe the given Team from Notifications on the matching Subscribable entities.<br /><br />Scoped OAuth requires: `subscribers.write`<br />
+Unsubscribe the given Team from Notifications on the matching Subscribable entities.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `subscribers.write`&lt;br /&gt;
 
 ```sql
-EXEC pagerduty.teams.notification_subscriptions.remove_team_notification_subscriptions 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}' 
+EXEC pagerduty.teams.notification_subscriptions.unsubscribe 
+@id='{{ id }}' --required 
 @@json=
 '{
 "subscribables": "{{ subscribables }}"

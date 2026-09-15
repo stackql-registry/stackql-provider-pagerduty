@@ -25,7 +25,7 @@ total resources: __7__
 ## Resources
 <div class="row">
 <div class="providerDocColumn">
-<a href="/services/business_services/account_subscription/">account_subscription</a><br />
+<a href="/services/business_services/account_subscriptions/">account_subscriptions</a><br />
 <a href="/services/business_services/business_services/">business_services</a><br />
 <a href="/services/business_services/impactors/">impactors</a><br />
 <a href="/services/business_services/impacts/">impacts</a>
@@ -33,6 +33,6 @@ total resources: __7__
 <div class="providerDocColumn">
 <a href="/services/business_services/priority_thresholds/">priority_thresholds</a><br />
 <a href="/services/business_services/subscribers/">subscribers</a><br />
-<a href="/services/business_services/supporting_services_impacts/">supporting_services_impacts</a>
+<a href="/services/business_services/supporting_service_impacts/">supporting_service_impacts</a>
 </div>
 </div>

@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>actions</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>actions</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="actions" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.incident_workflows.actions" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists an <code>actions</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_incident_workflow_action"
+    defaultValue="get"
     values={[
-        { label: 'get_incident_workflow_action', value: 'get_incident_workflow_action' },
-        { label: 'list_incident_workflow_actions', value: 'list_incident_workflow_actions' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_incident_workflow_action">
+<TabItem value="get">
 
 An Incident Workflow Action
 
@@ -82,9 +83,14 @@ An Incident Workflow Action
     <td>The Package Name corresponding to the broad category of the Action</td>
 </tr>
 <tr>
+    <td><CopyableCode code="action_tier" /></td>
+    <td><code>string</code></td>
+    <td>The tier of the Action (basic-action, standard-action, premium-action)</td>
+</tr>
+<tr>
     <td><CopyableCode code="action_type" /></td>
     <td><code>string</code></td>
-    <td>The type of Action</td>
+    <td>The type of Action (action, trigger)</td>
 </tr>
 <tr>
     <td><CopyableCode code="created_at" /></td>
@@ -139,12 +145,12 @@ An Incident Workflow Action
 <tr>
     <td><CopyableCode code="trigger_type" /></td>
     <td><code>string</code></td>
-    <td>The type of Trigger this Action is, if action_type is trigger</td>
+    <td>The type of Trigger this Action is, if action_type is trigger (polling, subscription, web)</td>
 </tr>
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 <tr>
     <td><CopyableCode code="version" /></td>
@@ -154,7 +160,7 @@ An Incident Workflow Action
 </tbody>
 </table>
 </TabItem>
-<TabItem value="list_incident_workflow_actions">
+<TabItem value="list">
 
 A paginated array of Incident Workflow Actions
 
@@ -198,9 +204,14 @@ A paginated array of Incident Workflow Actions
     <td>The Package Name corresponding to the broad category of the Action</td>
 </tr>
 <tr>
+    <td><CopyableCode code="action_tier" /></td>
+    <td><code>string</code></td>
+    <td>The tier of the Action (basic-action, standard-action, premium-action)</td>
+</tr>
+<tr>
     <td><CopyableCode code="action_type" /></td>
     <td><code>string</code></td>
-    <td>The type of Action</td>
+    <td>The type of Action (action, trigger)</td>
 </tr>
 <tr>
     <td><CopyableCode code="created_at" /></td>
@@ -255,12 +266,12 @@ A paginated array of Incident Workflow Actions
 <tr>
     <td><CopyableCode code="trigger_type" /></td>
     <td><code>string</code></td>
-    <td>The type of Trigger this Action is, if action_type is trigger</td>
+    <td>The type of Trigger this Action is, if action_type is trigger (polling, subscription, web)</td>
 </tr>
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 <tr>
     <td><CopyableCode code="version" /></td>
@@ -288,32 +299,18 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_incident_workflow_action"><CopyableCode code="get_incident_workflow_action" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get an Incident Workflow Action<br /><br />Scoped OAuth requires: `incident_workflows.read`<br /></td>
+    <td></td>
+    <td>Get an Incident Workflow Action&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incident_workflows.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#list_incident_workflow_actions"><CopyableCode code="list_incident_workflow_actions" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-cursor"><code>cursor</code></a>, <a href="#parameter-keyword"><code>keyword</code></a></td>
-    <td>List Incident Workflow Actions<br /><br />Scoped OAuth requires: `incident_workflows.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_incident_workflow_actions"><CopyableCode code="_list_incident_workflow_actions" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-cursor"><code>cursor</code></a>, <a href="#parameter-keyword"><code>keyword</code></a></td>
-    <td>List Incident Workflow Actions<br /><br />Scoped OAuth requires: `incident_workflows.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_incident_workflow_action"><CopyableCode code="_get_incident_workflow_action" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get an Incident Workflow Action<br /><br />Scoped OAuth requires: `incident_workflows.read`<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-cursor"><code>cursor</code></a>, <a href="#parameter-keyword"><code>keyword</code></a></td>
+    <td>List Incident Workflow Actions&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incident_workflows.read`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -336,16 +333,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 <tr id="parameter-cursor">
     <td><CopyableCode code="cursor" /></td>
     <td><code>string</code></td>
@@ -367,15 +354,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_incident_workflow_action"
+    defaultValue="get"
     values={[
-        { label: 'get_incident_workflow_action', value: 'get_incident_workflow_action' },
-        { label: 'list_incident_workflow_actions', value: 'list_incident_workflow_actions' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_incident_workflow_action">
+<TabItem value="get">
 
-Get an Incident Workflow Action<br /><br />Scoped OAuth requires: `incident_workflows.read`<br />
+Get an Incident Workflow Action&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incident_workflows.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -385,6 +372,7 @@ created_by_user_id,
 domain_name,
 function_name,
 package_name,
+action_tier,
 action_type,
 created_at,
 description,
@@ -401,14 +389,12 @@ type,
 version
 FROM pagerduty.incident_workflows.actions
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
-<TabItem value="list_incident_workflow_actions">
+<TabItem value="list">
 
-List Incident Workflow Actions<br /><br />Scoped OAuth requires: `incident_workflows.read`<br />
+List Incident Workflow Actions&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incident_workflows.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -418,6 +404,7 @@ created_by_user_id,
 domain_name,
 function_name,
 package_name,
+action_tier,
 action_type,
 created_at,
 description,
@@ -433,49 +420,9 @@ trigger_type,
 type,
 version
 FROM pagerduty.incident_workflows.actions
-WHERE Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-AND limit = '{{ limit }}'
+WHERE limit = '{{ limit }}'
 AND cursor = '{{ cursor }}'
 AND keyword = '{{ keyword }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_list_incident_workflow_actions"
-    values={[
-        { label: '_list_incident_workflow_actions', value: '_list_incident_workflow_actions' },
-        { label: '_get_incident_workflow_action', value: '_get_incident_workflow_action' }
-    ]}
->
-<TabItem value="_list_incident_workflow_actions">
-
-List Incident Workflow Actions<br /><br />Scoped OAuth requires: `incident_workflows.read`<br />
-
-```sql
-EXEC pagerduty.incident_workflows.actions._list_incident_workflow_actions 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@limit='{{ limit }}', 
-@cursor='{{ cursor }}', 
-@keyword='{{ keyword }}'
-;
-```
-</TabItem>
-<TabItem value="_get_incident_workflow_action">
-
-Get an Incident Workflow Action<br /><br />Scoped OAuth requires: `incident_workflows.read`<br />
-
-```sql
-EXEC pagerduty.incident_workflows.actions._get_incident_workflow_action 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
 ;
 ```
 </TabItem>
