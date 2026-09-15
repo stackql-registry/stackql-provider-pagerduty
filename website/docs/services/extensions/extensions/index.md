@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>extensions</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>extensions</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="extensions" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.extensions.extensions" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists an <code>extensions</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_extension"
+    defaultValue="get"
     values={[
-        { label: 'get_extension', value: 'get_extension' },
-        { label: 'list_extensions', value: 'list_extensions' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_extension">
+<TabItem value="get">
 
 The extension that was requested.
 
@@ -63,8 +64,8 @@ The extension that was requested.
 </tr>
 <tr>
     <td><CopyableCode code="config" /></td>
-    <td><code>object</code></td>
-    <td>The object that contains extension configuration values depending on the extension schema specification.</td>
+    <td><code>string</code></td>
+    <td>The object that contains extension configuration values depending on the extension schema specification. (opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="endpoint_url" /></td>
@@ -79,7 +80,7 @@ The extension that was requested.
 <tr>
     <td><CopyableCode code="extension_schema" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="html_url" /></td>
@@ -104,12 +105,12 @@ The extension that was requested.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of object being created. (default: extension)</td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 </tbody>
 </table>
 </TabItem>
-<TabItem value="list_extensions">
+<TabItem value="list">
 
 A paginated array of extensions.
 
@@ -134,8 +135,8 @@ A paginated array of extensions.
 </tr>
 <tr>
     <td><CopyableCode code="config" /></td>
-    <td><code>object</code></td>
-    <td>The object that contains extension configuration values depending on the extension schema specification.</td>
+    <td><code>string</code></td>
+    <td>The object that contains extension configuration values depending on the extension schema specification. (opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="endpoint_url" /></td>
@@ -150,7 +151,7 @@ A paginated array of extensions.
 <tr>
     <td><CopyableCode code="extension_schema" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="html_url" /></td>
@@ -175,7 +176,7 @@ A paginated array of extensions.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of object being created. (default: extension)</td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 </tbody>
 </table>
@@ -198,60 +199,46 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_extension"><CopyableCode code="get_extension" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>Get details about an existing extension.<br /><br />Extensions are representations of Extension Schema objects that are attached to Services.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)<br /><br />Scoped OAuth requires: `extensions.read`<br /></td>
+    <td><a href="#parameter-include[]"><code>include[]</code></a></td>
+    <td>Get details about an existing extension.&lt;br /&gt;&lt;br /&gt;Extensions are representations of Extension Schema objects that are attached to Services.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `extensions.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#list_extensions"><CopyableCode code="list_extensions" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-query"><code>query</code></a>, <a href="#parameter-extension_object_id"><code>extension_object_id</code></a>, <a href="#parameter-extension_schema_id"><code>extension_schema_id</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>List existing extensions.<br /><br />Extensions are representations of Extension Schema objects that are attached to Services.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)<br /><br />Scoped OAuth requires: `extensions.read`<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-query"><code>query</code></a>, <a href="#parameter-extension_object_id"><code>extension_object_id</code></a>, <a href="#parameter-extension_schema_id"><code>extension_schema_id</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
+    <td>List existing extensions.&lt;br /&gt;&lt;br /&gt;Extensions are representations of Extension Schema objects that are attached to Services.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `extensions.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_extension"><CopyableCode code="create_extension" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-data__extension"><code>data__extension</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Create a new Extension.<br /><br />Extensions are representations of Extension Schema objects that are attached to Services.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)<br /><br />Scoped OAuth requires: `extensions.write`<br /></td>
+    <td><a href="#parameter-extension"><code>extension</code></a></td>
+    <td></td>
+    <td>Create a new Extension.&lt;br /&gt;&lt;br /&gt;Extensions are representations of Extension Schema objects that are attached to Services.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `extensions.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#delete_extension"><CopyableCode code="delete_extension" /></a></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-extension"><code>extension</code></a></td>
+    <td></td>
+    <td>Update an existing extension.&lt;br /&gt;&lt;br /&gt;Extensions are representations of Extension Schema objects that are attached to Services.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `extensions.write`&lt;br /&gt;</td>
+</tr>
+<tr>
+    <td><a href="#delete"><CopyableCode code="delete" /></a></td>
     <td><CopyableCode code="delete" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Delete an existing extension.<br /><br />Once the extension is deleted, it will not be accessible from the web UI and new incidents won't be able to be created for this extension.<br /><br />Extensions are representations of Extension Schema objects that are attached to Services.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)<br /><br />Scoped OAuth requires: `extensions.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_extensions"><CopyableCode code="_list_extensions" /></a></td>
-    <td><CopyableCode code="exec" /></td>
     <td></td>
-    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-query"><code>query</code></a>, <a href="#parameter-extension_object_id"><code>extension_object_id</code></a>, <a href="#parameter-extension_schema_id"><code>extension_schema_id</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>List existing extensions.<br /><br />Extensions are representations of Extension Schema objects that are attached to Services.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)<br /><br />Scoped OAuth requires: `extensions.read`<br /></td>
+    <td>Delete an existing extension.&lt;br /&gt;&lt;br /&gt;Once the extension is deleted, it will not be accessible from the web UI and new incidents won't be able to be created for this extension.&lt;br /&gt;&lt;br /&gt;Extensions are representations of Extension Schema objects that are attached to Services.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `extensions.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#_get_extension"><CopyableCode code="_get_extension" /></a></td>
+    <td><a href="#enable"><CopyableCode code="enable" /></a></td>
     <td><CopyableCode code="exec" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>Get details about an existing extension.<br /><br />Extensions are representations of Extension Schema objects that are attached to Services.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)<br /><br />Scoped OAuth requires: `extensions.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#update_extension"><CopyableCode code="update_extension" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-extension"><code>extension</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Update an existing extension.<br /><br />Extensions are representations of Extension Schema objects that are attached to Services.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)<br /><br />Scoped OAuth requires: `extensions.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#enable_extension"><CopyableCode code="enable_extension" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Enable an extension that is temporarily disabled. (This API does not require a request body.)<br /><br />Extensions are representations of Extension Schema objects that are attached to Services.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)<br /><br />Scoped OAuth requires: `extensions.write`<br /></td>
+    <td></td>
+    <td>Enable an extension that is temporarily disabled. (This API does not require a request body.)&lt;br /&gt;&lt;br /&gt;Extensions are representations of Extension Schema objects that are attached to Services.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `extensions.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -273,16 +260,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><CopyableCode code="id" /></td>
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
-</tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
 </tr>
 <tr id="parameter-extension_object_id">
     <td><CopyableCode code="extension_object_id" /></td>
@@ -317,7 +294,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-total">
     <td><CopyableCode code="total" /></td>
     <td><code>boolean</code></td>
-    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
+    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our &#91;Pagination Docs&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
 </tr>
 </tbody>
 </table>
@@ -325,15 +302,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_extension"
+    defaultValue="get"
     values={[
-        { label: 'get_extension', value: 'get_extension' },
-        { label: 'list_extensions', value: 'list_extensions' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_extension">
+<TabItem value="get">
 
-Get details about an existing extension.<br /><br />Extensions are representations of Extension Schema objects that are attached to Services.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)<br /><br />Scoped OAuth requires: `extensions.read`<br />
+Get details about an existing extension.&lt;br /&gt;&lt;br /&gt;Extensions are representations of Extension Schema objects that are attached to Services.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `extensions.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -350,15 +327,13 @@ temporarily_disabled,
 type
 FROM pagerduty.extensions.extensions
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 AND include[] = '{{ include[] }}'
 ;
 ```
 </TabItem>
-<TabItem value="list_extensions">
+<TabItem value="list">
 
-List existing extensions.<br /><br />Extensions are representations of Extension Schema objects that are attached to Services.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)<br /><br />Scoped OAuth requires: `extensions.read`<br />
+List existing extensions.&lt;br /&gt;&lt;br /&gt;Extensions are representations of Extension Schema objects that are attached to Services.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `extensions.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -377,8 +352,6 @@ FROM pagerduty.extensions.extensions
 WHERE limit = '{{ limit }}'
 AND offset = '{{ offset }}'
 AND total = '{{ total }}'
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 AND query = '{{ query }}'
 AND extension_object_id = '{{ extension_object_id }}'
 AND extension_schema_id = '{{ extension_schema_id }}'
@@ -392,26 +365,22 @@ AND include[] = '{{ include[] }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_extension"
+    defaultValue="create"
     values={[
-        { label: 'create_extension', value: 'create_extension' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_extension">
+<TabItem value="create">
 
-Create a new Extension.<br /><br />Extensions are representations of Extension Schema objects that are attached to Services.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)<br /><br />Scoped OAuth requires: `extensions.write`<br />
+Create a new Extension.&lt;br /&gt;&lt;br /&gt;Extensions are representations of Extension Schema objects that are attached to Services.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `extensions.write`&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.extensions.extensions (
-data__extension,
-Accept,
-Content-Type
+extension
 )
 SELECT 
-'{{ extension }}' /* required */,
-'{{ Accept }}',
-'{{ Content-Type }}'
+'{{ extension }}' /* required */
 RETURNING
 extension
 ;
@@ -419,17 +388,59 @@ extension
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: extensions
   props:
     - name: extension
-      value: object
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-    - name: Content-Type
-      value: string
+      value:
+        id: "{{ id }}"
+        summary: "{{ summary }}"
+        type: "{{ type }}"
+        self: "{{ self }}"
+        html_url: "{{ html_url }}"
+        name: "{{ name }}"
+        endpoint_url: "{{ endpoint_url }}"
+        extension_objects:
+          - id: "{{ id }}"
+            summary: "{{ summary }}"
+            type: "{{ type }}"
+            self: "{{ self }}"
+            html_url: "{{ html_url }}"
+        extension_schema:
+          id: "{{ id }}"
+          summary: "{{ summary }}"
+          type: "{{ type }}"
+          self: "{{ self }}"
+          html_url: "{{ html_url }}"
+        temporarily_disabled: {{ temporarily_disabled }}
+        config: "{{ config }}"
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
+
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Update an existing extension.&lt;br /&gt;&lt;br /&gt;Extensions are representations of Extension Schema objects that are attached to Services.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `extensions.write`&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.extensions.extensions
+SET 
+extension = '{{ extension }}'
+WHERE 
+id = '{{ id }}' --required
+AND extension = '{{ extension }}' --required
+RETURNING
+extension;
 ```
 </TabItem>
 </Tabs>
@@ -438,20 +449,18 @@ extension
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="delete_extension"
+    defaultValue="delete"
     values={[
-        { label: 'delete_extension', value: 'delete_extension' }
+        { label: 'delete', value: 'delete' }
     ]}
 >
-<TabItem value="delete_extension">
+<TabItem value="delete">
 
-Delete an existing extension.<br /><br />Once the extension is deleted, it will not be accessible from the web UI and new incidents won't be able to be created for this extension.<br /><br />Extensions are representations of Extension Schema objects that are attached to Services.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)<br /><br />Scoped OAuth requires: `extensions.write`<br />
+Delete an existing extension.&lt;br /&gt;&lt;br /&gt;Once the extension is deleted, it will not be accessible from the web UI and new incidents won't be able to be created for this extension.&lt;br /&gt;&lt;br /&gt;Extensions are representations of Extension Schema objects that are attached to Services.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `extensions.write`&lt;br /&gt;
 
 ```sql
 DELETE FROM pagerduty.extensions.extensions
 WHERE id = '{{ id }}' --required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
@@ -461,70 +470,18 @@ AND Content-Type = '{{ Content-Type }}'
 ## Lifecycle Methods
 
 <Tabs
-    defaultValue="_list_extensions"
+    defaultValue="enable"
     values={[
-        { label: '_list_extensions', value: '_list_extensions' },
-        { label: '_get_extension', value: '_get_extension' },
-        { label: 'update_extension', value: 'update_extension' },
-        { label: 'enable_extension', value: 'enable_extension' }
+        { label: 'enable', value: 'enable' }
     ]}
 >
-<TabItem value="_list_extensions">
+<TabItem value="enable">
 
-List existing extensions.<br /><br />Extensions are representations of Extension Schema objects that are attached to Services.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)<br /><br />Scoped OAuth requires: `extensions.read`<br />
-
-```sql
-EXEC pagerduty.extensions.extensions._list_extensions 
-@limit='{{ limit }}', 
-@offset='{{ offset }}', 
-@total={{ total }}, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@query='{{ query }}', 
-@extension_object_id='{{ extension_object_id }}', 
-@extension_schema_id='{{ extension_schema_id }}', 
-@include[]='{{ include[] }}'
-;
-```
-</TabItem>
-<TabItem value="_get_extension">
-
-Get details about an existing extension.<br /><br />Extensions are representations of Extension Schema objects that are attached to Services.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)<br /><br />Scoped OAuth requires: `extensions.read`<br />
+Enable an extension that is temporarily disabled. (This API does not require a request body.)&lt;br /&gt;&lt;br /&gt;Extensions are representations of Extension Schema objects that are attached to Services.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `extensions.write`&lt;br /&gt;
 
 ```sql
-EXEC pagerduty.extensions.extensions._get_extension 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@include[]='{{ include[] }}'
-;
-```
-</TabItem>
-<TabItem value="update_extension">
-
-Update an existing extension.<br /><br />Extensions are representations of Extension Schema objects that are attached to Services.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)<br /><br />Scoped OAuth requires: `extensions.write`<br />
-
-```sql
-EXEC pagerduty.extensions.extensions.update_extension 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"extension": "{{ extension }}"
-}'
-;
-```
-</TabItem>
-<TabItem value="enable_extension">
-
-Enable an extension that is temporarily disabled. (This API does not require a request body.)<br /><br />Extensions are representations of Extension Schema objects that are attached to Services.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#extensions)<br /><br />Scoped OAuth requires: `extensions.write`<br />
-
-```sql
-EXEC pagerduty.extensions.extensions.enable_extension 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
+EXEC pagerduty.extensions.extensions.enable 
+@id='{{ id }}' --required
 ;
 ```
 </TabItem>

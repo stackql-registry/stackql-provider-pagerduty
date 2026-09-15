@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>license_allocations</code> reso
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>license_allocations</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="license_allocations" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.licenses.license_allocations" /></td></tr>
 </tbody></table>
@@ -32,12 +33,12 @@ Creates, updates, deletes, gets or lists a <code>license_allocations</code> reso
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_license_allocations"
+    defaultValue="list"
     values={[
-        { label: 'list_license_allocations', value: 'list_license_allocations' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="list_license_allocations">
+<TabItem value="list">
 
 License allocations to Users within your Account
 
@@ -63,7 +64,7 @@ License allocations to Users within your Account
 <tr>
     <td><CopyableCode code="user" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 </tbody>
 </table>
@@ -86,18 +87,11 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_license_allocations"><CopyableCode code="list_license_allocations" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a></td>
-    <td>List the Licenses allocated to Users within your Account<br /><br />Scoped OAuth requires: `licenses.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_license_allocations"><CopyableCode code="_list_license_allocations" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a></td>
-    <td>List the Licenses allocated to Users within your Account<br /><br />Scoped OAuth requires: `licenses.read`<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a></td>
+    <td>List the Licenses allocated to Users within your Account&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `licenses.read`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -115,16 +109,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 <tr id="parameter-limit">
     <td><CopyableCode code="limit" /></td>
     <td><code>integer</code></td>
@@ -141,14 +125,14 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_license_allocations"
+    defaultValue="list"
     values={[
-        { label: 'list_license_allocations', value: 'list_license_allocations' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="list_license_allocations">
+<TabItem value="list">
 
-List the Licenses allocated to Users within your Account<br /><br />Scoped OAuth requires: `licenses.read`<br />
+List the Licenses allocated to Users within your Account&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `licenses.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -156,34 +140,8 @@ allocated_at,
 license,
 user
 FROM pagerduty.licenses.license_allocations
-WHERE Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-AND limit = '{{ limit }}'
+WHERE limit = '{{ limit }}'
 AND offset = '{{ offset }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_list_license_allocations"
-    values={[
-        { label: '_list_license_allocations', value: '_list_license_allocations' }
-    ]}
->
-<TabItem value="_list_license_allocations">
-
-List the Licenses allocated to Users within your Account<br /><br />Scoped OAuth requires: `licenses.read`<br />
-
-```sql
-EXEC pagerduty.licenses.license_allocations._list_license_allocations 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@limit='{{ limit }}', 
-@offset='{{ offset }}'
 ;
 ```
 </TabItem>

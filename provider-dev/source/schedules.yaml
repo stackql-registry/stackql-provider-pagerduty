@@ -1,0 +1,2433 @@
+openapi: 3.0.2
+info:
+  title: PagerDuty API - Schedules
+  description: On-call schedules, their overrides, users and audit records.
+  version: 2.0.0
+paths:
+  /schedules:
+    get:
+      tags:
+        - Schedules
+      x-pd-requires-scope: schedules.read
+      operationId: listSchedules
+      description: |
+        List the on-call schedules.
+
+        A Schedule determines the time periods that users are On-Call.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)
+
+        Scoped OAuth requires: `schedules.read`
+      summary: List schedules
+      parameters:
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/include_schedules'
+        - $ref: '#/components/parameters/schedule_list_time_zone'
+        - $ref: '#/components/parameters/include_next_oncall_for_user'
+        - $ref: '#/components/parameters/schedule_since'
+        - $ref: '#/components/parameters/schedule_until'
+        - $ref: '#/components/parameters/team_ids'
+      responses:
+        '200':
+          description: A paginated array of schedule objects.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  schedules:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Schedule'
+                required:
+                  - schedules
+              examples:
+                Basic Example:
+                  value:
+                    schedules:
+                      - id: PI7DH85
+                        type: schedule
+                        summary: Daily Engineering Rotation
+                        self: https://api.pagerduty.com/schedules/PI7DH85
+                        html_url: https://subdomain.pagerduty.com/schedules/PI7DH85
+                        name: Daily Engineering Rotation
+                        time_zone: America/New_York
+                        description: Rotation schedule for engineering
+                        escalation_policies:
+                          - id: PT20YPA
+                            type: escalation_policy_reference
+                            summary: Another Escalation Policy
+                            self: https://api.pagerduty.com/escalation_policies/PT20YPA
+                            html_url: https://subdomain.pagerduty.com/escalation_policies/PT20YPA
+                        users:
+                          - id: PEYSGVF
+                            type: user_reference
+                            summary: PagerDuty Admin
+                            self: https://api.pagerduty.com/users/PEYSGVF
+                            html_url: https://subdomain.pagerduty.com/users/PEYSGVF
+                    limit: 100
+                    offset: 0
+                    more: false
+                    total: null
+                With Schedule Layers:
+                  summary: With Schedule Layers Included
+                  value:
+                    schedules:
+                      - id: PI7DH85
+                        type: schedule
+                        summary: Daily Engineering Rotation
+                        self: https://api.pagerduty.com/schedules/PI7DH85
+                        html_url: https://subdomain.pagerduty.com/schedules/PI7DH85
+                        name: Daily Engineering Rotation
+                        time_zone: America/New_York
+                        description: Rotation schedule for engineering
+                        escalation_policies:
+                          - id: PT20YPA
+                            type: escalation_policy_reference
+                            summary: Another Escalation Policy
+                            self: https://api.pagerduty.com/escalation_policies/PT20YPA
+                            html_url: https://subdomain.pagerduty.com/escalation_policies/PT20YPA
+                        users:
+                          - id: PEYSGVF
+                            type: user_reference
+                            summary: PagerDuty Admin
+                            self: https://api.pagerduty.com/users/PEYSGVF
+                            html_url: https://subdomain.pagerduty.com/users/PEYSGVF
+                        schedule_layers:
+                          - name: Night Shift
+                            start: '2015-11-06T20:00:00-05:00'
+                            end: '2016-11-06T20:00:00-05:00'
+                            rotation_virtual_start: '2015-11-06T20:00:00-05:00'
+                            rotation_turn_length_seconds: 86400
+                            users:
+                              - user:
+                                  id: PEYSGVF
+                                  type: user_reference
+                                  summary: PagerDuty Admin
+                                  self: https://api.pagerduty.com/users/PEYSGVF
+                                  html_url: https://subdomain.pagerduty.com/users/PEYSGVF
+                            restrictions:
+                              - type: daily_restriction
+                                start_time_of_day: '08:00:00'
+                                duration_seconds: 32400
+                    limit: 100
+                    offset: 0
+                    more: false
+                    total: null
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      tags:
+        - Schedules
+      x-pd-requires-scope: schedules.write
+      operationId: createSchedule
+      description: |
+        Create a new on-call schedule.
+
+        A Schedule determines the time periods that users are On-Call.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)
+
+        Scoped OAuth requires: `schedules.write`
+      summary: Create a schedule
+      parameters:
+        - $ref: '#/components/parameters/schedule_overflow'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                schedule:
+                  $ref: '#/components/schemas/Schedule'
+              required:
+                - schedule
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  schedule:
+                    name: Daily Engineering Rotation
+                    type: schedule
+                    time_zone: America/New_York
+                    description: Rotation schedule for engineering
+                    schedule_layers:
+                      - name: Night Shift
+                        start: '2015-11-06T20:00:00-05:00'
+                        rotation_virtual_start: '2015-11-06T20:00:00-05:00'
+                        rotation_turn_length_seconds: 86400
+                        users:
+                          - user:
+                              id: PXPGF42
+                              type: user_reference
+                        restrictions:
+                          - type: daily_restriction
+                            start_time_of_day: '08:00:00'
+                            duration_seconds: 32400
+        description: The schedule to be created.
+      responses:
+        '201':
+          description: The schedule object created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  schedule:
+                    $ref: '#/components/schemas/Schedule'
+                required:
+                  - schedule
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    schedule:
+                      id: PI7DH85
+                      type: schedule
+                      summary: Daily Engineering Rotation
+                      self: https://api.pagerduty.com/schedules/PI7DH85
+                      html_url: https://subdomain.pagerduty.com/schedules/PI7DH85
+                      name: Daily Engineering Rotation
+                      time_zone: America/New_York
+                      description: Rotation schedule for engineering
+                      escalation_policies:
+                        - id: PT20YPA
+                          type: escalation_policy_reference
+                          summary: Another Escalation Policy
+                          self: https://api.pagerduty.com/escalation_policies/PT20YPA
+                          html_url: https://subdomain.pagerduty.com/escalation_policies/PT20YPA
+                      users:
+                        - id: PEYSGVF
+                          type: user_reference
+                          summary: PagerDuty Admin
+                          self: https://api.pagerduty.com/users/PEYSGVF
+                          html_url: https://subdomain.pagerduty.com/users/PEYSGVF
+                      teams: []
+                      schedule_layers:
+                        - name: Layer 1
+                          rendered_schedule_entries: []
+                          id: PG68P1M
+                          start: '2015-11-06T20:00:00-05:00'
+                          rotation_virtual_start: '2015-11-06T20:00:00-05:00'
+                          rotation_turn_length_seconds: 86400
+                          users:
+                            - user:
+                                id: PEYSGVF
+                                type: user_reference
+                                summary: PagerDuty Admin
+                                self: https://api.pagerduty.com/users/PEYSGVF
+                                html_url: https://subdomain.pagerduty.com/users/PEYSGVF
+                          restrictions:
+                            - type: daily_restriction
+                              start_time_of_day: '08:00:00'
+                              duration_seconds: 32400
+                      overrides_subschedule:
+                        name: Overrides
+                        rendered_schedule_entries: []
+                      final_schedule:
+                        name: Final Schedule
+                        rendered_schedule_entries: []
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: List and create on-call schedules.
+  /schedules/{id}:
+    get:
+      tags:
+        - Schedules
+      x-pd-requires-scope: schedules.read
+      operationId: getSchedule
+      description: |
+        Show detailed information about a schedule, including entries for each layer.
+        Scoped OAuth requires: `schedules.read`
+      summary: Get a schedule
+      parameters:
+        - $ref: '#/components/parameters/schedule_time_zone'
+        - $ref: '#/components/parameters/schedule_since'
+        - $ref: '#/components/parameters/schedule_until'
+        - $ref: '#/components/parameters/schedule_overflow'
+        - $ref: '#/components/parameters/include_next_oncall_for_user'
+        - $ref: '#/components/parameters/schedule_id'
+      responses:
+        '200':
+          description: The schedule object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  schedule:
+                    $ref: '#/components/schemas/Schedule'
+                required:
+                  - schedule
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    schedule:
+                      id: PI7DH85
+                      type: schedule
+                      summary: Daily Engineering Rotation
+                      self: https://api.pagerduty.com/schedules/PI7DH85
+                      html_url: https://subdomain.pagerduty.com/schedules/PI7DH85
+                      name: Daily Engineering Rotation
+                      time_zone: America/New_York
+                      description: Rotation schedule for engineering
+                      escalation_policies:
+                        - id: PT20YPA
+                          type: escalation_policy_reference
+                          summary: Another Escalation Policy
+                          self: https://api.pagerduty.com/escalation_policies/PT20YPA
+                          html_url: https://subdomain.pagerduty.com/escalation_policies/PT20YPA
+                      users:
+                        - id: PXPGF42
+                          type: user_reference
+                          summary: Regina Phalange
+                          self: https://api.pagerduty.com/users/PXPGF42
+                          html_url: https://subdomain.pagerduty.com/users/PXPGF42
+                      teams:
+                        - id: PQ9K7I8
+                          type: team_reference
+                          summary: Engineering
+                          self: https://api.pagerduty.com/teams/PQ9K7I8
+                          html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                      schedule_layers:
+                        - name: Layer 1
+                          rendered_schedule_entries:
+                            - start: '2015-11-09T08:00:00-05:00'
+                              end: '2015-11-09T17:00:00-05:00'
+                              user:
+                                id: PXPGF42
+                                type: user_reference
+                                summary: Regina Phalange
+                                self: https://api.pagerduty.com/users/PXPGF42
+                                html_url: https://subdomain.pagerduty.com/users/PXPGF42
+                          rendered_coverage_percentage: 37.5
+                          id: PG68P1M
+                          start: '2015-11-06T21:00:00-05:00'
+                          rotation_virtual_start: '2015-11-06T20:00:00-05:00'
+                          rotation_turn_length_seconds: 86400
+                          users:
+                            - user:
+                                id: PXPGF42
+                                type: user_reference
+                                summary: Regina Phalange
+                                self: https://api.pagerduty.com/users/PXPGF42
+                                html_url: https://subdomain.pagerduty.com/users/PXPGF42
+                          restrictions:
+                            - type: daily_restriction
+                              start_time_of_day: '08:00:00'
+                              duration_seconds: 32400
+                      overrides_subschedule:
+                        name: Overrides
+                        rendered_schedule_entries: []
+                        rendered_coverage_percentage: 0
+                      final_schedule:
+                        name: Final Schedule
+                        rendered_schedule_entries:
+                          - start: '2015-11-10T08:00:00-05:00'
+                            end: '2015-11-10T17:00:00-05:00'
+                            user:
+                              id: PXPGF42
+                              type: user_reference
+                              summary: Regina Phalange
+                              self: https://api.pagerduty.com/users/PXPGF42
+                              html_url: https://subdomain.pagerduty.com/users/PXPGF42
+                        rendered_coverage_percentage: 37.5
+                      next_oncall_for_user:
+                        start: '2021-12-27T16:00:00-05:00'
+                        end: '2022-01-03T16:00:00-05:00'
+                        user:
+                          - id: PCQNVHM
+                            type: user_reference
+                            summary: Jim Halpert
+                            self: https://api.pagerduty.com/users/PCQNVHM
+                            html_url: https://subdomain.pagerduty.com/users/PCQNVHM
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+        - Schedules
+      x-pd-requires-scope: schedules.write
+      operationId: deleteSchedule
+      description: |
+        Delete an on-call schedule.
+
+        A Schedule determines the time periods that users are On-Call.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)
+
+        Scoped OAuth requires: `schedules.write`
+      summary: Delete a schedule
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: The schedule was deleted successfully.
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    put:
+      tags:
+        - Schedules
+      x-pd-requires-scope: schedules.write
+      operationId: updateSchedule
+      description: |
+        Update an existing on-call schedule.
+
+        A Schedule determines the time periods that users are On-Call.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)
+
+        Scoped OAuth requires: `schedules.write`
+      summary: Update a schedule
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/schedule_overflow'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                schedule:
+                  $ref: '#/components/schemas/Schedule'
+              required:
+                - schedule
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  schedule:
+                    name: Daily Engineering Rotation
+                    type: schedule
+                    time_zone: America/New_York
+                    description: Rotation schedule for engineering
+                    schedule_layers:
+                      - name: Night Shift
+                        start: '2015-11-06T20:00:00-05:00'
+                        end: '2016-11-06T20:00:00-05:00'
+                        rotation_virtual_start: '2015-11-06T20:00:00-05:00'
+                        rotation_turn_length_seconds: 86400
+                        users:
+                          - user:
+                              id: PXPGF42
+                              type: user_reference
+                        restrictions:
+                          - type: daily_restriction
+                            start_time_of_day: '08:00:00'
+                            duration_seconds: 32400
+        description: The schedule to be updated.
+      responses:
+        '200':
+          description: The updated schedule.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  schedule:
+                    $ref: '#/components/schemas/Schedule'
+                required:
+                  - schedule
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    schedule:
+                      id: PI7DH85
+                      type: schedule
+                      summary: Daily Engineering Rotation
+                      self: https://api.pagerduty.com/schedules/PI7DH85
+                      html_url: https://subdomain.pagerduty.com/schedules/PI7DH85
+                      name: Daily Engineering Rotation
+                      time_zone: America/New_York
+                      description: Rotation schedule for engineering
+                      escalation_policies:
+                        - id: PT20YPA
+                          type: escalation_policy_reference
+                          summary: Another Escalation Policy
+                          self: https://api.pagerduty.com/escalation_policies/PT20YPA
+                          html_url: https://subdomain.pagerduty.com/escalation_policies/PT20YPA
+                      users:
+                        - id: PXPGF42
+                          type: user_reference
+                          summary: Regina Phalange
+                          self: https://api.pagerduty.com/users/PXPGF42
+                          html_url: https://subdomain.pagerduty.com/users/PXPGF42
+                      teams:
+                        - id: PQ9K7I8
+                          type: team_reference
+                          summary: Engineering
+                          self: https://api.pagerduty.com/teams/PQ9K7I8
+                          html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                      schedule_layers:
+                        - name: Layer 1
+                          rendered_schedule_entries: []
+                          id: PG68P1M
+                          start: '2015-11-06T20:00:00-05:00'
+                          rotation_virtual_start: '2015-11-06T20:00:00-05:00'
+                          rotation_turn_length_seconds: 86400
+                          users:
+                            - user:
+                                id: PXPGF42
+                                type: user_reference
+                                summary: Regina Phalange
+                                self: https://api.pagerduty.com/users/PXPGF42
+                                html_url: https://subdomain.pagerduty.com/users/PXPGF42
+                          restrictions:
+                            - type: daily_restriction
+                              start_time_of_day: '08:00:00'
+                              duration_seconds: 32400
+                      overrides_subschedule:
+                        name: Overrides
+                        rendered_schedule_entries: []
+                      final_schedule:
+                        name: Final Schedule
+                        rendered_schedule_entries: []
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: Manage an on-call schedule.
+  /schedules/{id}/audit/records:
+    get:
+      x-pd-requires-scope: audit_records.read
+      tags:
+        - Schedules
+      operationId: listSchedulesAuditRecords
+      summary: List audit records for a schedule
+      description: |
+        The returned records are sorted by the `execution_time` from newest to oldest.
+
+        See [`Cursor-based pagination`](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.
+
+        For more information see the [Audit API Document](https://developer.pagerduty.com/docs/rest-api-v2/audit-records-api/).
+
+        Scoped OAuth requires: `audit_records.read`
+      parameters:
+        - $ref: '#/components/parameters/schedule_id'
+        - $ref: '#/components/parameters/cursor_limit'
+        - $ref: '#/components/parameters/cursor_cursor'
+        - $ref: '#/components/parameters/audit_since'
+        - $ref: '#/components/parameters/audit_until'
+      responses:
+        '200':
+          description: Records matching the query criteria.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditRecordResponseSchema'
+              examples:
+                response:
+                  $ref: '#/components/examples/AuditRecordScheduleResponse'
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    description: List audit records of changes made to the schedule.
+  /schedules/{id}/overrides:
+    get:
+      tags:
+        - Schedules
+      x-pd-requires-scope: schedules.read
+      operationId: listScheduleOverrides
+      description: |
+        List overrides for a given time range.
+
+        A Schedule determines the time periods that users are On-Call.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)
+
+        Scoped OAuth requires: `schedules.read`
+      summary: List overrides
+      parameters:
+        - $ref: '#/components/parameters/schedule_id'
+        - $ref: '#/components/parameters/since_schedules'
+        - $ref: '#/components/parameters/until_schedules'
+        - $ref: '#/components/parameters/editable_schedules'
+        - $ref: '#/components/parameters/overflow_schedules'
+      responses:
+        '201':
+          description: The collection of override objects returned by the query.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  overrides:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Override'
+                required:
+                  - overrides
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    overrides:
+                      - id: PQ47DCP
+                        start: '2012-07-01T00:00:00-04:00'
+                        end: '2012-07-02T00:00:00-04:00'
+                        user:
+                          id: PEYSGVF
+                          type: user_reference
+                          summary: Aurelio Rice
+                          self: https://api.pagerduty.com/users/PEYSGVF
+                          html_url: https://subdomain.pagerduty.com/users/PEYSGVF
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      tags:
+        - Schedules
+      x-pd-requires-scope: schedules.write
+      operationId: createScheduleOverride
+      description: |
+        Create one or more overrides, each for a specific user covering a specified time range. If you create an override on top of an existing override, the last created override will have priority.
+
+        A Schedule determines the time periods that users are On-Call.
+
+        Note: An older implementation of this endpoint only supported creating a single ocverride per request. That functionality is still supported, but deprecated and may be removed in the future.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)
+
+        Scoped OAuth requires: `schedules.write`
+      summary: Create one or more overrides
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                overrides:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Override'
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  overrides:
+                    - start: '2012-07-01T00:00:00-04:00'
+                      end: '2012-07-02T00:00:00-04:00'
+                      user:
+                        id: PEYSGVA
+                        type: user_reference
+                      time_zone: UTC
+                    - start: '2012-07-03T00:00:00-04:00'
+                      end: '2012-07-04T00:00:00-04:00'
+                      user:
+                        id: PEYSGVF
+                        type: user_reference
+                      time_zone: UTC
+        description: The overrides to be created
+        required: true
+      responses:
+        '201':
+          description: A list of overrides requested and a status code indicating whether they were created or rejected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateScheduleOverrideResponse'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    - status: 201
+                      override:
+                        start: '2021-03-09T05:00:00Z'
+                        end: '2021-03-09T17:00:00Z'
+                        user:
+                          id: P37CSDJ
+                          type: user_reference
+                          summary: Scott
+                          self: https://api.pd-staging.com/users/P37CSDJ
+                          html_url: https://pdt-braythwayt.pd-staging.com/users/P37CSDJ
+                        id: Q3X6MJ1LUKD6QW
+                    - status: 201
+                      override:
+                        start: '2021-03-10T05:00:00Z'
+                        end: '2021-03-10T17:00:00Z'
+                        user:
+                          id: P37CSDJ
+                          type: user_reference
+                          summary: Scott
+                          self: https://api.pd-staging.com/users/P37CSDJ
+                          html_url: https://pdt-braythwayt.pd-staging.com/users/P37CSDJ
+                        id: Q37A85CJZP1DTT
+                    - status: 400
+                      errors:
+                        - Override must end after its start
+                      override:
+                        start: '2021-03-11T05:00:00Z'
+                        end: '2021-03-11T05:00:00Z'
+                        user:
+                          id: P37CSDJ
+                          type: user_reference
+                          summary: Scott
+                          self: https://api.pd-staging.com/users/P37CSDJ
+                          html_url: https://pdt-braythwayt.pd-staging.com/users/P37CSDJ
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+      x-stackql-bare-array-wrap:
+        wrapperKey: create_schedule_override
+        wrapperName: CreateScheduleOverrideResponse
+        mediaType: application/json
+        scalar: false
+    description: List and create schedule overrides.
+  /schedules/{id}/overrides/{override_id}:
+    delete:
+      tags:
+        - Schedules
+      x-pd-requires-scope: schedules.write
+      operationId: deleteScheduleOverride
+      description: |
+        Remove an override.
+
+        You cannot remove a past override.
+
+        If the override start time is before the current time, but the end time is after the current time, the override will be truncated to the current time.
+
+        If the override is truncated, the status code will be 200 OK, as opposed to a 204 No Content for a successful delete.
+
+        A Schedule determines the time periods that users are On-Call.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)
+
+        Scoped OAuth requires: `schedules.write`
+      summary: Delete an override
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/schedule_override_id'
+      responses:
+        '200':
+          description: The override was truncated.
+        '204':
+          description: The override was deleted successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: Delete a schedule override.
+  /schedules/{id}/users:
+    get:
+      tags:
+        - Schedules
+      x-pd-requires-scope: users.read
+      operationId: listScheduleUsers
+      description: |
+        List all of the users on call in a given schedule for a given time range.
+
+        A Schedule determines the time periods that users are On-Call.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)
+
+        Scoped OAuth requires: `users.read`
+      summary: List users on call.
+      parameters:
+        - $ref: '#/components/parameters/schedule_id'
+        - $ref: '#/components/parameters/since'
+        - $ref: '#/components/parameters/until'
+      responses:
+        '200':
+          description: The users on the given schedule.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    readOnly: true
+                    items:
+                      $ref: '#/components/schemas/User'
+                required:
+                  - users
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    users:
+                      - id: PAM4FGS
+                        type: user
+                        summary: Kyler Kuhn
+                        self: https://api.pagerduty.com/users/PAM4FGS
+                        html_url: https://subdomain.pagerduty.com/users/PAM4FGS
+                        name: Kyler Kuhn
+                        email: 126_dvm_kyler_kuhn@beahan.name
+                        time_zone: Asia/Hong_Kong
+                        color: red
+                        role: admin
+                        avatar_url: https://pd-static-assets.pagerduty.com/users/blank-avatar.png
+                        description: Engineer based in HK
+                        invitation_sent: false
+                        contact_methods:
+                          - id: PVMGSML
+                            type: email_contact_method_reference
+                            summary: Work
+                            self: https://api.pagerduty.com/users/PAM4FGS/contact_methods/PVMGSMLL
+                        notification_rules:
+                          - id: P8GRWKZ
+                            type: assignment_notification_rule_reference
+                            summary: Default
+                            self: https://api.pagerduty.com/users/PAM4FGS/notification_rules/P8GRWKZ
+                            html_url: null
+                        job_title: Senior Engineer
+                        teams:
+                          - id: PQ9K7I8
+                            type: team_reference
+                            summary: Engineering
+                            self: https://api.pagerduty.com/teams/PQ9K7I8
+                            html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                      - id: PXPGF42
+                        type: user
+                        summary: Earline Greenholt
+                        self: https://api.pagerduty.com/users/PXPGF42
+                        html_url: https://subdomain.pagerduty.com/users/PXPGF42
+                        name: Earline Greenholt
+                        email: 125.greenholt.earline@graham.name
+                        time_zone: America/Lima
+                        color: green
+                        role: admin
+                        avatar_url: https://pd-static-assets.pagerduty.com/users/blank-avatar.png
+                        description: I'm the boss
+                        invitation_sent: false
+                        contact_methods:
+                          - id: PTDVERC
+                            type: email_contact_method_reference
+                            summary: Default
+                            self: https://api.pagerduty.com/users/PXPGF42/contact_methods/PTDVERC
+                        notification_rules:
+                          - id: P8GRWKK
+                            type: assignment_notification_rule_reference
+                            summary: Default
+                            self: https://api.pagerduty.com/users/PXPGF42/notification_rules/P8GRWKK
+                            html_url: null
+                        job_title: Director of Engineering
+                        teams:
+                          - id: PQ9K7I8
+                            type: team_reference
+                            summary: Engineering
+                            self: https://api.pagerduty.com/teams/PQ9K7I8
+                            html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: List the users on call for a given schedule.
+  /schedules/preview:
+    post:
+      tags:
+        - Schedules
+      x-pd-requires-scope: schedules.write
+      operationId: createSchedulePreview
+      description: |
+        Preview what an on-call schedule would look like without saving it.
+
+        A Schedule determines the time periods that users are On-Call.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)
+
+        Scoped OAuth requires: `schedules.write`
+      summary: Preview a schedule
+      parameters:
+        - $ref: '#/components/parameters/since'
+        - $ref: '#/components/parameters/until'
+        - $ref: '#/components/parameters/schedule_overflow'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                schedule:
+                  $ref: '#/components/schemas/Schedule'
+              required:
+                - schedule
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  schedule:
+                    name: Daily Engineering Rotation
+                    type: schedule
+                    time_zone: America/New_York
+                    description: Rotation schedule for engineering
+                    schedule_layers:
+                      - name: Night Shift
+                        start: '2015-11-06T20:00:00-05:00'
+                        end: '2016-11-06T20:00:00-05:00'
+                        rotation_virtual_start: '2015-11-06T20:00:00-05:00'
+                        rotation_turn_length_seconds: 86400
+                        users:
+                          - user:
+                              id: PXPGF42
+                              type: user_reference
+                        restrictions:
+                          - type: daily_restriction
+                            start_time_of_day: '08:00:00'
+                            duration_seconds: 32400
+        description: The schedule to be previewed.
+      responses:
+        '200':
+          description: What the schedule will look like if posted.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  schedule:
+                    $ref: '#/components/schemas/Schedule'
+                required:
+                  - schedule
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    schedule:
+                      id: PI7DH85
+                      type: schedule
+                      summary: Daily Engineering Rotation
+                      self: https://api.pagerduty.com/schedules/PI7DH85
+                      html_url: https://subdomain.pagerduty.com/schedules/PI7DH85
+                      name: Daily Engineering Rotation
+                      time_zone: America/New_York
+                      description: Rotation schedule for engineering
+                      escalation_policies: []
+                      users:
+                        - id: PXPGF42
+                          type: user_reference
+                          summary: Regina Phalange
+                          self: https://api.pagerduty.com/users/PXPGF42
+                          html_url: https://subdomain.pagerduty.com/users/PXPGF42
+                      teams:
+                        - id: PQ9K7I8
+                          type: team_reference
+                          summary: Engineering
+                          self: https://api.pagerduty.com/teams/PQ9K7I8
+                          html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                      schedule_layers:
+                        - name: Layer 1
+                          rendered_schedule_entries: []
+                          id: PG68P1M
+                          start: '2015-11-06T20:00:00-05:00'
+                          rotation_virtual_start: '2015-11-06T20:00:00-05:00'
+                          rotation_turn_length_seconds: 86400
+                          users:
+                            - user:
+                                id: PXPGF42
+                                type: user_reference
+                                summary: Regina Phalange
+                                self: https://api.pagerduty.com/users/PXPGF42
+                                html_url: https://subdomain.pagerduty.com/users/PXPGF42
+                          restrictions:
+                            - type: daily_restriction
+                              start_time_of_day: '08:00:00'
+                              duration_seconds: 32400
+                      overrides_subschedule:
+                        name: Overrides
+                        rendered_schedule_entries: []
+                      final_schedule:
+                        name: Final Schedule
+                        rendered_schedule_entries: []
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: Preview what an on-call schedule would look like without saving it. This works the same as the update or create actions, except that the result is not persisted. Preview optionally takes two additional arguments, since and until, delimiting the span of the preview.
+components:
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        offset:
+          type: integer
+          description: Echoes offset pagination property.
+          readOnly: true
+        limit:
+          type: integer
+          description: Echoes limit pagination property.
+          readOnly: true
+        more:
+          type: boolean
+          description: Indicates if there are additional records to return
+          readOnly: true
+        total:
+          type: integer
+          description: The total number of records matching the given query.
+          nullable: true
+          readOnly: true
+    Schedule:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        schedule_layers:
+          type: array
+          description: A list of schedule layers.
+          items:
+            $ref: '#/components/schemas/ScheduleLayer'
+        time_zone:
+          type: string
+          format: activesupport-time-zone
+          description: The time zone of the schedule.
+        name:
+          type: string
+          description: The name of the schedule
+        description:
+          type: string
+          description: The description of the schedule
+        final_schedule:
+          $ref: '#/components/schemas/SubSchedule'
+        overrides_subschedule:
+          $ref: '#/components/schemas/SubSchedule'
+        escalation_policies:
+          type: array
+          readOnly: true
+          description: An array of all of the escalation policies that uses this schedule.
+          items:
+            $ref: '#/components/schemas/EscalationPolicyReference'
+        users:
+          type: array
+          readOnly: true
+          description: An array of all of the users on the schedule.
+          items:
+            $ref: '#/components/schemas/UserReference'
+        teams:
+          type: array
+          readOnly: true
+          description: An array of all of the teams on the schedule.
+          items:
+            $ref: '#/components/schemas/TeamReference'
+        next_oncall_for_user:
+          type: object
+          properties:
+            start:
+              type: string
+              readOnly: true
+              description: The start date for the User shift
+            end:
+              type: string
+              readOnly: true
+              description: The end date for the User shift
+            user:
+              $ref: '#/components/schemas/Reference'
+      required:
+        - time_zone
+        - type
+      example:
+        name: Daily Engineering Rotation
+        type: schedule
+        time_zone: America/New_York
+        description: Rotation schedule for engineering
+        schedule_layers:
+          - name: Night Shift
+            start: '2015-11-06T20:00:00-05:00'
+            end: '2016-11-06T20:00:00-05:00'
+            rotation_virtual_start: '2015-11-06T20:00:00-05:00'
+            rotation_turn_length_seconds: 86400
+            users:
+              - user:
+                  id: PXPGF42
+                  type: user_reference
+            restrictions:
+              - type: daily_restriction
+                start_time_of_day: '08:00:00'
+                duration_seconds: 32400
+    AuditRecordResponseSchema:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditRecord'
+        response_metadata:
+          nullable: true
+          anyOf:
+            - $ref: '#/components/schemas/AuditMetadata'
+        limit:
+          type: integer
+          description: The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+          readOnly: true
+        next_cursor:
+          type: string
+          description: |
+            An opaque string than will deliver the next set of results when provided as the `cursor` parameter in a subsequent request.  A `null` value for this field indicates that there are no additional results.
+          example: dXNlcjaVMzc5V0ZYTlo=
+          nullable: true
+          readOnly: true
+      required:
+        - records
+        - limit
+        - next_cursor
+    Override:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        start:
+          description: The start date and time for the override.
+          type: string
+          format: date-time
+        end:
+          description: The end date and time for the override.
+          type: string
+          format: date-time
+        user:
+          $ref: '#/components/schemas/UserReference'
+      required:
+        - start
+        - end
+        - user
+      example:
+        start: '2012-07-01T00:00:00-04:00'
+        end: '2012-07-02T00:00:00-04:00'
+        user:
+          id: PEYSGVF
+          type: user_reference
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        name:
+          type: string
+          description: The name of the user.
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          description: The user's email address.
+          minLength: 6
+          maxLength: 100
+        time_zone:
+          type: string
+          format: tzinfo
+          description: The preferred time zone name. If null, the account's time zone will be used.
+        color:
+          type: string
+          description: The schedule color.
+        role:
+          description: The user role. Account must have the `read_only_users` ability to set a user as a `read_only_user` or a `read_only_limited_user`, and must have advanced permissions abilities to set a user as `observer` or `restricted_access`.
+          type: string
+          enum:
+            - admin
+            - limited_user
+            - observer
+            - owner
+            - read_only_user
+            - restricted_access
+            - read_only_limited_user
+            - user
+        avatar_url:
+          type: string
+          format: url
+          description: The URL of the user's avatar.
+          readOnly: true
+        description:
+          type: string
+          description: The user's bio.
+          nullable: true
+        invitation_sent:
+          type: boolean
+          readOnly: true
+          description: If true, the user has an outstanding invitation.
+        job_title:
+          type: string
+          description: The user's title.
+          maxLength: 100
+        created_via_sso:
+          type: boolean
+          readOnly: true
+          description: If true, the user was created via Single Sign-On (SSO).
+        teams:
+          type: array
+          readOnly: true
+          description: The list of teams to which the user belongs. Account must have the `teams` ability to set this.
+          items:
+            $ref: '#/components/schemas/TeamReference'
+        contact_methods:
+          type: array
+          readOnly: true
+          description: The list of contact methods for the user.
+          items:
+            $ref: '#/components/schemas/ContactMethodReference'
+        notification_rules:
+          readOnly: true
+          type: array
+          description: The list of notification rules for the user.
+          items:
+            $ref: '#/components/schemas/NotificationRuleReference'
+        http_cal_url:
+          type: string
+          format: uri
+          readOnly: true
+          description: |-
+            iCal HTTP feed URL for this user's on-call shifts. Only returned on the `GET /users/{id}` detail endpoint: automatically when viewing your own profile with a user-level token, or when an account admin with `can_update_user` passes `include[]=calendar_urls` for another user. Not returned on list endpoints or with account-level read-only keys.
+
+            **Security:** this URL is a bearer credential. Anyone with the URL can read the user's on-call calendar without further authentication. Rotate via `POST /users/{id}/regenerate_private_url_key` if it may have been exposed.
+        web_cal_url:
+          type: string
+          format: uri
+          readOnly: true
+          description: |-
+            iCal webcal URL for this user's on-call shifts. Only returned on the `GET /users/{id}` detail endpoint: automatically when viewing your own profile with a user-level token, or when an account admin with `can_update_user` passes `include[]=calendar_urls` for another user. Not returned on list endpoints or with account-level read-only keys.
+
+            **Security:** this URL is a bearer credential. Anyone with the URL can read the user's on-call calendar without further authentication. Rotate via `POST /users/{id}/regenerate_private_url_key` if it may have been exposed.
+      required:
+        - name
+        - email
+        - type
+      example:
+        type: user
+        name: Earline Greenholt
+        email: 125.greenholt.earline@graham.name
+        time_zone: America/Lima
+        color: green
+        role: admin
+        job_title: Director of Engineering
+        created_via_sso: false
+        avatar_url: https://pd-static-assets.pagerduty.com/users/blank-avatar.png
+        description: I'm the boss
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        label:
+          type: string
+          description: The label of the tag.
+          maxLength: 191
+      required:
+        - label
+        - type
+      example:
+        type: tag
+        label: Batman
+    ScheduleLayer:
+      type: object
+      properties:
+        id:
+          type: string
+        start:
+          type: string
+          format: date-time
+          description: The start time of this layer.
+        end:
+          type: string
+          format: date-time
+          description: The end time of this layer. If `null`, the layer does not end.
+        users:
+          type: array
+          description: The ordered list of users on this layer. The position of the user on the list determines their order in the layer.
+          items:
+            $ref: '#/components/schemas/ScheduleLayerUser'
+        restrictions:
+          type: array
+          description: An array of restrictions for the layer. A restriction is a limit on which period of the day or week the schedule layer can accept assignments. Restrictions respect the `time_zone` parameter of the request.
+          items:
+            $ref: '#/components/schemas/Restriction'
+        rotation_virtual_start:
+          type: string
+          format: date-time
+          description: The effective start time of the layer. This can be before the start time of the schedule.
+        rotation_turn_length_seconds:
+          type: integer
+          description: The duration of each on-call shift in seconds.
+        name:
+          type: string
+          description: The name of the schedule layer.
+        rendered_schedule_entries:
+          type: array
+          readOnly: true
+          description: This is a list of entries on the computed layer for the current time range. Since or until must be set in order for this field to be populated.
+          items:
+            $ref: '#/components/schemas/ScheduleLayerEntry'
+        rendered_coverage_percentage:
+          type: number
+          readOnly: true
+          description: The percentage of the time range covered by this layer. Returns null unless since or until are set.
+      required:
+        - start
+        - users
+        - rotation_virtual_start
+        - rotation_turn_length_seconds
+    SubSchedule:
+      type: object
+      properties:
+        name:
+          type: string
+          readOnly: true
+          description: The name of the subschedule
+          enum:
+            - Final Schedule
+            - Overrides
+        rendered_schedule_entries:
+          type: array
+          readOnly: true
+          description: This is a list of entries on the computed layer for the current time range. Since or until must be set in order for this field to be populated.
+          items:
+            $ref: '#/components/schemas/ScheduleLayerEntry'
+        rendered_coverage_percentage:
+          type: number
+          readOnly: true
+          description: The percentage of the time range covered by this layer. Returns null unless since or until are set.
+      required:
+        - name
+    EscalationPolicyReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    UserReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    TeamReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    Reference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    AuditRecord:
+      type: object
+      readOnly: true
+      description: An Audit Trail record
+      properties:
+        id:
+          type: string
+        self:
+          type: string
+          nullable: true
+          description: Record URL.
+        execution_time:
+          type: string
+          format: date-time
+          description: The date/time the action executed, in ISO8601 format and millisecond precision.
+        execution_context:
+          type: object
+          description: Action execution context
+          properties:
+            request_id:
+              type: string
+              nullable: true
+              description: Request Id
+            remote_address:
+              type: string
+              nullable: true
+              description: remote address
+          nullable: true
+        actors:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Reference'
+        method:
+          type: object
+          description: The method information
+          properties:
+            description:
+              type: string
+              nullable: true
+            truncated_token:
+              description: Truncated token containing the last 4 chars of the token's actual value.
+              type: string
+              nullable: true
+              example: 3xyz
+            type:
+              type: string
+              description: |
+                Describes the method used to perform the action:
+
+                `browser` -- authenticated user session. Session value is not returned in the `truncated_token` field.
+
+                `oauth` -- access token obtained via the OAuth flow. Truncated token value is returned in the `truncated_token` field.
+
+                `api_token` -- Pagerduty API token. Truncated token value is returned in the `truncated_token` field.
+
+                `identity_provider` -- action performed by an Identity provider on behalf of a user. No value is returned in the `truncated_token` field.
+
+                `other` -- Method that does not fall in the predefined categories. Truncated token value MAY be returned in the `truncated_token` field.
+              enum:
+                - browser
+                - oauth
+                - api_token
+                - identity_provider
+                - other
+          required:
+            - type
+        root_resource:
+          $ref: '#/components/schemas/Reference'
+        action:
+          type: string
+          example: create
+        details:
+          type: object
+          nullable: true
+          description: |
+            Additional details to provide further information about the action or
+            the resource that has been audited.
+          properties:
+            resource:
+              $ref: '#/components/schemas/Reference'
+            fields:
+              description: |
+                A set of fields that have been affected.
+                The fields that have not been affected MAY be returned.
+              type: array
+              nullable: true
+              items:
+                type: object
+                description: |
+                  Information about the affected field.
+                  When available, field's before and after values are returned:
+                    
+                  #### Resource creation
+                  - `value` MAY be returned
+
+                  #### Resource update
+                  - `value` MAY be returned
+                  - `before_value` MAY be returned
+
+                  #### Resource deletion
+                  - `before_value` MAY be returned
+                properties:
+                  name:
+                    type: string
+                    description: Name of the resource field
+                    example: name
+                  description:
+                    type: string
+                    nullable: true
+                    description: Human readable description of the resource field
+                    example: First and Last name
+                  value:
+                    type: string
+                    nullable: true
+                    description: new or updated value of the field
+                    example: Jonathan
+                  before_value:
+                    type: string
+                    nullable: true
+                    description: previous or deleted value of the field
+                    example: John
+                required:
+                  - name
+            references:
+              description: A set of references that have been affected.
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Name of the reference field
+                    example: team_members
+                  description:
+                    type: string
+                    nullable: true
+                    description: Human readable description of the references field
+                    example: First and Last name
+                  added:
+                    type: array
+                    nullable: true
+                    items:
+                      $ref: '#/components/schemas/Reference'
+                  removed:
+                    type: array
+                    nullable: true
+                    items:
+                      $ref: '#/components/schemas/Reference'
+                required:
+                  - name
+          required:
+            - resource
+      required:
+        - id
+        - execution_time
+        - method
+        - root_resource
+        - action
+    AuditMetadata:
+      type: object
+      properties:
+        messages:
+          type: array
+          nullable: true
+          items:
+            type: string
+            example: Message about the result
+    CursorPagination:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+          readOnly: true
+        next_cursor:
+          type: string
+          description: |
+            An opaque string than will deliver the next set of results when provided as the `cursor` parameter in a subsequent request.  A `null` value for this field indicates that there are no additional results.
+          example: dXNlcjaVMzc5V0ZYTlo=
+          nullable: true
+          readOnly: true
+      required:
+        - limit
+        - next_cursor
+    ContactMethodReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    NotificationRuleReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    ScheduleLayerUser:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserReference'
+      required:
+        - user
+    Restriction:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Specify the types of `restriction`.
+          enum:
+            - daily_restriction
+            - weekly_restriction
+        duration_seconds:
+          type: integer
+          description: The duration of the restriction in seconds.
+        start_time_of_day:
+          type: string
+          format: partial-time
+          description: The start time in HH:mm:ss format.
+        start_day_of_week:
+          type: integer
+          description: Only required for use with a `weekly_restriction` restriction type. The first day of the weekly rotation schedule as [ISO 8601 day](https://en.wikipedia.org/wiki/ISO_week_date) (1 is Monday, etc.)
+          minimum: 1
+          maximum: 7
+      discriminator:
+        propertyName: type
+      required:
+        - type
+        - duration_seconds
+        - start_time_of_day
+    ScheduleLayerEntry:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserReference'
+        start:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The start time of this entry.
+        end:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The end time of this entry. If null, the entry does not end.
+      required:
+        - start
+        - end
+    CreateScheduleOverrideResponse:
+      type: object
+      properties:
+        create_schedule_override:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: number
+                description: HTTP Status Code reflecting the result of creating this specific override, e.g. 201 for success, 400 for invalid parameters.
+              errors:
+                type: array
+                description: If present, an array of strings representing human-readable explanations for errors found.
+                items:
+                  type: string
+              override:
+                $ref: '#/components/schemas/Override'
+            required:
+              - override
+  responses:
+    ArgumentError:
+      description: Caller provided invalid arguments. Please review the response for error details. Retrying with the same arguments will *not* work.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Unauthorized:
+      description: |
+        Caller did not supply credentials or did not provide the correct credentials.
+        If you are using an API key, it may be invalid or your Authorization header may be malformed.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Forbidden:
+      description: |
+        Caller is not authorized to view the requested resource.
+        While your authentication is valid, the authenticated user or token does not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    TooManyRequests:
+      description: Too many requests have been made, the rate limit has been reached.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    PaymentRequired:
+      description: |
+        Account does not have the abilities to perform the action. Please review the response for the required abilities.
+        You can also use the [Abilities API](#resource_Abilities) to determine what features are available to your account.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    InternalServerError:
+      description: Internal Server Error the PagerDuty server experienced an error.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Conflict:
+      description: The request conflicts with the current state of the server.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+  parameters:
+    offset_limit:
+      name: limit
+      in: query
+      required: false
+      description: The number of results per page.
+      schema:
+        type: integer
+    offset_offset:
+      name: offset
+      in: query
+      required: false
+      description: Offset to start pagination search results.
+      schema:
+        type: integer
+    offset_total:
+      name: total
+      in: query
+      required: false
+      description: |
+        By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.
+
+        See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information.
+      schema:
+        default: false
+        type: boolean
+    query:
+      name: query
+      in: query
+      description: Filters the result, showing only the records whose name matches the query.
+      required: false
+      schema:
+        type: string
+    include_schedules:
+      name: include[]
+      in: query
+      description: Array of additional details to include.
+      explode: true
+      schema:
+        type: string
+        enum:
+          - schedule_layers
+          - overrides_subschedule
+          - final_schedule
+        uniqueItems: true
+    schedule_list_time_zone:
+      name: time_zone
+      in: query
+      description: Time zone in which results will be rendered. This will default to the current user's time zone and then the account's time zone.
+      schema:
+        type: string
+        format: tzinfo
+    include_next_oncall_for_user:
+      name: include_next_oncall_for_user
+      in: query
+      description: Specify an `user_id`, and the schedule list API will return information about this user's next on-call.
+      schema:
+        type: string
+    schedule_since:
+      name: since
+      in: query
+      description: The start of the date range over which you want to show schedule entries. Defaults to 2 weeks before until if an until is given. Optional parameter. When provided with include[] for schedule types, populates the rendered_schedule_entries fields in the response.
+      schema:
+        type: string
+        format: date-time
+    schedule_until:
+      name: until
+      in: query
+      description: The end of the date range over which you want to show schedule entries. Defaults to 2 weeks after since if a since is given. Optional parameter. When provided with include[] for schedule types, populates the rendered_schedule_entries fields in the response.
+      schema:
+        type: string
+        format: date-time
+    team_ids:
+      name: team_ids[]
+      in: query
+      description: An array of team IDs. Only results related to these teams will be returned. Account must have the `teams` ability to use this parameter.
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+    schedule_overflow:
+      name: overflow
+      in: query
+      description: |
+        Any on-call schedule entries that pass the date range bounds will be truncated at the bounds, unless the parameter `overflow=true` is passed. This parameter defaults to false.
+        For instance, if your schedule is a rotation that changes daily at midnight UTC, and your date range is from `2011-06-01T10:00:00Z` to `2011-06-01T14:00:00Z`:
+
+
+        - If you don't pass the `overflow=true` parameter, you will get one schedule entry returned with a start of `2011-06-01T10:00:00Z` and end of `2011-06-01T14:00:00Z`.
+        - If you do pass the `overflow=true` parameter, you will get one schedule entry returned with a start of `2011-06-01T00:00:00Z` and end of `2011-06-02T00:00:00Z`.
+      schema:
+        type: boolean
+        default: false
+    schedule_time_zone:
+      name: time_zone
+      in: query
+      description: Time zone in which results will be rendered. This will default to the schedule's time zone.
+      schema:
+        type: string
+        format: tzinfo
+    schedule_id:
+      name: id
+      description: The ID of the schedule.
+      in: path
+      required: true
+      schema:
+        type: string
+      example: P2LJD7G
+    id:
+      name: id
+      description: The ID of the resource.
+      in: path
+      required: true
+      schema:
+        type: string
+    cursor_limit:
+      name: limit
+      in: query
+      required: false
+      description: The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+      schema:
+        type: integer
+    cursor_cursor:
+      name: cursor
+      in: query
+      required: false
+      description: |
+        Optional parameter used to request the "next" set of results from an API.  The value provided here is most commonly obtained from the `next_cursor` field of the previous request.  When no value is provided, the request starts at the beginning of the result set.
+      schema:
+        type: string
+    audit_since:
+      name: since
+      in: query
+      description: The start of the date range over which you want to search. If not specified, defaults to `now() - 24 hours` (past 24 hours)
+      schema:
+        type: string
+        format: date-time
+    audit_until:
+      name: until
+      in: query
+      description: The end of the date range over which you want to search. If not specified, defaults to `now()`. May not be more than 31 days after `since`.
+      schema:
+        type: string
+        format: date-time
+    since_schedules:
+      name: since
+      in: query
+      description: The start of the date range over which you want to search.
+      required: true
+      schema:
+        type: string
+        format: date-time
+      example: '2026-04-01T00:00:00Z'
+    until_schedules:
+      name: until
+      in: query
+      description: The end of the date range over which you want to search.
+      required: true
+      schema:
+        type: string
+        format: date-time
+      example: '2026-05-30T00:00:00Z'
+    editable_schedules:
+      name: editable
+      in: query
+      description: When this parameter is present, only editable overrides will be returned. The result will only include the id of the override if this parameter is present. Only future overrides are editable.
+      schema:
+        type: boolean
+    overflow_schedules:
+      name: overflow
+      in: query
+      description: Any on-call schedule entries that pass the date range bounds will be truncated at the bounds, unless the parameter overflow=true is passed. This parameter defaults to false.
+      schema:
+        type: boolean
+    schedule_override_id:
+      name: override_id
+      in: path
+      description: The override ID on the schedule.
+      required: true
+      schema:
+        type: string
+      example: Q2MCMG5TVIV6LQ
+    since:
+      name: since
+      in: query
+      description: The start of the date range over which you want to search.
+      schema:
+        type: string
+        format: date-time
+    until:
+      name: until
+      in: query
+      description: The end of the date range over which you want to search.
+      schema:
+        type: string
+        format: date-time
+    audit_method_type:
+      name: method_type
+      in: query
+      description: Method type filter.
+      schema:
+        type: string
+        description: |
+          Describes the method used to perform the action:
+
+          `browser` -- authenticated user session. Session value is not returned in the `truncated_token` field.
+
+          `oauth` -- access token obtained via the OAuth flow. Truncated token value is returned in the `truncated_token` field.
+
+          `api_token` -- Pagerduty API token. Truncated token value is returned in the `truncated_token` field.
+
+          `identity_provider` -- action performed by an Identity provider on behalf of a user. No value is returned in the `truncated_token` field.
+
+          `other` -- Method that does not fall in the predefined categories. Truncated token value MAY be returned in the `truncated_token` field.
+        enum:
+          - browser
+          - oauth
+          - api_token
+          - identity_provider
+          - other
+  examples:
+    AuditRecordScheduleResponse:
+      summary: Response Example
+      value:
+        records:
+          - id: PD_ASSIGN_TEAM_TO_SCHEDULE
+            action: update
+            actors:
+              - id: PDUSER
+                summary: John Snow
+                type: user_reference
+                self: https://api.pagerduty.com/users/PD_USER123
+                html_url: https://mydomain.pagerduty.com/users/PD_USER123
+            details:
+              references:
+                - added:
+                    - id: PD_TEAM123
+                      summary: Devops
+                      type: team_reference
+                      self: https://api.pagerduty.com/teams/PD_TEAM123
+                      html_url: https://mydomain.pagerduty.com/teams/PD_TEAM123
+                  name: teams
+              resource:
+                id: PD_SCHEDULE_ID
+                summary: DevOps Schedule
+                type: schedule_reference
+                self: https://api.pagerduty.com/schedules/PD_SCHEDULE_ID
+                html_url: https://mydomain.pagerduty.com/schedules/PD_SCHEDULE_ID
+            execution_context:
+              request_id: 13a1c0c3-545c-4ebb-4115-662fff9d8ad
+            execution_time: '2021-01-05T16:25:41.324Z'
+            method:
+              type: browser
+            root_resource:
+              id: PD_SCHEDULE_ID
+              summary: DevOps Schedule
+              type: schedule_reference
+              self: https://api.pagerduty.com/schedules/PD_SCHEDULE_ID
+              html_url: https://mydomain.pagerduty.com/schedules/PD_SCHEDULE_ID
+          - id: PD_CREATE_SCHEDULE
+            action: create
+            actors:
+              - id: PDUSER
+                summary: John Snow
+                type: user_reference
+                self: https://api.pagerduty.com/users/PD_USER123
+                html_url: https://mydomain.pagerduty.com/users/PD_USER123
+            details:
+              fields:
+                - name: name
+                  value: DevOps Schedule
+                - name: description
+                  value: Our DevOps Team Schedule
+                - name: time_zone
+                  value: America/New_York
+              resource:
+                id: PD_SCHEDULE_ID
+                summary: DevOps Schedule
+                type: schedule_reference
+                self: https://api.pagerduty.com/schedules/PD_SCHEDULE_ID
+                html_url: https://mydomain.pagerduty.com/schedules/PD_SCHEDULE_ID
+            execution_context:
+              request_id: 13a1c0c3-545c-4ebb-4115-662fff9d8ad
+            execution_time: '2021-01-05T16:25:41.315Z'
+            method:
+              type: browser
+            root_resource:
+              id: PD_SCHEDULE_ID
+              summary: DevOps Schedule
+              type: schedule_reference
+              self: https://api.pagerduty.com/schedules/PD_SCHEDULE_ID
+              html_url: https://mydomain.pagerduty.com/schedules/PD_SCHEDULE_ID
+        limit: 10
+        next_cursor: null
+servers:
+  - url: https://api.pagerduty.com
+    description: PagerDuty V2 API.

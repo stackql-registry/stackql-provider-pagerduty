@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>integrations</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>integrations</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="integrations" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.services.integrations" /></td></tr>
 </tbody></table>
@@ -32,12 +33,12 @@ Creates, updates, deletes, gets or lists an <code>integrations</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_service_integration"
+    defaultValue="get"
     values={[
-        { label: 'get_service_integration', value: 'get_service_integration' }
+        { label: 'get', value: 'get' }
     ]}
 >
-<TabItem value="get_service_integration">
+<TabItem value="get">
 
 The integration that was requested.
 
@@ -68,7 +69,7 @@ The integration that was requested.
 <tr>
     <td><CopyableCode code="email_filter_mode" /></td>
     <td><code>string</code></td>
-    <td>Specify for generic_email_inbound_integration. May override email_incident_creation</td>
+    <td>Specify for generic_email_inbound_integration. May override email_incident_creation (all-email, or-rules-email, and-rules-email)</td>
 </tr>
 <tr>
     <td><CopyableCode code="email_filters" /></td>
@@ -78,7 +79,7 @@ The integration that was requested.
 <tr>
     <td><CopyableCode code="email_incident_creation" /></td>
     <td><code>string</code></td>
-    <td>Specify for generic_email_inbound_integration</td>
+    <td>Specify for generic_email_inbound_integration (on_new_email, on_new_email_subject, only_if_no_open_incidents, use_rules)</td>
 </tr>
 <tr>
     <td><CopyableCode code="email_parsers" /></td>
@@ -88,7 +89,7 @@ The integration that was requested.
 <tr>
     <td><CopyableCode code="email_parsing_fallback" /></td>
     <td><code>string</code></td>
-    <td>Specify for generic_email_inbound_integration.</td>
+    <td>Specify for generic_email_inbound_integration. (open_new_incident, discard)</td>
 </tr>
 <tr>
     <td><CopyableCode code="html_url" /></td>
@@ -108,7 +109,7 @@ The integration that was requested.
 <tr>
     <td><CopyableCode code="service" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="summary" /></td>
@@ -118,12 +119,12 @@ The integration that was requested.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 <tr>
     <td><CopyableCode code="vendor" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 </tbody>
 </table>
@@ -146,32 +147,25 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_service_integration"><CopyableCode code="get_service_integration" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-integration_id"><code>integration_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>Get details about an integration belonging to a service.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.read`<br /></td>
+    <td><a href="#parameter-include[]"><code>include[]</code></a></td>
+    <td>Get details about an integration belonging to a service.&lt;br /&gt;&lt;br /&gt;A service may represent an application, component, or team you wish to open incidents against.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_service_integration"><CopyableCode code="create_service_integration" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-data__integration"><code>data__integration</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Create a new integration belonging to a Service.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.write`<br /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-integration"><code>integration</code></a></td>
+    <td></td>
+    <td>Create a new integration belonging to a Service.&lt;br /&gt;&lt;br /&gt;A service may represent an application, component, or team you wish to open incidents against.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#update_service_integration"><CopyableCode code="update_service_integration" /></a></td>
-    <td><CopyableCode code="exec" /></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
     <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-integration_id"><code>integration_id</code></a>, <a href="#parameter-integration"><code>integration</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Update an integration belonging to a Service.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_service_integration"><CopyableCode code="_get_service_integration" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-integration_id"><code>integration_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>Get details about an integration belonging to a service.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.read`<br /></td>
+    <td></td>
+    <td>Update an integration belonging to a Service.&lt;br /&gt;&lt;br /&gt;A service may represent an application, component, or team you wish to open incidents against.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -199,16 +193,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The integration ID on the service.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 <tr id="parameter-include[]">
     <td><CopyableCode code="include[]" /></td>
     <td><code>string</code></td>
@@ -220,14 +204,14 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_service_integration"
+    defaultValue="get"
     values={[
-        { label: 'get_service_integration', value: 'get_service_integration' }
+        { label: 'get', value: 'get' }
     ]}
 >
-<TabItem value="get_service_integration">
+<TabItem value="get">
 
-Get details about an integration belonging to a service.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.read`<br />
+Get details about an integration belonging to a service.&lt;br /&gt;&lt;br /&gt;A service may represent an application, component, or team you wish to open incidents against.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -249,8 +233,6 @@ vendor
 FROM pagerduty.services.integrations
 WHERE id = '{{ id }}' -- required
 AND integration_id = '{{ integration_id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 AND include[] = '{{ include[] }}'
 ;
 ```
@@ -261,28 +243,24 @@ AND include[] = '{{ include[] }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_service_integration"
+    defaultValue="create"
     values={[
-        { label: 'create_service_integration', value: 'create_service_integration' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_service_integration">
+<TabItem value="create">
 
-Create a new integration belonging to a Service.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.write`<br />
+Create a new integration belonging to a Service.&lt;br /&gt;&lt;br /&gt;A service may represent an application, component, or team you wish to open incidents against.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.write`&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.services.integrations (
-data__integration,
-id,
-Accept,
-Content-Type
+integration,
+id
 )
 SELECT 
 '{{ integration }}' /* required */,
-'{{ id }}',
-'{{ Accept }}',
-'{{ Content-Type }}'
+'{{ id }}'
 RETURNING
 integration
 ;
@@ -290,63 +268,84 @@ integration
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: integrations
   props:
     - name: id
-      value: string
+      value: "{{ id }}"
       description: Required parameter for the integrations resource.
     - name: integration
-      value: object
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-    - name: Content-Type
-      value: string
-```
+      value:
+        id: "{{ id }}"
+        summary: "{{ summary }}"
+        type: "{{ type }}"
+        self: "{{ self }}"
+        html_url: "{{ html_url }}"
+        name: "{{ name }}"
+        service:
+          id: "{{ id }}"
+          summary: "{{ summary }}"
+          type: "{{ type }}"
+          self: "{{ self }}"
+          html_url: "{{ html_url }}"
+        created_at: "{{ created_at }}"
+        vendor:
+          id: "{{ id }}"
+          summary: "{{ summary }}"
+          type: "{{ type }}"
+          self: "{{ self }}"
+          html_url: "{{ html_url }}"
+        integration_email: "{{ integration_email }}"
+        email_incident_creation: "{{ email_incident_creation }}"
+        email_filter_mode: "{{ email_filter_mode }}"
+        email_parsers:
+          - action: "{{ action }}"
+            match_predicate:
+              type: "{{ type }}"
+              matcher: "{{ matcher }}"
+              part: "{{ part }}"
+              children:
+                - type: "{{ type }}"
+                  matcher: "{{ matcher }}"
+                  part: "{{ part }}"
+                  children: "{{ children }}"
+            value_extractors: "{{ value_extractors }}"
+        email_parsing_fallback: "{{ email_parsing_fallback }}"
+        email_filters:
+          - subject_mode: "{{ subject_mode }}"
+            subject_regex: "{{ subject_regex }}"
+            body_mode: "{{ body_mode }}"
+            body_regex: "{{ body_regex }}"
+            from_email_mode: "{{ from_email_mode }}"
+            from_email_regex: "{{ from_email_regex }}"
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
 
-## Lifecycle Methods
+## `UPDATE` examples
 
 <Tabs
-    defaultValue="update_service_integration"
+    defaultValue="update"
     values={[
-        { label: 'update_service_integration', value: 'update_service_integration' },
-        { label: '_get_service_integration', value: '_get_service_integration' }
+        { label: 'update', value: 'update' }
     ]}
 >
-<TabItem value="update_service_integration">
+<TabItem value="update">
 
-Update an integration belonging to a Service.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.write`<br />
-
-```sql
-EXEC pagerduty.services.integrations.update_service_integration 
-@id='{{ id }}' --required, 
-@integration_id='{{ integration_id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"integration": "{{ integration }}"
-}'
-;
-```
-</TabItem>
-<TabItem value="_get_service_integration">
-
-Get details about an integration belonging to a service.<br /><br />A service may represent an application, component, or team you wish to open incidents against.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)<br /><br />Scoped OAuth requires: `services.read`<br />
+Update an integration belonging to a Service.&lt;br /&gt;&lt;br /&gt;A service may represent an application, component, or team you wish to open incidents against.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.write`&lt;br /&gt;
 
 ```sql
-EXEC pagerduty.services.integrations._get_service_integration 
-@id='{{ id }}' --required, 
-@integration_id='{{ integration_id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@include[]='{{ include[] }}'
-;
+UPDATE pagerduty.services.integrations
+SET 
+integration = '{{ integration }}'
+WHERE 
+id = '{{ id }}' --required
+AND integration_id = '{{ integration_id }}' --required
+AND integration = '{{ integration }}' --required
+RETURNING
+integration;
 ```
 </TabItem>
 </Tabs>

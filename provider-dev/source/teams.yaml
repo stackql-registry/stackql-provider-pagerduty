@@ -1,0 +1,1806 @@
+openapi: 3.0.2
+info:
+  title: PagerDuty API - Teams
+  description: Teams, their members, escalation policies, notification subscriptions and audit records.
+  version: 2.0.0
+paths:
+  /teams:
+    post:
+      x-pd-requires-scope: teams.write
+      tags:
+        - Teams
+      operationId: createTeam
+      description: |
+        Create a new Team.
+
+        A team is a collection of Users and Escalation Policies that represent a group of people within an organization.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)
+
+        Scoped OAuth requires: `teams.write`
+      summary: Create a team
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                team:
+                  $ref: '#/components/schemas/Team'
+              required:
+                - team
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  team:
+                    type: team
+                    name: Engineering
+                    description: The engineering team
+        description: The team to be created.
+      responses:
+        '201':
+          description: The team that was created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  team:
+                    $ref: '#/components/schemas/Team'
+                required:
+                  - team
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    team:
+                      id: PQ9K7I8
+                      type: team
+                      summary: Engineering
+                      self: https://api.pagerduty.com/teams/PQ9K7I8
+                      html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                      name: Engineering
+                      description: All engineering
+                      default_role: manager
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    get:
+      x-pd-requires-scope: teams.read
+      tags:
+        - Teams
+      operationId: listTeams
+      description: |
+        List teams of your PagerDuty account, optionally filtered by a search query.
+
+        A team is a collection of Users and Escalation Policies that represent a group of people within an organization.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)
+
+        Scoped OAuth requires: `teams.read`
+      summary: List teams
+      parameters:
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+        - $ref: '#/components/parameters/query'
+      responses:
+        '200':
+          description: A paginated array of teams.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  teams:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Team'
+                required:
+                  - teams
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    teams:
+                      - id: PQ9K7I8
+                        type: team
+                        summary: Engineering
+                        self: https://api.pagerduty.com/teams/PQ9K7I8
+                        html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                        name: Engineering
+                        description: All engineering
+                    limit: 100
+                    offset: 0
+                    more: false
+                    total: null
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: List or create teams.
+  /teams/{id}:
+    get:
+      x-pd-requires-scope: teams.read
+      tags:
+        - Teams
+      operationId: getTeam
+      description: |
+        Get details about an existing team.
+
+        A team is a collection of Users and Escalation Policies that represent a group of people within an organization.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)
+
+        Scoped OAuth requires: `teams.read`
+      summary: Get a team
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/include_teams'
+      responses:
+        '200':
+          description: The team requested.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  team:
+                    $ref: '#/components/schemas/Team'
+                required:
+                  - team
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    team:
+                      id: PQ9K7I8
+                      type: team
+                      summary: Engineering
+                      self: https://api.pagerduty.com/teams/PQ9K7I8
+                      html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                      name: Engineering
+                      description: All engineering
+                      default_role: manager
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      x-pd-requires-scope: teams.write
+      tags:
+        - Teams
+      operationId: deleteTeam
+      description: |
+        Remove an existing team.
+
+        Succeeds only if the team has no associated Escalation Policies, Services, Schedules and Subteams.
+
+        All associated unresovled incidents will be reassigned to another team (if specified) or will loose team association, thus becoming account-level (with visibility implications).
+
+        Note that the incidents reassignment process is asynchronous and has no guarantee to complete before the API call return.
+
+        A team is a collection of Users and Escalation Policies that represent a group of people within an organization.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)
+
+        Scoped OAuth requires: `teams.write`
+      summary: Delete a team
+      parameters:
+        - $ref: '#/components/parameters/reassignment_team'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: The team was deleted successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    put:
+      x-pd-requires-scope: teams.write
+      tags:
+        - Teams
+      operationId: updateTeam
+      description: |
+        Update an existing team.
+
+        A team is a collection of Users and Escalation Policies that represent a group of people within an organization.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)
+
+        Scoped OAuth requires: `teams.write`
+      summary: Update a team
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                team:
+                  $ref: '#/components/schemas/Team'
+              required:
+                - team
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  team:
+                    type: team
+                    name: Engineering
+                    description: The engineering team
+        description: The team to be updated.
+      responses:
+        '200':
+          description: The team that was updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  team:
+                    $ref: '#/components/schemas/Team'
+                required:
+                  - team
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    team:
+                      id: PQ9K7I8
+                      type: team
+                      summary: Engineering
+                      self: https://api.pagerduty.com/teams/PQ9K7I8
+                      html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                      name: Engineering
+                      description: All engineering
+                      default_role: manager
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: Manage a team.
+  /teams/{id}/audit/records:
+    get:
+      x-pd-requires-scope: audit_records.read
+      tags:
+        - Teams
+      operationId: listTeamsAuditRecords
+      summary: List audit records for a team
+      description: |
+        The returned records are sorted by the `execution_time` from newest to oldest.
+
+        See [`Cursor-based pagination`](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.
+
+        For more information see the [Audit API Document](https://developer.pagerduty.com/docs/rest-api-v2/audit-records-api/).
+
+        Scoped OAuth requires: `audit_records.read`
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/cursor_limit'
+        - $ref: '#/components/parameters/cursor_cursor'
+        - $ref: '#/components/parameters/audit_since'
+        - $ref: '#/components/parameters/audit_until'
+      responses:
+        '200':
+          description: Records matching the query criteria.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditRecordResponseSchema'
+              examples:
+                response:
+                  $ref: '#/components/examples/AuditRecordTeamResponse'
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    description: List audit records of changes made to the team.
+  /teams/{id}/escalation_policies/{escalation_policy_id}:
+    delete:
+      tags:
+        - Teams
+      x-pd-requires-scope: teams.write
+      operationId: deleteTeamEscalationPolicy
+      description: |
+        Remove an escalation policy from a team.
+
+        A team is a collection of Users and Escalation Policies that represent a group of people within an organization.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)
+
+        Scoped OAuth requires: `teams.write`
+      summary: Remove an escalation policy from a team
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/team_escalation_policy_id'
+      responses:
+        '204':
+          description: The escalation policy was removed from the team.
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    put:
+      tags:
+        - Teams
+      x-pd-requires-scope: teams.write
+      operationId: updateTeamEscalationPolicy
+      description: |
+        Add an escalation policy to a team.
+
+        A team is a collection of Users and Escalation Policies that represent a group of people within an organization.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)
+
+        Scoped OAuth requires: `teams.write`
+      summary: Add an escalation policy to a team
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/team_escalation_policy_id'
+      responses:
+        '204':
+          description: The escalation policy was added to the team.
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: Manage an escalation policy for a team.
+  /teams/{id}/members:
+    get:
+      x-pd-requires-scope: teams.read
+      tags:
+        - Teams
+      operationId: listTeamUsers
+      description: |
+        Get information about members on a team.
+
+        A team is a collection of Users and Escalation Policies that represent a group of people within an organization.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)
+
+        Scoped OAuth requires: `teams.read`
+      summary: List members of a team
+      parameters:
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/include_teams_members'
+      responses:
+        '200':
+          description: A paginated array of users within the requested team.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  members:
+                    type: array
+                    uniqueItems: false
+                    items:
+                      type: object
+                      properties:
+                        user:
+                          $ref: '#/components/schemas/UserReference'
+                        role:
+                          type: string
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    members:
+                      - user:
+                          id: P0XJYI9
+                          type: user_reference
+                          summary: Jane Doe
+                          self: https://api.pagerduty.com/users/P0XJYI9
+                          html_url: https://subdomain.pagerduty.com/users/P0XJYI9
+                        role: manager
+                    limit: 100
+                    offset: 0
+                    more: false
+                    total: null
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: List information about members within a team.
+  /teams/{id}/notification_subscriptions:
+    get:
+      x-pd-requires-scope: subscribers.read
+      summary: List Team Notification Subscriptions
+      tags:
+        - Teams
+      operationId: getTeamNotificationSubscriptions
+      description: |
+        Retrieve a list of Notification Subscriptions the given Team has.
+
+        <!-- theme: warning -->
+        > Teams must be added through `POST /teams/{id}/notification_subscriptions` to be returned from this endpoint.
+
+        Scoped OAuth requires: `subscribers.read`
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  subscriptions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        subscription:
+                          $ref: '#/components/schemas/NotificationSubscription'
+                        subscribable_name:
+                          type: string
+                          nullable: true
+                          description: The name of the subscribable
+                required:
+                  - subscriptions
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    subscriptions:
+                      - subscription:
+                          subscriber_id: PD1234
+                          subscriber_type: team
+                          subscribable_id: PD1234
+                          subscribable_type: incident
+                          subscribable_name: null
+                          account_id: PD1234
+                      - subscription:
+                          subscriber_id: PD1234
+                          subscriber_type: team
+                          subscribable_id: PD1234
+                          subscribable_type: business_service
+                          subscribable_name: Online Payment
+                          account_id: PD1234
+                    limit: 2
+                    offset: 0
+                    total: 1000
+                    more: true
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      x-pd-requires-scope: subscribers.write
+      summary: Create Team Notification Subscriptions
+      tags:
+        - Teams
+      operationId: createTeamNotificationSubscriptions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subscriptions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/NotificationSubscriptionWithContext'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    subscriptions:
+                      - account_id: PD1234
+                        subscribable_id: PD1234
+                        subscribable_type: incident
+                        subscriber_id: PD1234
+                        subscriber_type: team
+                        result: success
+                      - account_id: PD1234
+                        subscribable_id: PD1234
+                        subscribable_type: business_service
+                        subscriber_id: PD1234
+                        subscriber_type: team
+                        result: duplicate
+                      - account_id: PD1234
+                        subscribable_id: PD1235
+                        subscribable_type: business_service
+                        subscriber_id: PD1234
+                        subscriber_type: team
+                        result: unauthorized
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      description: |
+        Create new Notification Subscriptions for the given Team.
+
+        Scoped OAuth requires: `subscribers.write`
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subscribables:
+                  type: array
+                  uniqueItems: true
+                  minItems: 1
+                  items:
+                    $ref: '#/components/schemas/NotificationSubscribable'
+              required:
+                - subscribables
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  subscribables:
+                    - subscribable_type: incident
+                      subscribable_id: PD1234
+                    - subscribable_type: business_service
+                      subscribable_id: PD1234
+                    - subscribable_type: business_service
+                      subscribable_id: PD1235
+        description: The entities to subscribe to.
+  /teams/{id}/notification_subscriptions/unsubscribe:
+    post:
+      x-pd-requires-scope: subscribers.write
+      tags:
+        - Teams
+      operationId: removeTeamNotificationSubscriptions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deleted_count:
+                    type: number
+                  unauthorized_count:
+                    type: number
+                  non_existent_count:
+                    type: number
+                required:
+                  - deleted_count
+                  - unauthorized_count
+                  - non_existent_count
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    deleted_count: 1
+                    unauthorized_count: 1
+                    non_existent_count: 0
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      description: |
+        Unsubscribe the given Team from Notifications on the matching Subscribable entities.
+
+        Scoped OAuth requires: `subscribers.write`
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subscribables:
+                  type: array
+                  uniqueItems: true
+                  minItems: 1
+                  items:
+                    $ref: '#/components/schemas/NotificationSubscribable'
+              required:
+                - subscribables
+            examples:
+              request:
+                summary: Response Example
+                value:
+                  subscribables:
+                    - subscribable_type: incident
+                      subscribable_id: PD1234
+                    - subscribable_type: business_service
+                      subscribable_id: PD1234
+        description: The entities to unsubscribe from.
+    summary: Remove Team Notification Subscriptions
+  /teams/{id}/users/{user_id}:
+    delete:
+      x-pd-requires-scope: teams.write
+      tags:
+        - Teams
+      operationId: deleteTeamUser
+      description: |
+        Remove a user from a team.
+
+        A team is a collection of Users and Escalation Policies that represent a group of people within an organization.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)
+
+        Scoped OAuth requires: `teams.write`
+      summary: Remove a user from a team
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/team_user_id'
+      responses:
+        '204':
+          description: The user was removed to the team.
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    put:
+      x-pd-requires-scope: teams.write
+      tags:
+        - Teams
+      operationId: updateTeamUser
+      description: |
+        Add a user to a team. Attempting to add a user with the `read_only_user` role will return a 400 error.
+
+        A team is a collection of Users and Escalation Policies that represent a group of people within an organization.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)
+
+        Scoped OAuth requires: `teams.write`
+      summary: Add a user to a team
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/team_user_id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role:
+                  type: string
+                  description: The role of the user on the team.
+                  enum:
+                    - observer
+                    - responder
+                    - manager
+            examples:
+              role:
+                summary: Request Example
+                value:
+                  role: observer
+        description: The role of the user on the team.
+      responses:
+        '204':
+          description: The user was added to the team.
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: Manage team memberships.
+components:
+  schemas:
+    Team:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        name:
+          type: string
+          description: The name of the team.
+          maxLength: 100
+        description:
+          type: string
+          description: The description of the team.
+          maxLength: 1024
+        default_role:
+          type: string
+          description: The team is private if the value is "none", or public if it is "manager" (the default permissions for a non-member of the team are either "none", or their base role up until "manager").
+          default: manager
+          enum:
+            - manager
+            - none
+      required:
+        - name
+        - type
+      example:
+        type: team
+        name: Engineering
+        description: The engineering team
+    Pagination:
+      type: object
+      properties:
+        offset:
+          type: integer
+          description: Echoes offset pagination property.
+          readOnly: true
+        limit:
+          type: integer
+          description: Echoes limit pagination property.
+          readOnly: true
+        more:
+          type: boolean
+          description: Indicates if there are additional records to return
+          readOnly: true
+        total:
+          type: integer
+          description: The total number of records matching the given query.
+          nullable: true
+          readOnly: true
+    AuditRecordResponseSchema:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditRecord'
+        response_metadata:
+          nullable: true
+          anyOf:
+            - $ref: '#/components/schemas/AuditMetadata'
+        limit:
+          type: integer
+          description: The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+          readOnly: true
+        next_cursor:
+          type: string
+          description: |
+            An opaque string than will deliver the next set of results when provided as the `cursor` parameter in a subsequent request.  A `null` value for this field indicates that there are no additional results.
+          example: dXNlcjaVMzc5V0ZYTlo=
+          nullable: true
+          readOnly: true
+      required:
+        - records
+        - limit
+        - next_cursor
+    UserReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    NotificationSubscription:
+      title: NotificationSubscription
+      description: An object describing the relationship of a NotificationSubscriber and a NotificationSubscribable.
+      type: object
+      properties:
+        subscriber_id:
+          type: string
+          description: The ID of the entity being subscribed
+        subscriber_type:
+          type: string
+          description: The type of the entity being subscribed
+          enum:
+            - user
+            - team
+        subscribable_id:
+          type: string
+          description: The ID of the entity being subscribed to
+        subscribable_type:
+          type: string
+          description: The type of the entity being subscribed to
+          enum:
+            - incident
+            - business_service
+        account_id:
+          type: string
+          description: The ID of the account belonging to the subscriber entity
+      x-examples:
+        example-1:
+          subscriber_id: string
+          subscriber_type: user
+          subscribable_id: string
+          subscribable_type: incident
+          account_id: string
+    NotificationSubscriptionWithContext:
+      title: NotificationSubscriptionWithContext
+      type: object
+      description: An object describing the relationship of a NotificationSubscriber and a NotificationSubscribable with additional context on status of subscription attempt.
+      x-examples:
+        example-1:
+          subscriber_id: string
+          subscriber_type: user
+          subscribable_id: string
+          subscribable_type: incident
+          account_id: string
+          result: success
+      properties:
+        subscriber_id:
+          type: string
+          description: The ID of the entity being subscribed
+        subscriber_type:
+          type: string
+          enum:
+            - user
+            - team
+          description: The type of the entity being subscribed
+        subscribable_id:
+          type: string
+          description: The ID of the entity being subscribed to
+        subscribable_type:
+          type: string
+          enum:
+            - incident
+            - business_service
+          description: The type of the entity being subscribed to
+        account_id:
+          type: string
+          description: The type of the entity being subscribed to
+        result:
+          type: string
+          enum:
+            - success
+            - duplicate
+            - unauthorized
+          description: The resulting status of the subscription
+    NotificationSubscribable:
+      title: NotificationSubscribable
+      description: A reference of a subscribable entity.
+      type: object
+      properties:
+        subscribable_id:
+          type: string
+          description: The ID of the entity to subscribe to
+        subscribable_type:
+          type: string
+          description: The type of the entity being subscribed to
+          enum:
+            - incident
+            - business_service
+      example:
+        subscribable_id: PD1234
+        subscribable_type: incident
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        label:
+          type: string
+          description: The label of the tag.
+          maxLength: 191
+      required:
+        - label
+        - type
+      example:
+        type: tag
+        label: Batman
+    AuditRecord:
+      type: object
+      readOnly: true
+      description: An Audit Trail record
+      properties:
+        id:
+          type: string
+        self:
+          type: string
+          nullable: true
+          description: Record URL.
+        execution_time:
+          type: string
+          format: date-time
+          description: The date/time the action executed, in ISO8601 format and millisecond precision.
+        execution_context:
+          type: object
+          description: Action execution context
+          properties:
+            request_id:
+              type: string
+              nullable: true
+              description: Request Id
+            remote_address:
+              type: string
+              nullable: true
+              description: remote address
+          nullable: true
+        actors:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Reference'
+        method:
+          type: object
+          description: The method information
+          properties:
+            description:
+              type: string
+              nullable: true
+            truncated_token:
+              description: Truncated token containing the last 4 chars of the token's actual value.
+              type: string
+              nullable: true
+              example: 3xyz
+            type:
+              type: string
+              description: |
+                Describes the method used to perform the action:
+
+                `browser` -- authenticated user session. Session value is not returned in the `truncated_token` field.
+
+                `oauth` -- access token obtained via the OAuth flow. Truncated token value is returned in the `truncated_token` field.
+
+                `api_token` -- Pagerduty API token. Truncated token value is returned in the `truncated_token` field.
+
+                `identity_provider` -- action performed by an Identity provider on behalf of a user. No value is returned in the `truncated_token` field.
+
+                `other` -- Method that does not fall in the predefined categories. Truncated token value MAY be returned in the `truncated_token` field.
+              enum:
+                - browser
+                - oauth
+                - api_token
+                - identity_provider
+                - other
+          required:
+            - type
+        root_resource:
+          $ref: '#/components/schemas/Reference'
+        action:
+          type: string
+          example: create
+        details:
+          type: object
+          nullable: true
+          description: |
+            Additional details to provide further information about the action or
+            the resource that has been audited.
+          properties:
+            resource:
+              $ref: '#/components/schemas/Reference'
+            fields:
+              description: |
+                A set of fields that have been affected.
+                The fields that have not been affected MAY be returned.
+              type: array
+              nullable: true
+              items:
+                type: object
+                description: |
+                  Information about the affected field.
+                  When available, field's before and after values are returned:
+                    
+                  #### Resource creation
+                  - `value` MAY be returned
+
+                  #### Resource update
+                  - `value` MAY be returned
+                  - `before_value` MAY be returned
+
+                  #### Resource deletion
+                  - `before_value` MAY be returned
+                properties:
+                  name:
+                    type: string
+                    description: Name of the resource field
+                    example: name
+                  description:
+                    type: string
+                    nullable: true
+                    description: Human readable description of the resource field
+                    example: First and Last name
+                  value:
+                    type: string
+                    nullable: true
+                    description: new or updated value of the field
+                    example: Jonathan
+                  before_value:
+                    type: string
+                    nullable: true
+                    description: previous or deleted value of the field
+                    example: John
+                required:
+                  - name
+            references:
+              description: A set of references that have been affected.
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Name of the reference field
+                    example: team_members
+                  description:
+                    type: string
+                    nullable: true
+                    description: Human readable description of the references field
+                    example: First and Last name
+                  added:
+                    type: array
+                    nullable: true
+                    items:
+                      $ref: '#/components/schemas/Reference'
+                  removed:
+                    type: array
+                    nullable: true
+                    items:
+                      $ref: '#/components/schemas/Reference'
+                required:
+                  - name
+          required:
+            - resource
+      required:
+        - id
+        - execution_time
+        - method
+        - root_resource
+        - action
+    AuditMetadata:
+      type: object
+      properties:
+        messages:
+          type: array
+          nullable: true
+          items:
+            type: string
+            example: Message about the result
+    CursorPagination:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+          readOnly: true
+        next_cursor:
+          type: string
+          description: |
+            An opaque string than will deliver the next set of results when provided as the `cursor` parameter in a subsequent request.  A `null` value for this field indicates that there are no additional results.
+          example: dXNlcjaVMzc5V0ZYTlo=
+          nullable: true
+          readOnly: true
+      required:
+        - limit
+        - next_cursor
+    Reference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+  responses:
+    ArgumentError:
+      description: Caller provided invalid arguments. Please review the response for error details. Retrying with the same arguments will *not* work.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Unauthorized:
+      description: |
+        Caller did not supply credentials or did not provide the correct credentials.
+        If you are using an API key, it may be invalid or your Authorization header may be malformed.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    PaymentRequired:
+      description: |
+        Account does not have the abilities to perform the action. Please review the response for the required abilities.
+        You can also use the [Abilities API](#resource_Abilities) to determine what features are available to your account.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Forbidden:
+      description: |
+        Caller is not authorized to view the requested resource.
+        While your authentication is valid, the authenticated user or token does not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    TooManyRequests:
+      description: Too many requests have been made, the rate limit has been reached.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    InternalServerError:
+      description: Internal Server Error the PagerDuty server experienced an error.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    UnprocessableEntity:
+      description: Unprocessable Entity. Some arguments failed validation checks.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Conflict:
+      description: The request conflicts with the current state of the server.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+  parameters:
+    offset_limit:
+      name: limit
+      in: query
+      required: false
+      description: The number of results per page.
+      schema:
+        type: integer
+    offset_offset:
+      name: offset
+      in: query
+      required: false
+      description: Offset to start pagination search results.
+      schema:
+        type: integer
+    offset_total:
+      name: total
+      in: query
+      required: false
+      description: |
+        By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.
+
+        See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information.
+      schema:
+        default: false
+        type: boolean
+    query:
+      name: query
+      in: query
+      description: Filters the result, showing only the records whose name matches the query.
+      required: false
+      schema:
+        type: string
+    id:
+      name: id
+      description: The ID of the resource.
+      in: path
+      required: true
+      schema:
+        type: string
+    include_teams:
+      name: include[]
+      in: query
+      description: Array of additional Models to include in response.
+      explode: true
+      schema:
+        type: string
+        enum:
+          - privileges
+        uniqueItems: true
+    reassignment_team:
+      name: reassignment_team
+      in: query
+      description: |
+        Team to reassign unresolved incident to.
+        If an unresolved incident exists on both the reassignment team and
+        the team being deleted, a duplicate will not be made. If not supplied,
+        unresolved incidents will be made account-level.
+      required: false
+      schema:
+        type: string
+    cursor_limit:
+      name: limit
+      in: query
+      required: false
+      description: The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+      schema:
+        type: integer
+    cursor_cursor:
+      name: cursor
+      in: query
+      required: false
+      description: |
+        Optional parameter used to request the "next" set of results from an API.  The value provided here is most commonly obtained from the `next_cursor` field of the previous request.  When no value is provided, the request starts at the beginning of the result set.
+      schema:
+        type: string
+    audit_since:
+      name: since
+      in: query
+      description: The start of the date range over which you want to search. If not specified, defaults to `now() - 24 hours` (past 24 hours)
+      schema:
+        type: string
+        format: date-time
+    audit_until:
+      name: until
+      in: query
+      description: The end of the date range over which you want to search. If not specified, defaults to `now()`. May not be more than 31 days after `since`.
+      schema:
+        type: string
+        format: date-time
+    team_escalation_policy_id:
+      name: escalation_policy_id
+      in: path
+      description: The escalation policy ID on the team.
+      required: true
+      schema:
+        type: string
+    include_teams_members:
+      name: include[]
+      in: query
+      description: Array of additional Models to include in response.
+      explode: true
+      schema:
+        type: string
+        enum:
+          - users
+        uniqueItems: true
+    team_user_id:
+      name: user_id
+      in: path
+      description: The user ID on the team.
+      required: true
+      schema:
+        type: string
+    audit_method_type:
+      name: method_type
+      in: query
+      description: Method type filter.
+      schema:
+        type: string
+        description: |
+          Describes the method used to perform the action:
+
+          `browser` -- authenticated user session. Session value is not returned in the `truncated_token` field.
+
+          `oauth` -- access token obtained via the OAuth flow. Truncated token value is returned in the `truncated_token` field.
+
+          `api_token` -- Pagerduty API token. Truncated token value is returned in the `truncated_token` field.
+
+          `identity_provider` -- action performed by an Identity provider on behalf of a user. No value is returned in the `truncated_token` field.
+
+          `other` -- Method that does not fall in the predefined categories. Truncated token value MAY be returned in the `truncated_token` field.
+        enum:
+          - browser
+          - oauth
+          - api_token
+          - identity_provider
+          - other
+  examples:
+    AuditRecordTeamResponse:
+      summary: Response Example
+      value:
+        records:
+          - id: PDRECORD_USER_ROLE_ON_TEAM
+            execution_time: '2020-06-04T15:30:16.272Z'
+            execution_context:
+              request_id: 111lDEOIH-534-4ljhLHJjh111
+              remote_address: 201.19.20.19
+            actors:
+              - id: PDUSER
+                summary: John Snow
+                type: user_reference
+                self: https://api.pagerduty.com/users/PD_USER123
+                html_url: https://mydomain.pagerduty.com/users/PD_USER123
+            method:
+              type: browser
+            root_resource:
+              id: PD_TEAM123
+              type: team_reference
+              summary: my DevOps team
+              self: https://api.pagerduty.com/teams/PD_TEAM123
+              html_url: https://mydomain.pagerduty.com/teams/PD_TEAM123
+            action: update
+            details:
+              resource:
+                id: PD_ADMIN_USER123
+                type: user_reference
+                summary: AA Admin User
+                self: https://api.pagerduty.com/users/PD_ADMIN_USER123
+                html_url: https://mydomain.pagerduty.com/users/PD_ADMIN_USER123
+              fields:
+                - name: members.role
+                  value: manager
+          - id: PDRECORD_USER_ADDED_TO_TEAM
+            execution_time: '2020-06-04T15:30:16.272Z'
+            execution_context:
+              request_id: 111lDEOIH-534-4ljhLHJjh111
+              remote_address: 201.19.20.19
+            actors:
+              - id: PDUSER
+                summary: John Snow
+                type: user_reference
+                self: https://api.pagerduty.com/users/PD_USER123
+                html_url: https://mydomain.pagerduty.com/users/PD_USER123
+            method:
+              type: browser
+            root_resource:
+              id: PD_TEAM123
+              type: team_reference
+              summary: DevOps
+            action: update
+            details:
+              resource:
+                id: PD_TEAM123
+                type: team_reference
+                summary: DevOps
+              references:
+                - name: members
+                  added:
+                    - id: PD_ADMIN_USER123
+                      type: user_reference
+                      summary: AA Admin User
+                      self: https://api.pagerduty.com/users/PD_ADMIN_USER123
+                      html_url: https://mydomain.pagerduty.com/users/PD_ADMIN_USER123
+          - id: PDRECORD_TEAM_CREATED
+            execution_time: '2020-06-04T15:25:04.113Z'
+            execution_context:
+              request_id: 222lDEOIH-534-4ljhLHJjh222
+              remote_address: 201.19.20.19
+            actors:
+              - id: PDUSER
+                summary: John Snow
+                type: user_reference
+                self: https://api.pagerduty.com/users/PD_USER123
+                html_url: https://mydomain.pagerduty.com/users/PD_USER123
+            method:
+              type: browser
+            root_resource:
+              id: PD_TEAM123
+              type: team_reference
+              summary: DevOps
+              self: https://api.pagerduty.com/teams/PD_TEAM123
+              html_url: https://mydomain.pagerduty.com/teams/PD_TEAM123
+            action: create
+            details:
+              resource:
+                id: PD_TEAM123
+                type: team_reference
+                summary: DevOps
+                self: https://api.pagerduty.com/teams/PD_TEAM123
+                html_url: https://mydomain.pagerduty.com/teams/PD_TEAM123
+              fields:
+                - name: name
+                  value: DevOps
+                - name: description
+                  value: MyDevOps Team
+                - name: default_role
+                  value: manager
+        next_cursor: null
+        limit: 10
+servers:
+  - url: https://api.pagerduty.com
+    description: PagerDuty V2 API.

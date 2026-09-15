@@ -25,7 +25,7 @@ total resources: __1__
 ## Resources
 <div class="row">
 <div class="providerDocColumn">
-<a href="/services/on_calls/oncalls/">oncalls</a>
+<a href="/services/on_calls/on_calls/">on_calls</a>
 </div>
 <div class="providerDocColumn">
 

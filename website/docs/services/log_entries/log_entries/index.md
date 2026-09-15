@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>log_entries</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>log_entries</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="log_entries" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.log_entries.log_entries" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>log_entries</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_log_entry"
+    defaultValue="get"
     values={[
-        { label: 'get_log_entry', value: 'get_log_entry' },
-        { label: 'list_log_entries', value: 'list_log_entries' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_log_entry">
+<TabItem value="get">
 
 A single log entry.
 
@@ -51,10 +52,105 @@ A single log entry.
     </tr>
 </thead>
 <tbody>
+<tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="acknowledgement_timeout" /></td>
+    <td><code>integer</code></td>
+    <td>Duration for which the acknowledgement lasts, in seconds. Services can contain an `acknowledgement_timeout` property, which specifies the length of time acknowledgements should last for. Each time an incident is acknowledged, this timeout is copied into the acknowledgement log entry. This property is optional, as older log entries may not contain it. It may also be `null`, as acknowledgements can be performed on incidents whose services have no `acknowledgement_timeout` set.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="agent" /></td>
+    <td><code>object</code></td>
+    <td>(opaque JSON object)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="assignees" /></td>
+    <td><code>array</code></td>
+    <td>An array of assigned Users for this log entry</td>
+</tr>
+<tr>
+    <td><CopyableCode code="changed_actions" /></td>
+    <td><code>array</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="changeset" /></td>
+    <td><code>array</code></td>
+    <td>String record of custom field updates</td>
+</tr>
+<tr>
+    <td><CopyableCode code="channel" /></td>
+    <td><code>object</code></td>
+    <td>Polymorphic object representation of the means by which the action was channeled. Has different formats depending on type, indicated by channel&#91;type&#93;. Will be one of `auto`, `email`, `api`, `nagios`, or `timeout` if `agent&#91;type&#93;` is `service`. Will be one of `email`, `sms`, `website`, `web_trigger`, or `note` if `agent&#91;type&#93;` is `user`. (title: NagiosChannel)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="contexts" /></td>
+    <td><code>array</code></td>
+    <td>Contexts to be included with the trigger such as links to graphs or images.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="created_at" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>Time at which the log entry was created.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="event_details" /></td>
+    <td><code>object</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="html_url" /></td>
+    <td><code>string (url)</code></td>
+    <td>a URL at which the entity is uniquely displayed in the Web app</td>
+</tr>
+<tr>
+    <td><CopyableCode code="incident" /></td>
+    <td><code>object</code></td>
+    <td>(opaque JSON object)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="note" /></td>
+    <td><code>string</code></td>
+    <td>Optional field containing a note, if one was included with the log entry.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="self" /></td>
+    <td><code>string (url)</code></td>
+    <td>the API show URL at which the object is accessible</td>
+</tr>
+<tr>
+    <td><CopyableCode code="service" /></td>
+    <td><code>object</code></td>
+    <td>(opaque JSON object)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="summary" /></td>
+    <td><code>string</code></td>
+    <td>A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="teams" /></td>
+    <td><code>array</code></td>
+    <td>Will consist of references unless included</td>
+</tr>
+<tr>
+    <td><CopyableCode code="type" /></td>
+    <td><code>string</code></td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="user" /></td>
+    <td><code>object</code></td>
+    <td>(opaque JSON object)</td>
+</tr>
 </tbody>
 </table>
 </TabItem>
-<TabItem value="list_log_entries">
+<TabItem value="list">
 
 A paginated array of log entries.
 
@@ -88,39 +184,25 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_log_entry"><CopyableCode code="get_log_entry" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>Get details for a specific incident log entry. This method provides additional information you can use to get at raw event data.<br /><br />A log of all the events that happen to an Incident, and these are exposed as Log Entries.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)<br /><br />Scoped OAuth requires: `incidents.read`<br /></td>
+    <td><a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
+    <td>Get details for a specific incident log entry. This method provides additional information you can use to get at raw event data.&lt;br /&gt;&lt;br /&gt;A log of all the events that happen to an Incident, and these are exposed as Log Entries.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#list_log_entries"><CopyableCode code="list_log_entries" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a>, <a href="#parameter-is_overview"><code>is_overview</code></a>, <a href="#parameter-include[]"><code>include[]</code></a>, <a href="#parameter-team_ids[]"><code>team_ids[]</code></a></td>
-    <td>List all of the incident log entries across the entire account.<br /><br />A log of all the events that happen to an Incident, and these are exposed as Log Entries.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)<br /><br />Scoped OAuth requires: `incidents.read`<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a>, <a href="#parameter-is_overview"><code>is_overview</code></a>, <a href="#parameter-include[]"><code>include[]</code></a>, <a href="#parameter-team_ids[]"><code>team_ids[]</code></a></td>
+    <td>List all of the incident log entries across the entire account.&lt;br /&gt;&lt;br /&gt;A log of all the events that happen to an Incident, and these are exposed as Log Entries.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#_list_log_entries"><CopyableCode code="_list_log_entries" /></a></td>
+    <td><a href="#update_channel"><CopyableCode code="update_channel" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a>, <a href="#parameter-is_overview"><code>is_overview</code></a>, <a href="#parameter-include[]"><code>include[]</code></a>, <a href="#parameter-team_ids[]"><code>team_ids[]</code></a></td>
-    <td>List all of the incident log entries across the entire account.<br /><br />A log of all the events that happen to an Incident, and these are exposed as Log Entries.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)<br /><br />Scoped OAuth requires: `incidents.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_log_entry"><CopyableCode code="_get_log_entry" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>Get details for a specific incident log entry. This method provides additional information you can use to get at raw event data.<br /><br />A log of all the events that happen to an Incident, and these are exposed as Log Entries.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)<br /><br />Scoped OAuth requires: `incidents.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#update_log_entry_channel"><CopyableCode code="update_log_entry_channel" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-From"><code>From</code></a>, <a href="#parameter-channel"><code>channel</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Update an existing incident log entry channel.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)<br /><br />Scoped OAuth requires: `incidents.write`<br /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-channel"><code>channel</code></a></td>
+    <td><a href="#parameter-From"><code>From</code></a></td>
+    <td>Update an existing incident log entry channel.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -138,25 +220,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
-<tr id="parameter-From">
-    <td><CopyableCode code="From" /></td>
-    <td><code>string (email)</code></td>
-    <td>The email address of a valid user associated with the account making the request.</td>
-</tr>
 <tr id="parameter-id">
     <td><CopyableCode code="id" /></td>
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
+<tr id="parameter-From">
+    <td><CopyableCode code="From" /></td>
+    <td><code>string (email)</code></td>
+    <td>The email address of a valid user associated with the account making the request.</td>
 </tr>
 <tr id="parameter-include[]">
     <td><CopyableCode code="include[]" /></td>
@@ -191,12 +263,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-time_zone">
     <td><CopyableCode code="time_zone" /></td>
     <td><code>string (tzinfo)</code></td>
-    <td>Time zone in which dates in the result will be rendered.</td>
+    <td>Time zone in which results will be rendered. This will default to the account time zone.</td>
 </tr>
 <tr id="parameter-total">
     <td><CopyableCode code="total" /></td>
     <td><code>boolean</code></td>
-    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
+    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our &#91;Pagination Docs&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
 </tr>
 <tr id="parameter-until">
     <td><CopyableCode code="until" /></td>
@@ -209,39 +281,53 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_log_entry"
+    defaultValue="get"
     values={[
-        { label: 'get_log_entry', value: 'get_log_entry' },
-        { label: 'list_log_entries', value: 'list_log_entries' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_log_entry">
+<TabItem value="get">
 
-Get details for a specific incident log entry. This method provides additional information you can use to get at raw event data.<br /><br />A log of all the events that happen to an Incident, and these are exposed as Log Entries.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)<br /><br />Scoped OAuth requires: `incidents.read`<br />
+Get details for a specific incident log entry. This method provides additional information you can use to get at raw event data.&lt;br /&gt;&lt;br /&gt;A log of all the events that happen to an Incident, and these are exposed as Log Entries.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.read`&lt;br /&gt;
 
 ```sql
 SELECT
-*
+id,
+acknowledgement_timeout,
+agent,
+assignees,
+changed_actions,
+changeset,
+channel,
+contexts,
+created_at,
+event_details,
+html_url,
+incident,
+note,
+self,
+service,
+summary,
+teams,
+type,
+user
 FROM pagerduty.log_entries.log_entries
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 AND time_zone = '{{ time_zone }}'
 AND include[] = '{{ include[] }}'
 ;
 ```
 </TabItem>
-<TabItem value="list_log_entries">
+<TabItem value="list">
 
-List all of the incident log entries across the entire account.<br /><br />A log of all the events that happen to an Incident, and these are exposed as Log Entries.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)<br /><br />Scoped OAuth requires: `incidents.read`<br />
+List all of the incident log entries across the entire account.&lt;br /&gt;&lt;br /&gt;A log of all the events that happen to an Incident, and these are exposed as Log Entries.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.read`&lt;br /&gt;
 
 ```sql
 SELECT
 *
 FROM pagerduty.log_entries.log_entries
-WHERE Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-AND limit = '{{ limit }}'
+WHERE limit = '{{ limit }}'
 AND offset = '{{ offset }}'
 AND total = '{{ total }}'
 AND time_zone = '{{ time_zone }}'
@@ -259,57 +345,19 @@ AND team_ids[] = '{{ team_ids[] }}'
 ## Lifecycle Methods
 
 <Tabs
-    defaultValue="_list_log_entries"
+    defaultValue="update_channel"
     values={[
-        { label: '_list_log_entries', value: '_list_log_entries' },
-        { label: '_get_log_entry', value: '_get_log_entry' },
-        { label: 'update_log_entry_channel', value: 'update_log_entry_channel' }
+        { label: 'update_channel', value: 'update_channel' }
     ]}
 >
-<TabItem value="_list_log_entries">
+<TabItem value="update_channel">
 
-List all of the incident log entries across the entire account.<br /><br />A log of all the events that happen to an Incident, and these are exposed as Log Entries.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)<br /><br />Scoped OAuth requires: `incidents.read`<br />
-
-```sql
-EXEC pagerduty.log_entries.log_entries._list_log_entries 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@limit='{{ limit }}', 
-@offset='{{ offset }}', 
-@total={{ total }}, 
-@time_zone='{{ time_zone }}', 
-@since='{{ since }}', 
-@until='{{ until }}', 
-@is_overview={{ is_overview }}, 
-@include[]='{{ include[] }}', 
-@team_ids[]='{{ team_ids[] }}'
-;
-```
-</TabItem>
-<TabItem value="_get_log_entry">
-
-Get details for a specific incident log entry. This method provides additional information you can use to get at raw event data.<br /><br />A log of all the events that happen to an Incident, and these are exposed as Log Entries.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)<br /><br />Scoped OAuth requires: `incidents.read`<br />
+Update an existing incident log entry channel.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;
 
 ```sql
-EXEC pagerduty.log_entries.log_entries._get_log_entry 
+EXEC pagerduty.log_entries.log_entries.update_channel 
 @id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@time_zone='{{ time_zone }}', 
-@include[]='{{ include[] }}'
-;
-```
-</TabItem>
-<TabItem value="update_log_entry_channel">
-
-Update an existing incident log entry channel.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)<br /><br />Scoped OAuth requires: `incidents.write`<br />
-
-```sql
-EXEC pagerduty.log_entries.log_entries.update_log_entry_channel 
-@id='{{ id }}' --required, 
-@From='{{ From }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
+@From='{{ From }}' 
 @@json=
 '{
 "channel": "{{ channel }}"

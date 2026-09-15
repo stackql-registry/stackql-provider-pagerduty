@@ -18,16 +18,17 @@ tags service documentation.
 
 :::info[Service Summary]
 
-total resources: __1__  
+total resources: __3__  
 
 :::
 
 ## Resources
 <div class="row">
 <div class="providerDocColumn">
-<a href="/services/tags/tags/">tags</a>
+<a href="/services/tags/entity_tags/">entity_tags</a><br />
+<a href="/services/tags/tagged_entities/">tagged_entities</a>
 </div>
 <div class="providerDocColumn">
-
+<a href="/services/tags/tags/">tags</a>
 </div>
 </div>

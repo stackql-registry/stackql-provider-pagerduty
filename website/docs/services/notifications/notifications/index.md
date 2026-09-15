@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>notifications</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>notifications</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="notifications" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.notifications.notifications" /></td></tr>
 </tbody></table>
@@ -32,12 +33,12 @@ Creates, updates, deletes, gets or lists a <code>notifications</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_notifications"
+    defaultValue="list"
     values={[
-        { label: 'list_notifications', value: 'list_notifications' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="list_notifications">
+<TabItem value="list">
 
 A paginated array of notifications.
 
@@ -83,12 +84,12 @@ A paginated array of notifications.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of notification.</td>
+    <td>The type of notification. (sms_notification, email_notification, phone_notification, push_notification)</td>
 </tr>
 <tr>
     <td><CopyableCode code="user" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 </tbody>
 </table>
@@ -111,18 +112,11 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_notifications"><CopyableCode code="list_notifications" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-filter"><code>filter</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>List notifications for a given time range, optionally filtered by type (sms_notification, email_notification, phone_notification, or push_notification).<br /><br />A Notification is created when an Incident is triggered or escalated.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#notifications)<br /><br />Scoped OAuth requires: `users:notifications.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_notifications"><CopyableCode code="_list_notifications" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-filter"><code>filter</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>List notifications for a given time range, optionally filtered by type (sms_notification, email_notification, phone_notification, or push_notification).<br /><br />A Notification is created when an Incident is triggered or escalated.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#notifications)<br /><br />Scoped OAuth requires: `users:notifications.read`<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-filter"><code>filter</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
+    <td>List notifications for a given time range, optionally filtered by type (sms_notification, email_notification, phone_notification, or push_notification).&lt;br /&gt;&lt;br /&gt;A Notification is created when an Incident is triggered or escalated.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#notifications)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:notifications.read`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -150,16 +144,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string (date-time)</code></td>
     <td>The end of the date range over which you want to search. This should be in the same format as since. The size of the date range must be less than 3 months.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 <tr id="parameter-filter">
     <td><CopyableCode code="filter" /></td>
     <td><code>string</code></td>
@@ -183,12 +167,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-time_zone">
     <td><CopyableCode code="time_zone" /></td>
     <td><code>string (tzinfo)</code></td>
-    <td>Time zone in which dates in the result will be rendered.</td>
+    <td>Time zone in which results will be rendered. This will default to the account time zone.</td>
 </tr>
 <tr id="parameter-total">
     <td><CopyableCode code="total" /></td>
     <td><code>boolean</code></td>
-    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
+    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our &#91;Pagination Docs&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
 </tr>
 </tbody>
 </table>
@@ -196,14 +180,14 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_notifications"
+    defaultValue="list"
     values={[
-        { label: 'list_notifications', value: 'list_notifications' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="list_notifications">
+<TabItem value="list">
 
-List notifications for a given time range, optionally filtered by type (sms_notification, email_notification, phone_notification, or push_notification).<br /><br />A Notification is created when an Incident is triggered or escalated.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#notifications)<br /><br />Scoped OAuth requires: `users:notifications.read`<br />
+List notifications for a given time range, optionally filtered by type (sms_notification, email_notification, phone_notification, or push_notification).&lt;br /&gt;&lt;br /&gt;A Notification is created when an Incident is triggered or escalated.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#notifications)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `users:notifications.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -218,44 +202,12 @@ user
 FROM pagerduty.notifications.notifications
 WHERE since = '{{ since }}' -- required
 AND until = '{{ until }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 AND limit = '{{ limit }}'
 AND offset = '{{ offset }}'
 AND total = '{{ total }}'
 AND time_zone = '{{ time_zone }}'
 AND filter = '{{ filter }}'
 AND include[] = '{{ include[] }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_list_notifications"
-    values={[
-        { label: '_list_notifications', value: '_list_notifications' }
-    ]}
->
-<TabItem value="_list_notifications">
-
-List notifications for a given time range, optionally filtered by type (sms_notification, email_notification, phone_notification, or push_notification).<br /><br />A Notification is created when an Incident is triggered or escalated.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#notifications)<br /><br />Scoped OAuth requires: `users:notifications.read`<br />
-
-```sql
-EXEC pagerduty.notifications.notifications._list_notifications 
-@since='{{ since }}' --required, 
-@until='{{ until }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@limit='{{ limit }}', 
-@offset='{{ offset }}', 
-@total={{ total }}, 
-@time_zone='{{ time_zone }}', 
-@filter='{{ filter }}', 
-@include[]='{{ include[] }}'
 ;
 ```
 </TabItem>

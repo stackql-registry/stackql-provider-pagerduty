@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>priorities</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>priorities</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="priorities" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.priorities.priorities" /></td></tr>
 </tbody></table>
@@ -32,12 +33,12 @@ Creates, updates, deletes, gets or lists a <code>priorities</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_priorities"
+    defaultValue="list"
     values={[
-        { label: 'list_priorities', value: 'list_priorities' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="list_priorities">
+<TabItem value="list">
 
 A paginated array of priorities.
 
@@ -106,18 +107,11 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_priorities"><CopyableCode code="list_priorities" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a></td>
-    <td>List existing priorities, in order (most to least severe).<br /><br />A priority is a label representing the importance and impact of an incident. This feature is only available on Standard and Enterprise plans.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#priorities)<br /><br />Scoped OAuth requires: `priorities.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_priorities"><CopyableCode code="_list_priorities" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a></td>
-    <td>List existing priorities, in order (most to least severe).<br /><br />A priority is a label representing the importance and impact of an incident. This feature is only available on Standard and Enterprise plans.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#priorities)<br /><br />Scoped OAuth requires: `priorities.read`<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a></td>
+    <td>List existing priorities, in order (most to least severe).&lt;br /&gt;&lt;br /&gt;A priority is a label representing the importance and impact of an incident.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#priorities)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `priorities.read`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -135,16 +129,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 <tr id="parameter-limit">
     <td><CopyableCode code="limit" /></td>
     <td><code>integer</code></td>
@@ -158,7 +142,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-total">
     <td><CopyableCode code="total" /></td>
     <td><code>boolean</code></td>
-    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
+    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our &#91;Pagination Docs&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
 </tr>
 </tbody>
 </table>
@@ -166,14 +150,14 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_priorities"
+    defaultValue="list"
     values={[
-        { label: 'list_priorities', value: 'list_priorities' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="list_priorities">
+<TabItem value="list">
 
-List existing priorities, in order (most to least severe).<br /><br />A priority is a label representing the importance and impact of an incident. This feature is only available on Standard and Enterprise plans.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#priorities)<br /><br />Scoped OAuth requires: `priorities.read`<br />
+List existing priorities, in order (most to least severe).&lt;br /&gt;&lt;br /&gt;A priority is a label representing the importance and impact of an incident.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#priorities)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `priorities.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -185,36 +169,9 @@ self,
 summary,
 type
 FROM pagerduty.priorities.priorities
-WHERE Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-AND limit = '{{ limit }}'
+WHERE limit = '{{ limit }}'
 AND offset = '{{ offset }}'
 AND total = '{{ total }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_list_priorities"
-    values={[
-        { label: '_list_priorities', value: '_list_priorities' }
-    ]}
->
-<TabItem value="_list_priorities">
-
-List existing priorities, in order (most to least severe).<br /><br />A priority is a label representing the importance and impact of an incident. This feature is only available on Standard and Enterprise plans.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#priorities)<br /><br />Scoped OAuth requires: `priorities.read`<br />
-
-```sql
-EXEC pagerduty.priorities.priorities._list_priorities 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@limit='{{ limit }}', 
-@offset='{{ offset }}', 
-@total={{ total }}
 ;
 ```
 </TabItem>

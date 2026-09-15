@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>teams</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>teams</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="teams" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.teams.teams" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>teams</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_team"
+    defaultValue="get"
     values={[
-        { label: 'get_team', value: 'get_team' },
-        { label: 'list_teams', value: 'list_teams' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_team">
+<TabItem value="get">
 
 The team requested.
 
@@ -62,6 +63,11 @@ The team requested.
     <td>The name of the team.</td>
 </tr>
 <tr>
+    <td><CopyableCode code="default_role" /></td>
+    <td><code>string</code></td>
+    <td>The team is private if the value is "none", or public if it is "manager" (the default permissions for a non-member of the team are either "none", or their base role up until "manager"). (manager, none) (default: manager)</td>
+</tr>
+<tr>
     <td><CopyableCode code="description" /></td>
     <td><code>string</code></td>
     <td>The description of the team.</td>
@@ -70,11 +76,6 @@ The team requested.
     <td><CopyableCode code="html_url" /></td>
     <td><code>string (url)</code></td>
     <td>a URL at which the entity is uniquely displayed in the Web app</td>
-</tr>
-<tr>
-    <td><CopyableCode code="parent" /></td>
-    <td><code>object</code></td>
-    <td></td>
 </tr>
 <tr>
     <td><CopyableCode code="self" /></td>
@@ -89,12 +90,12 @@ The team requested.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of object being created. (default: team)</td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 </tbody>
 </table>
 </TabItem>
-<TabItem value="list_teams">
+<TabItem value="list">
 
 A paginated array of teams.
 
@@ -118,6 +119,11 @@ A paginated array of teams.
     <td>The name of the team.</td>
 </tr>
 <tr>
+    <td><CopyableCode code="default_role" /></td>
+    <td><code>string</code></td>
+    <td>The team is private if the value is "none", or public if it is "manager" (the default permissions for a non-member of the team are either "none", or their base role up until "manager"). (manager, none) (default: manager)</td>
+</tr>
+<tr>
     <td><CopyableCode code="description" /></td>
     <td><code>string</code></td>
     <td>The description of the team.</td>
@@ -126,11 +132,6 @@ A paginated array of teams.
     <td><CopyableCode code="html_url" /></td>
     <td><code>string (url)</code></td>
     <td>a URL at which the entity is uniquely displayed in the Web app</td>
-</tr>
-<tr>
-    <td><CopyableCode code="parent" /></td>
-    <td><code>object</code></td>
-    <td></td>
 </tr>
 <tr>
     <td><CopyableCode code="self" /></td>
@@ -145,7 +146,7 @@ A paginated array of teams.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of object being created. (default: team)</td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 </tbody>
 </table>
@@ -168,53 +169,39 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_team"><CopyableCode code="get_team" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>Get details about an existing team.<br /><br />A team is a collection of Users and Escalation Policies that represent a group of people within an organization.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)<br /><br />Scoped OAuth requires: `teams.read`<br /></td>
+    <td><a href="#parameter-include[]"><code>include[]</code></a></td>
+    <td>Get details about an existing team.&lt;br /&gt;&lt;br /&gt;A team is a collection of Users and Escalation Policies that represent a group of people within an organization.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `teams.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#list_teams"><CopyableCode code="list_teams" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-query"><code>query</code></a></td>
-    <td>List teams of your PagerDuty account, optionally filtered by a search query.<br /><br />A team is a collection of Users and Escalation Policies that represent a group of people within an organization.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)<br /><br />Scoped OAuth requires: `teams.read`<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-query"><code>query</code></a></td>
+    <td>List teams of your PagerDuty account, optionally filtered by a search query.&lt;br /&gt;&lt;br /&gt;A team is a collection of Users and Escalation Policies that represent a group of people within an organization.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `teams.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_team"><CopyableCode code="create_team" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-data__team"><code>data__team</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Create a new Team.<br /><br />A team is a collection of Users and Escalation Policies that represent a group of people within an organization.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)<br /><br />Scoped OAuth requires: `teams.write`<br /></td>
+    <td><a href="#parameter-team"><code>team</code></a></td>
+    <td></td>
+    <td>Create a new Team.&lt;br /&gt;&lt;br /&gt;A team is a collection of Users and Escalation Policies that represent a group of people within an organization.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `teams.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#delete_team"><CopyableCode code="delete_team" /></a></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-team"><code>team</code></a></td>
+    <td></td>
+    <td>Update an existing team.&lt;br /&gt;&lt;br /&gt;A team is a collection of Users and Escalation Policies that represent a group of people within an organization.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `teams.write`&lt;br /&gt;</td>
+</tr>
+<tr>
+    <td><a href="#delete"><CopyableCode code="delete" /></a></td>
     <td><CopyableCode code="delete" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-reassignment_team"><code>reassignment_team</code></a></td>
-    <td>Remove an existing team.<br /><br />Succeeds only if the team has no associated Escalation Policies, Services, Schedules and Subteams.<br /><br />All associated unresovled incidents will be reassigned to another team (if specified) or will loose team association, thus becoming account-level (with visibility implications).<br /><br />Note that the incidents reassignment process is asynchronous and has no guarantee to complete before the API call return.<br /><br />A team is a collection of Users and Escalation Policies that represent a group of people within an organization.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)<br /><br />Scoped OAuth requires: `teams.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_teams"><CopyableCode code="_list_teams" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-query"><code>query</code></a></td>
-    <td>List teams of your PagerDuty account, optionally filtered by a search query.<br /><br />A team is a collection of Users and Escalation Policies that represent a group of people within an organization.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)<br /><br />Scoped OAuth requires: `teams.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_team"><CopyableCode code="_get_team" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>Get details about an existing team.<br /><br />A team is a collection of Users and Escalation Policies that represent a group of people within an organization.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)<br /><br />Scoped OAuth requires: `teams.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#update_team"><CopyableCode code="update_team" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-team"><code>team</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Update an existing team.<br /><br />A team is a collection of Users and Escalation Policies that represent a group of people within an organization.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)<br /><br />Scoped OAuth requires: `teams.write`<br /></td>
+    <td><a href="#parameter-reassignment_team"><code>reassignment_team</code></a></td>
+    <td>Remove an existing team.&lt;br /&gt;&lt;br /&gt;Succeeds only if the team has no associated Escalation Policies, Services, Schedules and Subteams.&lt;br /&gt;&lt;br /&gt;All associated unresovled incidents will be reassigned to another team (if specified) or will loose team association, thus becoming account-level (with visibility implications).&lt;br /&gt;&lt;br /&gt;Note that the incidents reassignment process is asynchronous and has no guarantee to complete before the API call return.&lt;br /&gt;&lt;br /&gt;A team is a collection of Users and Escalation Policies that represent a group of people within an organization.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `teams.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -236,16 +223,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><CopyableCode code="id" /></td>
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
-</tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
 </tr>
 <tr id="parameter-include[]">
     <td><CopyableCode code="include[]" /></td>
@@ -275,7 +252,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-total">
     <td><CopyableCode code="total" /></td>
     <td><code>boolean</code></td>
-    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
+    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our &#91;Pagination Docs&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
 </tr>
 </tbody>
 </table>
@@ -283,52 +260,48 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_team"
+    defaultValue="get"
     values={[
-        { label: 'get_team', value: 'get_team' },
-        { label: 'list_teams', value: 'list_teams' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_team">
+<TabItem value="get">
 
-Get details about an existing team.<br /><br />A team is a collection of Users and Escalation Policies that represent a group of people within an organization.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)<br /><br />Scoped OAuth requires: `teams.read`<br />
+Get details about an existing team.&lt;br /&gt;&lt;br /&gt;A team is a collection of Users and Escalation Policies that represent a group of people within an organization.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `teams.read`&lt;br /&gt;
 
 ```sql
 SELECT
 id,
 name,
+default_role,
 description,
 html_url,
-parent,
 self,
 summary,
 type
 FROM pagerduty.teams.teams
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 AND include[] = '{{ include[] }}'
 ;
 ```
 </TabItem>
-<TabItem value="list_teams">
+<TabItem value="list">
 
-List teams of your PagerDuty account, optionally filtered by a search query.<br /><br />A team is a collection of Users and Escalation Policies that represent a group of people within an organization.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)<br /><br />Scoped OAuth requires: `teams.read`<br />
+List teams of your PagerDuty account, optionally filtered by a search query.&lt;br /&gt;&lt;br /&gt;A team is a collection of Users and Escalation Policies that represent a group of people within an organization.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `teams.read`&lt;br /&gt;
 
 ```sql
 SELECT
 id,
 name,
+default_role,
 description,
 html_url,
-parent,
 self,
 summary,
 type
 FROM pagerduty.teams.teams
-WHERE Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-AND limit = '{{ limit }}'
+WHERE limit = '{{ limit }}'
 AND offset = '{{ offset }}'
 AND total = '{{ total }}'
 AND query = '{{ query }}'
@@ -341,26 +314,22 @@ AND query = '{{ query }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_team"
+    defaultValue="create"
     values={[
-        { label: 'create_team', value: 'create_team' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_team">
+<TabItem value="create">
 
-Create a new Team.<br /><br />A team is a collection of Users and Escalation Policies that represent a group of people within an organization.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)<br /><br />Scoped OAuth requires: `teams.write`<br />
+Create a new Team.&lt;br /&gt;&lt;br /&gt;A team is a collection of Users and Escalation Policies that represent a group of people within an organization.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `teams.write`&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.teams.teams (
-data__team,
-Accept,
-Content-Type
+team
 )
 SELECT 
-'{{ team }}' /* required */,
-'{{ Accept }}',
-'{{ Content-Type }}'
+'{{ team }}' /* required */
 RETURNING
 team
 ;
@@ -368,17 +337,46 @@ team
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: teams
   props:
     - name: team
-      value: object
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-    - name: Content-Type
-      value: string
+      value:
+        id: "{{ id }}"
+        summary: "{{ summary }}"
+        type: "{{ type }}"
+        self: "{{ self }}"
+        html_url: "{{ html_url }}"
+        name: "{{ name }}"
+        description: "{{ description }}"
+        default_role: "{{ default_role }}"
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
+
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Update an existing team.&lt;br /&gt;&lt;br /&gt;A team is a collection of Users and Escalation Policies that represent a group of people within an organization.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `teams.write`&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.teams.teams
+SET 
+team = '{{ team }}'
+WHERE 
+id = '{{ id }}' --required
+AND team = '{{ team }}' --required
+RETURNING
+team;
 ```
 </TabItem>
 </Tabs>
@@ -387,78 +385,19 @@ team
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="delete_team"
+    defaultValue="delete"
     values={[
-        { label: 'delete_team', value: 'delete_team' }
+        { label: 'delete', value: 'delete' }
     ]}
 >
-<TabItem value="delete_team">
+<TabItem value="delete">
 
-Remove an existing team.<br /><br />Succeeds only if the team has no associated Escalation Policies, Services, Schedules and Subteams.<br /><br />All associated unresovled incidents will be reassigned to another team (if specified) or will loose team association, thus becoming account-level (with visibility implications).<br /><br />Note that the incidents reassignment process is asynchronous and has no guarantee to complete before the API call return.<br /><br />A team is a collection of Users and Escalation Policies that represent a group of people within an organization.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)<br /><br />Scoped OAuth requires: `teams.write`<br />
+Remove an existing team.&lt;br /&gt;&lt;br /&gt;Succeeds only if the team has no associated Escalation Policies, Services, Schedules and Subteams.&lt;br /&gt;&lt;br /&gt;All associated unresovled incidents will be reassigned to another team (if specified) or will loose team association, thus becoming account-level (with visibility implications).&lt;br /&gt;&lt;br /&gt;Note that the incidents reassignment process is asynchronous and has no guarantee to complete before the API call return.&lt;br /&gt;&lt;br /&gt;A team is a collection of Users and Escalation Policies that represent a group of people within an organization.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `teams.write`&lt;br /&gt;
 
 ```sql
 DELETE FROM pagerduty.teams.teams
 WHERE id = '{{ id }}' --required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 AND reassignment_team = '{{ reassignment_team }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_list_teams"
-    values={[
-        { label: '_list_teams', value: '_list_teams' },
-        { label: '_get_team', value: '_get_team' },
-        { label: 'update_team', value: 'update_team' }
-    ]}
->
-<TabItem value="_list_teams">
-
-List teams of your PagerDuty account, optionally filtered by a search query.<br /><br />A team is a collection of Users and Escalation Policies that represent a group of people within an organization.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)<br /><br />Scoped OAuth requires: `teams.read`<br />
-
-```sql
-EXEC pagerduty.teams.teams._list_teams 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@limit='{{ limit }}', 
-@offset='{{ offset }}', 
-@total={{ total }}, 
-@query='{{ query }}'
-;
-```
-</TabItem>
-<TabItem value="_get_team">
-
-Get details about an existing team.<br /><br />A team is a collection of Users and Escalation Policies that represent a group of people within an organization.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)<br /><br />Scoped OAuth requires: `teams.read`<br />
-
-```sql
-EXEC pagerduty.teams.teams._get_team 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@include[]='{{ include[] }}'
-;
-```
-</TabItem>
-<TabItem value="update_team">
-
-Update an existing team.<br /><br />A team is a collection of Users and Escalation Policies that represent a group of people within an organization.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#teams)<br /><br />Scoped OAuth requires: `teams.write`<br />
-
-```sql
-EXEC pagerduty.teams.teams.update_team 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"team": "{{ team }}"
-}'
 ;
 ```
 </TabItem>

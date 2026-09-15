@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>event_orchestrations</code> re
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>event_orchestrations</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="event_orchestrations" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.event_orchestrations.event_orchestrations" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists an <code>event_orchestrations</code> re
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_orchestration"
+    defaultValue="get"
     values={[
-        { label: 'get_orchestration', value: 'get_orchestration' },
-        { label: 'list_event_orchestrations', value: 'list_event_orchestrations' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_orchestration">
+<TabItem value="get">
 
 The Orchestration object.
 
@@ -114,7 +115,7 @@ The Orchestration object.
 </tbody>
 </table>
 </TabItem>
-<TabItem value="list_event_orchestrations">
+<TabItem value="list">
 
 A paginated array of Event Orchestration objects.
 
@@ -203,53 +204,39 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_orchestration"><CopyableCode code="get_orchestration" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get a Global Event Orchestration.<br /><br />Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.read`<br /></td>
+    <td></td>
+    <td>Get a Global Event Orchestration.&lt;br /&gt;&lt;br /&gt;Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#list_event_orchestrations"><CopyableCode code="list_event_orchestrations" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-sort_by"><code>sort_by</code></a></td>
-    <td>List all Global Event Orchestrations on an Account.<br /><br />Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.read`<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-sort_by"><code>sort_by</code></a></td>
+    <td>List all Global Event Orchestrations on an Account.&lt;br /&gt;&lt;br /&gt;Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#delete_orchestration"><CopyableCode code="delete_orchestration" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
+    <td><CopyableCode code="insert" /></td>
+    <td><a href="#parameter-orchestration"><code>orchestration</code></a></td>
+    <td></td>
+    <td>Create a Global Event Orchestration.&lt;br /&gt;&lt;br /&gt;Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.write`&lt;br /&gt;</td>
+</tr>
+<tr>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-orchestration"><code>orchestration</code></a></td>
+    <td></td>
+    <td>Update a Global Event Orchestration.&lt;br /&gt;&lt;br /&gt;Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.write`&lt;br /&gt;</td>
+</tr>
+<tr>
+    <td><a href="#delete"><CopyableCode code="delete" /></a></td>
     <td><CopyableCode code="delete" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Delete a Global Event Orchestration.<br /><br />Once deleted, you will no longer be able to ingest events into PagerDuty using this Orchestration's Routing Key.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_event_orchestrations"><CopyableCode code="_list_event_orchestrations" /></a></td>
-    <td><CopyableCode code="exec" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-sort_by"><code>sort_by</code></a></td>
-    <td>List all Global Event Orchestrations on an Account.<br /><br />Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#post_orchestration"><CopyableCode code="post_orchestration" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-orchestration"><code>orchestration</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Create a Global Event Orchestration.<br /><br />Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_orchestration"><CopyableCode code="_get_orchestration" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get a Global Event Orchestration.<br /><br />Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#update_orchestration"><CopyableCode code="update_orchestration" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-orchestration"><code>orchestration</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Update a Global Event Orchestration.<br /><br />Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.write`<br /></td>
+    <td>Delete a Global Event Orchestration.&lt;br /&gt;&lt;br /&gt;Once deleted, you will no longer be able to ingest events into PagerDuty using this Orchestration's Routing Key.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -272,16 +259,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The ID of an Event Orchestration.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 <tr id="parameter-limit">
     <td><CopyableCode code="limit" /></td>
     <td><code>integer</code></td>
@@ -303,15 +280,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_orchestration"
+    defaultValue="get"
     values={[
-        { label: 'get_orchestration', value: 'get_orchestration' },
-        { label: 'list_event_orchestrations', value: 'list_event_orchestrations' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_orchestration">
+<TabItem value="get">
 
-Get a Global Event Orchestration.<br /><br />Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.read`<br />
+Get a Global Event Orchestration.&lt;br /&gt;&lt;br /&gt;Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -329,14 +306,12 @@ updated_by,
 version
 FROM pagerduty.event_orchestrations.event_orchestrations
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
-<TabItem value="list_event_orchestrations">
+<TabItem value="list">
 
-List all Global Event Orchestrations on an Account.<br /><br />Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.read`<br />
+List all Global Event Orchestrations on an Account.&lt;br /&gt;&lt;br /&gt;Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -352,9 +327,7 @@ updated_at,
 updated_by,
 version
 FROM pagerduty.event_orchestrations.event_orchestrations
-WHERE Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-AND limit = '{{ limit }}'
+WHERE limit = '{{ limit }}'
 AND offset = '{{ offset }}'
 AND sort_by = '{{ sort_by }}'
 ;
@@ -363,94 +336,110 @@ AND sort_by = '{{ sort_by }}'
 </Tabs>
 
 
-## `DELETE` examples
+## `INSERT` examples
 
 <Tabs
-    defaultValue="delete_orchestration"
+    defaultValue="create"
     values={[
-        { label: 'delete_orchestration', value: 'delete_orchestration' }
+        { label: 'create', value: 'create' },
+        { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="delete_orchestration">
+<TabItem value="create">
 
-Delete a Global Event Orchestration.<br /><br />Once deleted, you will no longer be able to ingest events into PagerDuty using this Orchestration's Routing Key.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.write`<br />
+Create a Global Event Orchestration.&lt;br /&gt;&lt;br /&gt;Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.write`&lt;br /&gt;
 
 ```sql
-DELETE FROM pagerduty.event_orchestrations.event_orchestrations
-WHERE id = '{{ id }}' --required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
+INSERT INTO pagerduty.event_orchestrations.event_orchestrations (
+orchestration
+)
+SELECT 
+'{{ orchestration }}' /* required */
+RETURNING
+orchestration
 ;
+```
+</TabItem>
+<TabItem value="manifest">
+
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
+- name: event_orchestrations
+  props:
+    - name: orchestration
+      value:
+        id: "{{ id }}"
+        self: "{{ self }}"
+        name: "{{ name }}"
+        description: "{{ description }}"
+        team:
+          id: "{{ id }}"
+          type: "{{ type }}"
+          self: "{{ self }}"
+        integrations:
+          - id: "{{ id }}"
+            label: "{{ label }}"
+            parameters:
+              routing_key: "{{ routing_key }}"
+              type: "{{ type }}"
+        routes: {{ routes }}
+        created_at: "{{ created_at }}"
+        created_by:
+          id: "{{ id }}"
+          type: "{{ type }}"
+          self: "{{ self }}"
+        updated_at: "{{ updated_at }}"
+        updated_by:
+          id: "{{ id }}"
+          type: "{{ type }}"
+          self: "{{ self }}"
+        version: "{{ version }}"
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
+
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Update a Global Event Orchestration.&lt;br /&gt;&lt;br /&gt;Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.write`&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.event_orchestrations.event_orchestrations
+SET 
+orchestration = '{{ orchestration }}'
+WHERE 
+id = '{{ id }}' --required
+AND orchestration = '{{ orchestration }}' --required
+RETURNING
+orchestration;
 ```
 </TabItem>
 </Tabs>
 
 
-## Lifecycle Methods
+## `DELETE` examples
 
 <Tabs
-    defaultValue="_list_event_orchestrations"
+    defaultValue="delete"
     values={[
-        { label: '_list_event_orchestrations', value: '_list_event_orchestrations' },
-        { label: 'post_orchestration', value: 'post_orchestration' },
-        { label: '_get_orchestration', value: '_get_orchestration' },
-        { label: 'update_orchestration', value: 'update_orchestration' }
+        { label: 'delete', value: 'delete' }
     ]}
 >
-<TabItem value="_list_event_orchestrations">
+<TabItem value="delete">
 
-List all Global Event Orchestrations on an Account.<br /><br />Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.read`<br />
-
-```sql
-EXEC pagerduty.event_orchestrations.event_orchestrations._list_event_orchestrations 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@limit='{{ limit }}', 
-@offset='{{ offset }}', 
-@sort_by='{{ sort_by }}'
-;
-```
-</TabItem>
-<TabItem value="post_orchestration">
-
-Create a Global Event Orchestration.<br /><br />Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.write`<br />
+Delete a Global Event Orchestration.&lt;br /&gt;&lt;br /&gt;Once deleted, you will no longer be able to ingest events into PagerDuty using this Orchestration's Routing Key.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.write`&lt;br /&gt;
 
 ```sql
-EXEC pagerduty.event_orchestrations.event_orchestrations.post_orchestration 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"orchestration": "{{ orchestration }}"
-}'
-;
-```
-</TabItem>
-<TabItem value="_get_orchestration">
-
-Get a Global Event Orchestration.<br /><br />Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.read`<br />
-
-```sql
-EXEC pagerduty.event_orchestrations.event_orchestrations._get_orchestration 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
-;
-```
-</TabItem>
-<TabItem value="update_orchestration">
-
-Update a Global Event Orchestration.<br /><br />Global Event Orchestrations allow you define a set of Global Rules and Router Rules, so that when you ingest events using the Orchestration's Routing Key your events will have actions applied via the Global Rules & then routed to the correct Service by the Router Rules, based on the event's content.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.write`<br />
-
-```sql
-EXEC pagerduty.event_orchestrations.event_orchestrations.update_orchestration 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"orchestration": "{{ orchestration }}"
-}'
+DELETE FROM pagerduty.event_orchestrations.event_orchestrations
+WHERE id = '{{ id }}' --required
 ;
 ```
 </TabItem>

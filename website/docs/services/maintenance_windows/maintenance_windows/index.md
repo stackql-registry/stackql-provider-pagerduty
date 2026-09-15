@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>maintenance_windows</code> reso
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>maintenance_windows</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="maintenance_windows" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.maintenance_windows.maintenance_windows" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>maintenance_windows</code> reso
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_maintenance_window"
+    defaultValue="get"
     values={[
-        { label: 'get_maintenance_window', value: 'get_maintenance_window' },
-        { label: 'list_maintenance_windows', value: 'list_maintenance_windows' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_maintenance_window">
+<TabItem value="get">
 
 The maintenance window that was updated.
 
@@ -59,7 +60,7 @@ The maintenance window that was updated.
 <tr>
     <td><CopyableCode code="created_by" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="description" /></td>
@@ -109,12 +110,12 @@ The maintenance window that was updated.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of object being created. (default: maintenance_window)</td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 </tbody>
 </table>
 </TabItem>
-<TabItem value="list_maintenance_windows">
+<TabItem value="list">
 
 A paginated array of maintenance windows.
 
@@ -135,7 +136,7 @@ A paginated array of maintenance windows.
 <tr>
     <td><CopyableCode code="created_by" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="description" /></td>
@@ -185,7 +186,7 @@ A paginated array of maintenance windows.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of object being created. (default: maintenance_window)</td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 </tbody>
 </table>
@@ -208,53 +209,39 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_maintenance_window"><CopyableCode code="get_maintenance_window" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>Get an existing maintenance window.<br /><br />A Maintenance Window is used to temporarily disable one or more Services for a set period of time.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)<br /><br />Scoped OAuth requires: `services.read`<br /></td>
+    <td><a href="#parameter-include[]"><code>include[]</code></a></td>
+    <td>Get an existing maintenance window.&lt;br /&gt;&lt;br /&gt;A Maintenance Window is used to temporarily disable one or more Services for a set period of time.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#list_maintenance_windows"><CopyableCode code="list_maintenance_windows" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-query"><code>query</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-team_ids[]"><code>team_ids[]</code></a>, <a href="#parameter-service_ids[]"><code>service_ids[]</code></a>, <a href="#parameter-include[]"><code>include[]</code></a>, <a href="#parameter-filter"><code>filter</code></a></td>
-    <td>List existing maintenance windows, optionally filtered by service and/or team, or whether they are from the past, present or future.<br /><br />A Maintenance Window is used to temporarily disable one or more Services for a set period of time.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)<br /><br />Scoped OAuth requires: `services.read`<br /></td>
+    <td><a href="#parameter-query"><code>query</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-team_ids[]"><code>team_ids[]</code></a>, <a href="#parameter-service_ids[]"><code>service_ids[]</code></a>, <a href="#parameter-include[]"><code>include[]</code></a>, <a href="#parameter-filter"><code>filter</code></a></td>
+    <td>List existing maintenance windows, optionally filtered by service and/or team, or whether they are from the past, present or future.&lt;br /&gt;&lt;br /&gt;A Maintenance Window is used to temporarily disable one or more Services for a set period of time.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_maintenance_window"><CopyableCode code="create_maintenance_window" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-From"><code>From</code></a>, <a href="#parameter-data__maintenance_window"><code>data__maintenance_window</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Create a new maintenance window for the specified services. No new incidents will be created for a service that is in maintenance.<br /><br />A Maintenance Window is used to temporarily disable one or more Services for a set period of time.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)<br /><br />Scoped OAuth requires: `services.write`<br /></td>
+    <td><a href="#parameter-maintenance_window"><code>maintenance_window</code></a></td>
+    <td><a href="#parameter-From"><code>From</code></a></td>
+    <td>Create a new maintenance window for the specified services. No new incidents will be created for a service that is in maintenance.&lt;br /&gt;&lt;br /&gt;A Maintenance Window is used to temporarily disable one or more Services for a set period of time.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#delete_maintenance_window"><CopyableCode code="delete_maintenance_window" /></a></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-maintenance_window"><code>maintenance_window</code></a></td>
+    <td></td>
+    <td>Update an existing maintenance window.&lt;br /&gt;&lt;br /&gt;A Maintenance Window is used to temporarily disable one or more Services for a set period of time.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.write`&lt;br /&gt;</td>
+</tr>
+<tr>
+    <td><a href="#delete"><CopyableCode code="delete" /></a></td>
     <td><CopyableCode code="delete" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Delete an existing maintenance window if it's in the future, or end it if it's currently on-going. If the maintenance window has already ended it cannot be deleted.<br /><br />A Maintenance Window is used to temporarily disable one or more Services for a set period of time.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)<br /><br />Scoped OAuth requires: `services.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_maintenance_windows"><CopyableCode code="_list_maintenance_windows" /></a></td>
-    <td><CopyableCode code="exec" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-query"><code>query</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-team_ids[]"><code>team_ids[]</code></a>, <a href="#parameter-service_ids[]"><code>service_ids[]</code></a>, <a href="#parameter-include[]"><code>include[]</code></a>, <a href="#parameter-filter"><code>filter</code></a></td>
-    <td>List existing maintenance windows, optionally filtered by service and/or team, or whether they are from the past, present or future.<br /><br />A Maintenance Window is used to temporarily disable one or more Services for a set period of time.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)<br /><br />Scoped OAuth requires: `services.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_maintenance_window"><CopyableCode code="_get_maintenance_window" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>Get an existing maintenance window.<br /><br />A Maintenance Window is used to temporarily disable one or more Services for a set period of time.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)<br /><br />Scoped OAuth requires: `services.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#update_maintenance_window"><CopyableCode code="update_maintenance_window" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-maintenance_window"><code>maintenance_window</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Update an existing maintenance window.<br /><br />A Maintenance Window is used to temporarily disable one or more Services for a set period of time.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)<br /><br />Scoped OAuth requires: `services.write`<br /></td>
+    <td>Delete an existing maintenance window if it's in the future, or end it if it's currently on-going. If the maintenance window has already ended it cannot be deleted.&lt;br /&gt;&lt;br /&gt;A Maintenance Window is used to temporarily disable one or more Services for a set period of time.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -272,25 +259,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
-<tr id="parameter-From">
-    <td><CopyableCode code="From" /></td>
-    <td><code>string (email)</code></td>
-    <td>The email address of a valid user associated with the account making the request.</td>
-</tr>
 <tr id="parameter-id">
     <td><CopyableCode code="id" /></td>
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
+<tr id="parameter-From">
+    <td><CopyableCode code="From" /></td>
+    <td><code>string (email)</code></td>
+    <td>The email address of a valid user associated with the account making the request.</td>
 </tr>
 <tr id="parameter-filter">
     <td><CopyableCode code="filter" /></td>
@@ -330,7 +307,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-total">
     <td><CopyableCode code="total" /></td>
     <td><code>boolean</code></td>
-    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
+    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our &#91;Pagination Docs&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
 </tr>
 </tbody>
 </table>
@@ -338,15 +315,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_maintenance_window"
+    defaultValue="get"
     values={[
-        { label: 'get_maintenance_window', value: 'get_maintenance_window' },
-        { label: 'list_maintenance_windows', value: 'list_maintenance_windows' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_maintenance_window">
+<TabItem value="get">
 
-Get an existing maintenance window.<br /><br />A Maintenance Window is used to temporarily disable one or more Services for a set period of time.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)<br /><br />Scoped OAuth requires: `services.read`<br />
+Get an existing maintenance window.&lt;br /&gt;&lt;br /&gt;A Maintenance Window is used to temporarily disable one or more Services for a set period of time.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -364,15 +341,13 @@ teams,
 type
 FROM pagerduty.maintenance_windows.maintenance_windows
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 AND include[] = '{{ include[] }}'
 ;
 ```
 </TabItem>
-<TabItem value="list_maintenance_windows">
+<TabItem value="list">
 
-List existing maintenance windows, optionally filtered by service and/or team, or whether they are from the past, present or future.<br /><br />A Maintenance Window is used to temporarily disable one or more Services for a set period of time.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)<br /><br />Scoped OAuth requires: `services.read`<br />
+List existing maintenance windows, optionally filtered by service and/or team, or whether they are from the past, present or future.&lt;br /&gt;&lt;br /&gt;A Maintenance Window is used to temporarily disable one or more Services for a set period of time.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -389,9 +364,7 @@ summary,
 teams,
 type
 FROM pagerduty.maintenance_windows.maintenance_windows
-WHERE Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-AND query = '{{ query }}'
+WHERE query = '{{ query }}'
 AND limit = '{{ limit }}'
 AND offset = '{{ offset }}'
 AND total = '{{ total }}'
@@ -408,28 +381,24 @@ AND filter = '{{ filter }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_maintenance_window"
+    defaultValue="create"
     values={[
-        { label: 'create_maintenance_window', value: 'create_maintenance_window' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_maintenance_window">
+<TabItem value="create">
 
-Create a new maintenance window for the specified services. No new incidents will be created for a service that is in maintenance.<br /><br />A Maintenance Window is used to temporarily disable one or more Services for a set period of time.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)<br /><br />Scoped OAuth requires: `services.write`<br />
+Create a new maintenance window for the specified services. No new incidents will be created for a service that is in maintenance.&lt;br /&gt;&lt;br /&gt;A Maintenance Window is used to temporarily disable one or more Services for a set period of time.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.write`&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.maintenance_windows.maintenance_windows (
-data__maintenance_window,
-From,
-Accept,
-Content-Type
+maintenance_window,
+"From"
 )
 SELECT 
 '{{ maintenance_window }}' /* required */,
-'{{ From }}',
-'{{ Accept }}',
-'{{ Content-Type }}'
+'{{ From }}'
 RETURNING
 maintenance_window
 ;
@@ -437,20 +406,69 @@ maintenance_window
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: maintenance_windows
   props:
-    - name: From
-      value: string (email)
-      description: Required parameter for the maintenance_windows resource.
     - name: maintenance_window
-      value: object
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-    - name: Content-Type
-      value: string
+      value:
+        id: "{{ id }}"
+        summary: "{{ summary }}"
+        type: "{{ type }}"
+        self: "{{ self }}"
+        html_url: "{{ html_url }}"
+        sequence_number: {{ sequence_number }}
+        start_time: "{{ start_time }}"
+        end_time: "{{ end_time }}"
+        description: "{{ description }}"
+        created_by:
+          id: "{{ id }}"
+          summary: "{{ summary }}"
+          type: "{{ type }}"
+          self: "{{ self }}"
+          html_url: "{{ html_url }}"
+        services:
+          - id: "{{ id }}"
+            summary: "{{ summary }}"
+            type: "{{ type }}"
+            self: "{{ self }}"
+            html_url: "{{ html_url }}"
+        teams:
+          - id: "{{ id }}"
+            summary: "{{ summary }}"
+            type: "{{ type }}"
+            self: "{{ self }}"
+            html_url: "{{ html_url }}"
+    - name: From
+      value: "{{ From }}"
+      description: The email address of a valid user associated with the account making the request.
+      description: The email address of a valid user associated with the account making the request.
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
+
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Update an existing maintenance window.&lt;br /&gt;&lt;br /&gt;A Maintenance Window is used to temporarily disable one or more Services for a set period of time.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.write`&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.maintenance_windows.maintenance_windows
+SET 
+maintenance_window = '{{ maintenance_window }}'
+WHERE 
+id = '{{ id }}' --required
+AND maintenance_window = '{{ maintenance_window }}' --required
+RETURNING
+maintenance_window;
 ```
 </TabItem>
 </Tabs>
@@ -459,81 +477,18 @@ maintenance_window
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="delete_maintenance_window"
+    defaultValue="delete"
     values={[
-        { label: 'delete_maintenance_window', value: 'delete_maintenance_window' }
+        { label: 'delete', value: 'delete' }
     ]}
 >
-<TabItem value="delete_maintenance_window">
+<TabItem value="delete">
 
-Delete an existing maintenance window if it's in the future, or end it if it's currently on-going. If the maintenance window has already ended it cannot be deleted.<br /><br />A Maintenance Window is used to temporarily disable one or more Services for a set period of time.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)<br /><br />Scoped OAuth requires: `services.write`<br />
+Delete an existing maintenance window if it's in the future, or end it if it's currently on-going. If the maintenance window has already ended it cannot be deleted.&lt;br /&gt;&lt;br /&gt;A Maintenance Window is used to temporarily disable one or more Services for a set period of time.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `services.write`&lt;br /&gt;
 
 ```sql
 DELETE FROM pagerduty.maintenance_windows.maintenance_windows
 WHERE id = '{{ id }}' --required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_list_maintenance_windows"
-    values={[
-        { label: '_list_maintenance_windows', value: '_list_maintenance_windows' },
-        { label: '_get_maintenance_window', value: '_get_maintenance_window' },
-        { label: 'update_maintenance_window', value: 'update_maintenance_window' }
-    ]}
->
-<TabItem value="_list_maintenance_windows">
-
-List existing maintenance windows, optionally filtered by service and/or team, or whether they are from the past, present or future.<br /><br />A Maintenance Window is used to temporarily disable one or more Services for a set period of time.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)<br /><br />Scoped OAuth requires: `services.read`<br />
-
-```sql
-EXEC pagerduty.maintenance_windows.maintenance_windows._list_maintenance_windows 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@query='{{ query }}', 
-@limit='{{ limit }}', 
-@offset='{{ offset }}', 
-@total={{ total }}, 
-@team_ids[]='{{ team_ids[] }}', 
-@service_ids[]='{{ service_ids[] }}', 
-@include[]='{{ include[] }}', 
-@filter='{{ filter }}'
-;
-```
-</TabItem>
-<TabItem value="_get_maintenance_window">
-
-Get an existing maintenance window.<br /><br />A Maintenance Window is used to temporarily disable one or more Services for a set period of time.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)<br /><br />Scoped OAuth requires: `services.read`<br />
-
-```sql
-EXEC pagerduty.maintenance_windows.maintenance_windows._get_maintenance_window 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@include[]='{{ include[] }}'
-;
-```
-</TabItem>
-<TabItem value="update_maintenance_window">
-
-Update an existing maintenance window.<br /><br />A Maintenance Window is used to temporarily disable one or more Services for a set period of time.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)<br /><br />Scoped OAuth requires: `services.write`<br />
-
-```sql
-EXEC pagerduty.maintenance_windows.maintenance_windows.update_maintenance_window 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"maintenance_window": "{{ maintenance_window }}"
-}'
 ;
 ```
 </TabItem>

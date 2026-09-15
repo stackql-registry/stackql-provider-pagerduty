@@ -18,16 +18,16 @@ templates service documentation.
 
 :::info[Service Summary]
 
-total resources: __1__  
+total resources: __2__  
 
 :::
 
 ## Resources
 <div class="row">
 <div class="providerDocColumn">
-<a href="/services/templates/templates/">templates</a>
+<a href="/services/templates/fields/">fields</a>
 </div>
 <div class="providerDocColumn">
-
+<a href="/services/templates/templates/">templates</a>
 </div>
 </div>

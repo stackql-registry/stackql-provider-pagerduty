@@ -1,0 +1,643 @@
+openapi: 3.0.2
+info:
+  title: PagerDuty API - On Calls
+  description: 'On-calls: who is on call for which escalation policy and schedule.'
+  version: 2.0.0
+paths:
+  /oncalls:
+    get:
+      tags:
+        - On-Calls
+      x-pd-requires-scope: oncalls.read
+      x-pd-operation-limit: true
+      operationId: listOnCalls
+      description: |
+        List the on-call entries during a given time range.
+
+        An on-call represents a contiguous unit of time for which a User will be on call for a given Escalation Policy and Escalation Rules.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#on-calls)
+
+        Scoped OAuth requires: `oncalls.read`
+
+        This API operation has operation specific rate limits. See the [Rate Limits](https://developer.pagerduty.com/docs/72d3b724589e3-rest-api-rate-limits) page for more information.
+      summary: List all of the on-calls
+      parameters:
+        - $ref: '#/components/parameters/time_zone'
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+        - $ref: '#/components/parameters/include_oncalls'
+        - $ref: '#/components/parameters/user_ids_oncalls'
+        - $ref: '#/components/parameters/escalation_policy_ids_oncalls'
+        - $ref: '#/components/parameters/schedule_ids_oncalls'
+        - $ref: '#/components/parameters/since_oncalls'
+        - $ref: '#/components/parameters/until_oncalls'
+        - $ref: '#/components/parameters/earliest_oncalls'
+      responses:
+        '200':
+          description: A paginated array of on-call objects.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  oncalls:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Oncall'
+                required:
+                  - oncalls
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    oncalls:
+                      - user:
+                          id: PT23IWX
+                          type: user_reference
+                          summary: Tim Wright
+                          self: https://api.pagerduty.com/users/PT23IWX
+                          html_url: https://subdomain.pagerduty.com/users/PT23IWX
+                        schedule:
+                          id: PI7DH85
+                          type: schedule_reference
+                          summary: Daily Engineering Rotation
+                          self: https://api.pagerduty.com/schedules/PI7DH85
+                          html_url: https://subdomain.pagerduty.com/schedules/PI7DH85
+                        escalation_policy:
+                          id: PT20YPA
+                          type: escalation_policy_reference
+                          summary: Engineering Escalation Policy
+                          self: https://api.pagerduty.com/escalation_policies/PT20YPA
+                          html_url: https://subdomain.pagerduty.com/escalation_policies/PT20YPA
+                        escalation_level: 2
+                        start: '2015-03-06T15:28:51-05:00'
+                        end: '2015-03-07T15:28:51-05:00'
+                    limit: 25
+                    offset: 0
+                    more: false
+                    total: null
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: |
+      List all of the on-call entries within a given time range for a given set of users, escalation policies, and/or schedules. Each on-call entry includes:
+
+      - the date/time period for the on-call entry;
+      - the escalation policy, rule, and level;
+      - the schedule, if the rule targeted a schedule and not a user; and,
+      - the user on call for the escalation policy rule during that time.
+components:
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        offset:
+          type: integer
+          description: Echoes offset pagination property.
+          readOnly: true
+        limit:
+          type: integer
+          description: Echoes limit pagination property.
+          readOnly: true
+        more:
+          type: boolean
+          description: Indicates if there are additional records to return
+          readOnly: true
+        total:
+          type: integer
+          description: The total number of records matching the given query.
+          nullable: true
+          readOnly: true
+    Oncall:
+      type: object
+      properties:
+        escalation_policy:
+          $ref: '#/components/schemas/EscalationPolicyReference'
+        user:
+          $ref: '#/components/schemas/UserReference'
+        schedule:
+          description: The schedule from which this on-call originates. May be a legacy schedule reference or a v3 schedule reference.
+          type: object
+          properties:
+            id:
+              type: string
+              readOnly: true
+            summary:
+              type: string
+              nullable: true
+              readOnly: true
+              description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+            type:
+              type: string
+              readOnly: true
+              description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+            self:
+              type: string
+              nullable: true
+              readOnly: true
+              format: url
+              description: the API show URL at which the object is accessible
+            html_url:
+              type: string
+              nullable: true
+              readOnly: true
+              format: url
+              description: a URL at which the entity is uniquely displayed in the Web app
+          required:
+            - type
+            - id
+            - summary
+        escalation_level:
+          type: integer
+          readOnly: true
+          description: The escalation level for the on-call.
+        start:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The start of the on-call. If `null`, the on-call is a permanent user on-call.
+        end:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The end of the on-call. If `null`, the user does not go off-call.
+      example:
+        user:
+          id: PT23IWX
+          type: user_reference
+          summary: Tim Wright
+          self: https://api.pagerduty.com/users/PT23IWX
+          html_url: https://subdomain.pagerduty.com/users/PT23IWX
+        schedule:
+          id: PI7DH85
+          type: schedule_reference
+          summary: Daily Engineering Rotation
+          self: https://api.pagerduty.com/schedules/PI7DH85
+          html_url: https://subdomain.pagerduty.com/schedules/PI7DH85
+        escalation_policy:
+          id: PT20YPA
+          type: escalation_policy_reference
+          summary: Engineering Escalation Policy
+          self: https://api.pagerduty.com/escalation_policies/PT20YPA
+          html_url: https://subdomain.pagerduty.com/escalation_policies/PT20YPA
+        escalation_level: 2
+        start: '2015-03-06T15:28:51-05:00'
+        end: '2015-03-07T15:28:51-05:00'
+    EscalationPolicyReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    UserReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    ScheduleReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    V3ScheduleReference:
+      type: object
+      description: |
+        Lightweight schedule object returned by the list endpoint.
+        Uses `"type": "schedule_v3_reference"` to distinguish from
+        legacy schedules (`"type": "schedule_reference"`).
+      required:
+        - id
+        - type
+        - summary
+      properties:
+        id:
+          type: string
+          example: PL5FQHC
+        type:
+          type: string
+          enum:
+            - schedule_v3_reference
+        summary:
+          type: string
+          description: Schedule name
+          example: Engineering On-Call
+        self:
+          type: string
+          format: uri
+          example: https://api.pagerduty.com/v3/schedules/PL5FQHC
+        html_url:
+          type: string
+          format: uri
+          example: https://example.pagerduty.com/schedules/PL5FQHC
+    Reference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        label:
+          type: string
+          description: The label of the tag.
+          maxLength: 191
+      required:
+        - label
+        - type
+      example:
+        type: tag
+        label: Batman
+  responses:
+    ArgumentError:
+      description: Caller provided invalid arguments. Please review the response for error details. Retrying with the same arguments will *not* work.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Unauthorized:
+      description: |
+        Caller did not supply credentials or did not provide the correct credentials.
+        If you are using an API key, it may be invalid or your Authorization header may be malformed.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Forbidden:
+      description: |
+        Caller is not authorized to view the requested resource.
+        While your authentication is valid, the authenticated user or token does not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    TooManyRequests:
+      description: Too many requests have been made, the rate limit has been reached.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Conflict:
+      description: The request conflicts with the current state of the server.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+  parameters:
+    time_zone:
+      name: time_zone
+      in: query
+      description: Time zone in which results will be rendered. This will default to the account time zone.
+      schema:
+        type: string
+        format: tzinfo
+    offset_limit:
+      name: limit
+      in: query
+      required: false
+      description: The number of results per page.
+      schema:
+        type: integer
+    offset_offset:
+      name: offset
+      in: query
+      required: false
+      description: Offset to start pagination search results.
+      schema:
+        type: integer
+    offset_total:
+      name: total
+      in: query
+      required: false
+      description: |
+        By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.
+
+        See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information.
+      schema:
+        default: false
+        type: boolean
+    include_oncalls:
+      name: include[]
+      in: query
+      description: Array of additional details to include.
+      explode: true
+      schema:
+        type: string
+        enum:
+          - escalation_policies
+          - users
+          - schedules
+        uniqueItems: true
+    user_ids_oncalls:
+      name: user_ids[]
+      in: query
+      description: Filters the results, showing only on-calls for the specified user IDs.
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+    escalation_policy_ids_oncalls:
+      name: escalation_policy_ids[]
+      in: query
+      description: Filters the results, showing only on-calls for the specified escalation policy IDs.
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+    schedule_ids_oncalls:
+      name: schedule_ids[]
+      in: query
+      description: Filters the results, showing only on-calls for the specified schedule IDs. If `null` is provided in the array, it includes permanent on-calls due to direct user escalation targets.
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+    since_oncalls:
+      name: since
+      in: query
+      description: The start of the time range over which you want to search. If an on-call period overlaps with the range, it will be included in the result. Defaults to current time. On-call shifts are limited to 90 days in the future.
+      schema:
+        type: string
+        format: date-time
+    until_oncalls:
+      name: until
+      in: query
+      description: The end of the time range over which you want to search. If an on-call period overlaps with the range, it will be included in the result. Defaults to current time. On-call shifts are limited to 90 days in the future, and the `until` time cannot be before the `since` time.
+      schema:
+        type: string
+        format: date-time
+    earliest_oncalls:
+      name: earliest
+      in: query
+      description: This will filter on-calls such that only the earliest on-call for each combination of escalation policy, escalation level, and user is returned. This is useful for determining when the "next" on-calls are for a given set of filters.
+      schema:
+        type: boolean
+servers:
+  - url: https://api.pagerduty.com
+    description: PagerDuty V2 API.

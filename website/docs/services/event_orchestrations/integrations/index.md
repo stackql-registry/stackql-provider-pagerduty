@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>integrations</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>integrations</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="integrations" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.event_orchestrations.integrations" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists an <code>integrations</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_orchestration_integration"
+    defaultValue="get"
     values={[
-        { label: 'get_orchestration_integration', value: 'get_orchestration_integration' },
-        { label: 'list_orchestration_integrations', value: 'list_orchestration_integrations' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_orchestration_integration">
+<TabItem value="get">
 
 An Integration for this Event Orchestration.
 
@@ -69,7 +70,7 @@ An Integration for this Event Orchestration.
 </tbody>
 </table>
 </TabItem>
-<TabItem value="list_orchestration_integrations">
+<TabItem value="list">
 
 The Integrations for this Event Orchestration.
 
@@ -118,60 +119,46 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_orchestration_integration"><CopyableCode code="get_orchestration_integration" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-integration_id"><code>integration_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get an Integration associated with this Event Orchestrations.<br /><br />You can use the Routing Key from this Integration to send events to PagerDuty!<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.read`<br /></td>
+    <td></td>
+    <td>Get an Integration associated with this Event Orchestrations.&lt;br /&gt;&lt;br /&gt;You can use the Routing Key from this Integration to send events to PagerDuty!&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#list_orchestration_integrations"><CopyableCode code="list_orchestration_integrations" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>List the Integrations associated with this Event Orchestrations.<br /><br />You can use a Routing Key from these Integrations to send events to PagerDuty!<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.read`<br /></td>
+    <td></td>
+    <td>List the Integrations associated with this Event Orchestrations.&lt;br /&gt;&lt;br /&gt;You can use a Routing Key from these Integrations to send events to PagerDuty!&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#delete_orchestration_integration"><CopyableCode code="delete_orchestration_integration" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
+    <td><CopyableCode code="insert" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-integration"><code>integration</code></a></td>
+    <td></td>
+    <td>Create an Integration associated with this Event Orchestration.&lt;br /&gt;&lt;br /&gt;You can then use the Routing Key from this new Integration to send events to PagerDuty!&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.write`&lt;br /&gt;</td>
+</tr>
+<tr>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-integration_id"><code>integration_id</code></a>, <a href="#parameter-integration"><code>integration</code></a></td>
+    <td></td>
+    <td>Update an Integration associated with this Event Orchestrations.&lt;br /&gt;&lt;br /&gt;You can use the Routing Key from this Integration to send events to PagerDuty!&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.write`&lt;br /&gt;</td>
+</tr>
+<tr>
+    <td><a href="#delete"><CopyableCode code="delete" /></a></td>
     <td><CopyableCode code="delete" /></td>
     <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-integration_id"><code>integration_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Delete an Integration and its associated Routing Key.<br /><br />Once deleted, PagerDuty will drop all future events sent to PagerDuty using the Routing Key.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.write`<br /></td>
+    <td></td>
+    <td>Delete an Integration and its associated Routing Key.&lt;br /&gt;&lt;br /&gt;Once deleted, PagerDuty will drop all future events sent to PagerDuty using the Routing Key.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#_list_orchestration_integrations"><CopyableCode code="_list_orchestration_integrations" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>List the Integrations associated with this Event Orchestrations.<br /><br />You can use a Routing Key from these Integrations to send events to PagerDuty!<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#post_orchestration_integration"><CopyableCode code="post_orchestration_integration" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-integration"><code>integration</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Create an Integration associated with this Event Orchestration.<br /><br />You can then use the Routing Key from this new Integration to send events to PagerDuty!<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_orchestration_integration"><CopyableCode code="_get_orchestration_integration" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-integration_id"><code>integration_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get an Integration associated with this Event Orchestrations.<br /><br />You can use the Routing Key from this Integration to send events to PagerDuty!<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#update_orchestration_integration"><CopyableCode code="update_orchestration_integration" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-integration_id"><code>integration_id</code></a>, <a href="#parameter-integration"><code>integration</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Update an Integration associated with this Event Orchestrations.<br /><br />You can use the Routing Key from this Integration to send events to PagerDuty!<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#migrate_orchestration_integration"><CopyableCode code="migrate_orchestration_integration" /></a></td>
+    <td><a href="#migrate"><CopyableCode code="migrate" /></a></td>
     <td><CopyableCode code="exec" /></td>
     <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-source_id"><code>source_id</code></a>, <a href="#parameter-source_type"><code>source_type</code></a>, <a href="#parameter-integration_id"><code>integration_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Move an Integration and its Routing Key from the Event Orchestration specified in the request payload, to the Event Orchestration specified in the request URL.<br /><br />Any future events sent to this Integration's Routing Key will be processed by this Event Orchestration's Rules.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.write`<br /></td>
+    <td></td>
+    <td>Move an Integration and its Routing Key from the Event Orchestration specified in the request payload, to the Event Orchestration specified in the request URL.&lt;br /&gt;&lt;br /&gt;Any future events sent to this Integration's Routing Key will be processed by this Event Orchestration's Rules.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -199,31 +186,21 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The ID of an Integration.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 </tbody>
 </table>
 
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_orchestration_integration"
+    defaultValue="get"
     values={[
-        { label: 'get_orchestration_integration', value: 'get_orchestration_integration' },
-        { label: 'list_orchestration_integrations', value: 'list_orchestration_integrations' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_orchestration_integration">
+<TabItem value="get">
 
-Get an Integration associated with this Event Orchestrations.<br /><br />You can use the Routing Key from this Integration to send events to PagerDuty!<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.read`<br />
+Get an Integration associated with this Event Orchestrations.&lt;br /&gt;&lt;br /&gt;You can use the Routing Key from this Integration to send events to PagerDuty!&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -233,14 +210,12 @@ parameters
 FROM pagerduty.event_orchestrations.integrations
 WHERE id = '{{ id }}' -- required
 AND integration_id = '{{ integration_id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
-<TabItem value="list_orchestration_integrations">
+<TabItem value="list">
 
-List the Integrations associated with this Event Orchestrations.<br /><br />You can use a Routing Key from these Integrations to send events to PagerDuty!<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.read`<br />
+List the Integrations associated with this Event Orchestrations.&lt;br /&gt;&lt;br /&gt;You can use a Routing Key from these Integrations to send events to PagerDuty!&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -249,9 +224,77 @@ label,
 parameters
 FROM pagerduty.event_orchestrations.integrations
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
+```
+</TabItem>
+</Tabs>
+
+
+## `INSERT` examples
+
+<Tabs
+    defaultValue="create"
+    values={[
+        { label: 'create', value: 'create' },
+        { label: 'Manifest', value: 'manifest' }
+    ]}
+>
+<TabItem value="create">
+
+Create an Integration associated with this Event Orchestration.&lt;br /&gt;&lt;br /&gt;You can then use the Routing Key from this new Integration to send events to PagerDuty!&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.write`&lt;br /&gt;
+
+```sql
+INSERT INTO pagerduty.event_orchestrations.integrations (
+integration,
+id
+)
+SELECT 
+'{{ integration }}' /* required */,
+'{{ id }}'
+RETURNING
+integration
+;
+```
+</TabItem>
+<TabItem value="manifest">
+
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
+- name: integrations
+  props:
+    - name: id
+      value: "{{ id }}"
+      description: Required parameter for the integrations resource.
+    - name: integration
+      value:
+        label: "{{ label }}"
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
+
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Update an Integration associated with this Event Orchestrations.&lt;br /&gt;&lt;br /&gt;You can use the Routing Key from this Integration to send events to PagerDuty!&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.write`&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.event_orchestrations.integrations
+SET 
+integration = '{{ integration }}'
+WHERE 
+id = '{{ id }}' --required
+AND integration_id = '{{ integration_id }}' --required
+AND integration = '{{ integration }}' --required
+RETURNING
+integration;
 ```
 </TabItem>
 </Tabs>
@@ -260,21 +303,19 @@ AND Content-Type = '{{ Content-Type }}'
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="delete_orchestration_integration"
+    defaultValue="delete"
     values={[
-        { label: 'delete_orchestration_integration', value: 'delete_orchestration_integration' }
+        { label: 'delete', value: 'delete' }
     ]}
 >
-<TabItem value="delete_orchestration_integration">
+<TabItem value="delete">
 
-Delete an Integration and its associated Routing Key.<br /><br />Once deleted, PagerDuty will drop all future events sent to PagerDuty using the Routing Key.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.write`<br />
+Delete an Integration and its associated Routing Key.&lt;br /&gt;&lt;br /&gt;Once deleted, PagerDuty will drop all future events sent to PagerDuty using the Routing Key.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.write`&lt;br /&gt;
 
 ```sql
 DELETE FROM pagerduty.event_orchestrations.integrations
 WHERE id = '{{ id }}' --required
 AND integration_id = '{{ integration_id }}' --required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
@@ -284,82 +325,18 @@ AND Content-Type = '{{ Content-Type }}'
 ## Lifecycle Methods
 
 <Tabs
-    defaultValue="_list_orchestration_integrations"
+    defaultValue="migrate"
     values={[
-        { label: '_list_orchestration_integrations', value: '_list_orchestration_integrations' },
-        { label: 'post_orchestration_integration', value: 'post_orchestration_integration' },
-        { label: '_get_orchestration_integration', value: '_get_orchestration_integration' },
-        { label: 'update_orchestration_integration', value: 'update_orchestration_integration' },
-        { label: 'migrate_orchestration_integration', value: 'migrate_orchestration_integration' }
+        { label: 'migrate', value: 'migrate' }
     ]}
 >
-<TabItem value="_list_orchestration_integrations">
+<TabItem value="migrate">
 
-List the Integrations associated with this Event Orchestrations.<br /><br />You can use a Routing Key from these Integrations to send events to PagerDuty!<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.read`<br />
-
-```sql
-EXEC pagerduty.event_orchestrations.integrations._list_orchestration_integrations 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
-;
-```
-</TabItem>
-<TabItem value="post_orchestration_integration">
-
-Create an Integration associated with this Event Orchestration.<br /><br />You can then use the Routing Key from this new Integration to send events to PagerDuty!<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.write`<br />
+Move an Integration and its Routing Key from the Event Orchestration specified in the request payload, to the Event Orchestration specified in the request URL.&lt;br /&gt;&lt;br /&gt;Any future events sent to this Integration's Routing Key will be processed by this Event Orchestration's Rules.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `event_orchestrations.write`&lt;br /&gt;
 
 ```sql
-EXEC pagerduty.event_orchestrations.integrations.post_orchestration_integration 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"integration": "{{ integration }}"
-}'
-;
-```
-</TabItem>
-<TabItem value="_get_orchestration_integration">
-
-Get an Integration associated with this Event Orchestrations.<br /><br />You can use the Routing Key from this Integration to send events to PagerDuty!<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.read`<br />
-
-```sql
-EXEC pagerduty.event_orchestrations.integrations._get_orchestration_integration 
-@id='{{ id }}' --required, 
-@integration_id='{{ integration_id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
-;
-```
-</TabItem>
-<TabItem value="update_orchestration_integration">
-
-Update an Integration associated with this Event Orchestrations.<br /><br />You can use the Routing Key from this Integration to send events to PagerDuty!<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.write`<br />
-
-```sql
-EXEC pagerduty.event_orchestrations.integrations.update_orchestration_integration 
-@id='{{ id }}' --required, 
-@integration_id='{{ integration_id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"integration": "{{ integration }}"
-}'
-;
-```
-</TabItem>
-<TabItem value="migrate_orchestration_integration">
-
-Move an Integration and its Routing Key from the Event Orchestration specified in the request payload, to the Event Orchestration specified in the request URL.<br /><br />Any future events sent to this Integration's Routing Key will be processed by this Event Orchestration's Rules.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#event-orchestrations)<br /><br />Scoped OAuth requires: `event_orchestrations.write`<br />
-
-```sql
-EXEC pagerduty.event_orchestrations.integrations.migrate_orchestration_integration 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
+EXEC pagerduty.event_orchestrations.integrations.migrate 
+@id='{{ id }}' --required 
 @@json=
 '{
 "source_id": "{{ source_id }}", 

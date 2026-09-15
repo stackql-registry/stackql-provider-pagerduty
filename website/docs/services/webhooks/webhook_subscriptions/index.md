@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>webhook_subscriptions</code> re
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>webhook_subscriptions</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="webhook_subscriptions" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.webhooks.webhook_subscriptions" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>webhook_subscriptions</code> re
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_webhook_subscription"
+    defaultValue="get"
     values={[
-        { label: 'get_webhook_subscription', value: 'get_webhook_subscription' },
-        { label: 'list_webhook_subscriptions', value: 'list_webhook_subscriptions' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_webhook_subscription">
+<TabItem value="get">
 
 The webhook subscription that was requested.
 
@@ -82,14 +83,19 @@ The webhook subscription that was requested.
     <td></td>
 </tr>
 <tr>
+    <td><CopyableCode code="oauth_client" /></td>
+    <td><code>object</code></td>
+    <td>OAuth client details. This field is populated in responses when oauth_client_id is set.</td>
+</tr>
+<tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type indicating the schema of the object. (default: webhook_subscription)</td>
+    <td>The type indicating the schema of the object. (webhook_subscription) (default: webhook_subscription)</td>
 </tr>
 </tbody>
 </table>
 </TabItem>
-<TabItem value="list_webhook_subscriptions">
+<TabItem value="list">
 
 A set of webhook subscriptions matching the request.
 
@@ -133,9 +139,14 @@ A set of webhook subscriptions matching the request.
     <td></td>
 </tr>
 <tr>
+    <td><CopyableCode code="oauth_client" /></td>
+    <td><code>object</code></td>
+    <td>OAuth client details. This field is populated in responses when oauth_client_id is set.</td>
+</tr>
+<tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type indicating the schema of the object. (default: webhook_subscription)</td>
+    <td>The type indicating the schema of the object. (webhook_subscription) (default: webhook_subscription)</td>
 </tr>
 </tbody>
 </table>
@@ -158,67 +169,53 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_webhook_subscription"><CopyableCode code="get_webhook_subscription" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a></td>
-    <td>Gets details about an existing webhook subscription.<br /></td>
+    <td></td>
+    <td>Gets details about an existing webhook subscription.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `webhook_subscriptions.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#list_webhook_subscriptions"><CopyableCode code="list_webhook_subscriptions" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-filter_type"><code>filter_type</code></a>, <a href="#parameter-filter_id"><code>filter_id</code></a></td>
-    <td>List existing webhook subscriptions.<br /><br />The `filter_type` and `filter_id` query parameters may be used to only show subscriptions<br />for a particular _service_ or _team_.<br /><br />For more information on webhook subscriptions and how they are used to configure v3 webhooks<br />see the [Webhooks v3 Developer Documentation](https://developer.pagerduty.com/docs/webhooks/v3-overview/).<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-filter_type"><code>filter_type</code></a>, <a href="#parameter-filter_id"><code>filter_id</code></a></td>
+    <td>List existing webhook subscriptions.&lt;br /&gt;&lt;br /&gt;The `filter_type` and `filter_id` query parameters may be used to only show subscriptions&lt;br /&gt;for a particular _service_ or _team_.&lt;br /&gt;&lt;br /&gt;For more information on webhook subscriptions and how they are used to configure v3 webhooks&lt;br /&gt;see the &#91;Webhooks v3 Developer Documentation&#93;(https:​//developer.pagerduty.com/docs/webhooks/v3-overview/).&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `webhook_subscriptions.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_webhook_subscription"><CopyableCode code="create_webhook_subscription" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-data__webhook_subscription"><code>data__webhook_subscription</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Creates a new webhook subscription.<br /><br />For more information on webhook subscriptions and how they are used to configure v3 webhooks<br />see the [Webhooks v3 Developer Documentation](https://developer.pagerduty.com/docs/webhooks/v3-overview/).<br /></td>
+    <td><a href="#parameter-webhook_subscription"><code>webhook_subscription</code></a></td>
+    <td></td>
+    <td>Creates a new webhook subscription.&lt;br /&gt;&lt;br /&gt;For more information on webhook subscriptions and how they are used to configure v3 webhooks&lt;br /&gt;see the &#91;Webhooks v3 Developer Documentation&#93;(https:​//developer.pagerduty.com/docs/webhooks/v3-overview/).&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `webhook_subscriptions.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#delete_webhook_subscription"><CopyableCode code="delete_webhook_subscription" /></a></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a></td>
+    <td></td>
+    <td>Updates an existing webhook subscription.&lt;br /&gt;&lt;br /&gt;Only the fields being updated need to be included on the request.  This operation does not&lt;br /&gt;support updating the `delivery_method` of the webhook subscription.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `webhook_subscriptions.write`&lt;br /&gt;</td>
+</tr>
+<tr>
+    <td><a href="#delete"><CopyableCode code="delete" /></a></td>
     <td><CopyableCode code="delete" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a></td>
-    <td>Deletes a webhook subscription.<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_webhook_subscriptions"><CopyableCode code="_list_webhook_subscriptions" /></a></td>
-    <td><CopyableCode code="exec" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-filter_type"><code>filter_type</code></a>, <a href="#parameter-filter_id"><code>filter_id</code></a></td>
-    <td>List existing webhook subscriptions.<br /><br />The `filter_type` and `filter_id` query parameters may be used to only show subscriptions<br />for a particular _service_ or _team_.<br /><br />For more information on webhook subscriptions and how they are used to configure v3 webhooks<br />see the [Webhooks v3 Developer Documentation](https://developer.pagerduty.com/docs/webhooks/v3-overview/).<br /></td>
+    <td>Deletes a webhook subscription.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `webhook_subscriptions.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#_get_webhook_subscription"><CopyableCode code="_get_webhook_subscription" /></a></td>
+    <td><a href="#enable"><CopyableCode code="enable" /></a></td>
     <td><CopyableCode code="exec" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a></td>
-    <td>Gets details about an existing webhook subscription.<br /></td>
+    <td></td>
+    <td>Enable a webhook subscription that is temporarily disabled. (This API does not require a request body.)&lt;br /&gt;&lt;br /&gt;Webhook subscriptions can become temporarily disabled when the subscription's delivery method is repeatedly rejected by the server.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `webhook_subscriptions.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#update_webhook_subscription"><CopyableCode code="update_webhook_subscription" /></a></td>
+    <td><a href="#ping"><CopyableCode code="ping" /></a></td>
     <td><CopyableCode code="exec" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Updates an existing webhook subscription.<br /><br />Only the fields being updated need to be included on the request.  This operation does not<br />support updating the `delivery_method` of the webhook subscription.<br /></td>
-</tr>
-<tr>
-    <td><a href="#enable_webhook_subscription"><CopyableCode code="enable_webhook_subscription" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a></td>
-    <td>Enable a webhook subscription that is temporarily disabled. (This API does not require a request body.)<br /><br />Webhook subscriptions can become temporarily disabled when the subscription's delivery method is repeatedly rejected by the server.<br /></td>
-</tr>
-<tr>
-    <td><a href="#test_webhook_subscription"><CopyableCode code="test_webhook_subscription" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a></td>
-    <td>Test a webhook subscription.<br /><br />Fires a test event against the webhook subscription.  If properly configured,<br />this will deliver the `pagey.ping` webhook event to the destination.<br /></td>
+    <td></td>
+    <td>Test a webhook subscription.&lt;br /&gt;&lt;br /&gt;Fires a test event against the webhook subscription.  If properly configured,&lt;br /&gt;this will deliver the `pagey.ping` webhook event to the destination.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `webhook_subscriptions.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -241,20 +238,10 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 <tr id="parameter-filter_id">
     <td><CopyableCode code="filter_id" /></td>
     <td><code>string</code></td>
-    <td>The id of the resource to filter upon.</td>
+    <td>The id of the resource to filter upon. Required if filter_type is service or team.</td>
 </tr>
 <tr id="parameter-filter_type">
     <td><CopyableCode code="filter_type" /></td>
@@ -274,7 +261,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-total">
     <td><CopyableCode code="total" /></td>
     <td><code>boolean</code></td>
-    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
+    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our &#91;Pagination Docs&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
 </tr>
 </tbody>
 </table>
@@ -282,15 +269,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_webhook_subscription"
+    defaultValue="get"
     values={[
-        { label: 'get_webhook_subscription', value: 'get_webhook_subscription' },
-        { label: 'list_webhook_subscriptions', value: 'list_webhook_subscriptions' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_webhook_subscription">
+<TabItem value="get">
 
-Gets details about an existing webhook subscription.<br />
+Gets details about an existing webhook subscription.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `webhook_subscriptions.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -300,16 +287,16 @@ delivery_method,
 description,
 events,
 filter,
+oauth_client,
 type
 FROM pagerduty.webhooks.webhook_subscriptions
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
 ;
 ```
 </TabItem>
-<TabItem value="list_webhook_subscriptions">
+<TabItem value="list">
 
-List existing webhook subscriptions.<br /><br />The `filter_type` and `filter_id` query parameters may be used to only show subscriptions<br />for a particular _service_ or _team_.<br /><br />For more information on webhook subscriptions and how they are used to configure v3 webhooks<br />see the [Webhooks v3 Developer Documentation](https://developer.pagerduty.com/docs/webhooks/v3-overview/).<br />
+List existing webhook subscriptions.&lt;br /&gt;&lt;br /&gt;The `filter_type` and `filter_id` query parameters may be used to only show subscriptions&lt;br /&gt;for a particular _service_ or _team_.&lt;br /&gt;&lt;br /&gt;For more information on webhook subscriptions and how they are used to configure v3 webhooks&lt;br /&gt;see the &#91;Webhooks v3 Developer Documentation&#93;(https:​//developer.pagerduty.com/docs/webhooks/v3-overview/).&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `webhook_subscriptions.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -319,10 +306,10 @@ delivery_method,
 description,
 events,
 filter,
+oauth_client,
 type
 FROM pagerduty.webhooks.webhook_subscriptions
-WHERE Accept = '{{ Accept }}'
-AND limit = '{{ limit }}'
+WHERE limit = '{{ limit }}'
 AND offset = '{{ offset }}'
 AND total = '{{ total }}'
 AND filter_type = '{{ filter_type }}'
@@ -336,26 +323,22 @@ AND filter_id = '{{ filter_id }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_webhook_subscription"
+    defaultValue="create"
     values={[
-        { label: 'create_webhook_subscription', value: 'create_webhook_subscription' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_webhook_subscription">
+<TabItem value="create">
 
-Creates a new webhook subscription.<br /><br />For more information on webhook subscriptions and how they are used to configure v3 webhooks<br />see the [Webhooks v3 Developer Documentation](https://developer.pagerduty.com/docs/webhooks/v3-overview/).<br />
+Creates a new webhook subscription.&lt;br /&gt;&lt;br /&gt;For more information on webhook subscriptions and how they are used to configure v3 webhooks&lt;br /&gt;see the &#91;Webhooks v3 Developer Documentation&#93;(https:​//developer.pagerduty.com/docs/webhooks/v3-overview/).&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `webhook_subscriptions.write`&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.webhooks.webhook_subscriptions (
-data__webhook_subscription,
-Accept,
-Content-Type
+webhook_subscription
 )
 SELECT 
-'{{ webhook_subscription }}' /* required */,
-'{{ Accept }}',
-'{{ Content-Type }}'
+'{{ webhook_subscription }}' /* required */
 RETURNING
 webhook_subscription
 ;
@@ -363,17 +346,59 @@ webhook_subscription
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: webhook_subscriptions
   props:
     - name: webhook_subscription
-      value: object
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-    - name: Content-Type
-      value: string
+      value:
+        id: "{{ id }}"
+        type: "{{ type }}"
+        active: {{ active }}
+        delivery_method:
+          id: "{{ id }}"
+          secret: "{{ secret }}"
+          temporarily_disabled: {{ temporarily_disabled }}
+          type: "{{ type }}"
+          url: "{{ url }}"
+          custom_headers:
+            - name: "{{ name }}"
+              value: "{{ value }}"
+        description: "{{ description }}"
+        events:
+          - "{{ events }}"
+        filter:
+          id: "{{ id }}"
+          type: "{{ type }}"
+        oauth_client:
+          id: "{{ id }}"
+          type: "{{ type }}"
+          summary: "{{ summary }}"
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
+
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Updates an existing webhook subscription.&lt;br /&gt;&lt;br /&gt;Only the fields being updated need to be included on the request.  This operation does not&lt;br /&gt;support updating the `delivery_method` of the webhook subscription.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `webhook_subscriptions.write`&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.webhooks.webhook_subscriptions
+SET 
+webhook_subscription = '{{ webhook_subscription }}'
+WHERE 
+id = '{{ id }}' --required
+RETURNING
+webhook_subscription;
 ```
 </TabItem>
 </Tabs>
@@ -382,19 +407,18 @@ webhook_subscription
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="delete_webhook_subscription"
+    defaultValue="delete"
     values={[
-        { label: 'delete_webhook_subscription', value: 'delete_webhook_subscription' }
+        { label: 'delete', value: 'delete' }
     ]}
 >
-<TabItem value="delete_webhook_subscription">
+<TabItem value="delete">
 
-Deletes a webhook subscription.<br />
+Deletes a webhook subscription.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `webhook_subscriptions.write`&lt;br /&gt;
 
 ```sql
 DELETE FROM pagerduty.webhooks.webhook_subscriptions
 WHERE id = '{{ id }}' --required
-AND Accept = '{{ Accept }}'
 ;
 ```
 </TabItem>
@@ -404,76 +428,29 @@ AND Accept = '{{ Accept }}'
 ## Lifecycle Methods
 
 <Tabs
-    defaultValue="_list_webhook_subscriptions"
+    defaultValue="enable"
     values={[
-        { label: '_list_webhook_subscriptions', value: '_list_webhook_subscriptions' },
-        { label: '_get_webhook_subscription', value: '_get_webhook_subscription' },
-        { label: 'update_webhook_subscription', value: 'update_webhook_subscription' },
-        { label: 'enable_webhook_subscription', value: 'enable_webhook_subscription' },
-        { label: 'test_webhook_subscription', value: 'test_webhook_subscription' }
+        { label: 'enable', value: 'enable' },
+        { label: 'ping', value: 'ping' }
     ]}
 >
-<TabItem value="_list_webhook_subscriptions">
+<TabItem value="enable">
 
-List existing webhook subscriptions.<br /><br />The `filter_type` and `filter_id` query parameters may be used to only show subscriptions<br />for a particular _service_ or _team_.<br /><br />For more information on webhook subscriptions and how they are used to configure v3 webhooks<br />see the [Webhooks v3 Developer Documentation](https://developer.pagerduty.com/docs/webhooks/v3-overview/).<br />
+Enable a webhook subscription that is temporarily disabled. (This API does not require a request body.)&lt;br /&gt;&lt;br /&gt;Webhook subscriptions can become temporarily disabled when the subscription's delivery method is repeatedly rejected by the server.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `webhook_subscriptions.write`&lt;br /&gt;
 
 ```sql
-EXEC pagerduty.webhooks.webhook_subscriptions._list_webhook_subscriptions 
-@Accept='{{ Accept }}', 
-@limit='{{ limit }}', 
-@offset='{{ offset }}', 
-@total={{ total }}, 
-@filter_type='{{ filter_type }}', 
-@filter_id='{{ filter_id }}'
+EXEC pagerduty.webhooks.webhook_subscriptions.enable 
+@id='{{ id }}' --required
 ;
 ```
 </TabItem>
-<TabItem value="_get_webhook_subscription">
+<TabItem value="ping">
 
-Gets details about an existing webhook subscription.<br />
-
-```sql
-EXEC pagerduty.webhooks.webhook_subscriptions._get_webhook_subscription 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}'
-;
-```
-</TabItem>
-<TabItem value="update_webhook_subscription">
-
-Updates an existing webhook subscription.<br /><br />Only the fields being updated need to be included on the request.  This operation does not<br />support updating the `delivery_method` of the webhook subscription.<br />
+Test a webhook subscription.&lt;br /&gt;&lt;br /&gt;Fires a test event against the webhook subscription.  If properly configured,&lt;br /&gt;this will deliver the `pagey.ping` webhook event to the destination.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `webhook_subscriptions.write`&lt;br /&gt;
 
 ```sql
-EXEC pagerduty.webhooks.webhook_subscriptions.update_webhook_subscription 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"webhook_subscription": "{{ webhook_subscription }}"
-}'
-;
-```
-</TabItem>
-<TabItem value="enable_webhook_subscription">
-
-Enable a webhook subscription that is temporarily disabled. (This API does not require a request body.)<br /><br />Webhook subscriptions can become temporarily disabled when the subscription's delivery method is repeatedly rejected by the server.<br />
-
-```sql
-EXEC pagerduty.webhooks.webhook_subscriptions.enable_webhook_subscription 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}'
-;
-```
-</TabItem>
-<TabItem value="test_webhook_subscription">
-
-Test a webhook subscription.<br /><br />Fires a test event against the webhook subscription.  If properly configured,<br />this will deliver the `pagey.ping` webhook event to the destination.<br />
-
-```sql
-EXEC pagerduty.webhooks.webhook_subscriptions.test_webhook_subscription 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}'
+EXEC pagerduty.webhooks.webhook_subscriptions.ping 
+@id='{{ id }}' --required
 ;
 ```
 </TabItem>

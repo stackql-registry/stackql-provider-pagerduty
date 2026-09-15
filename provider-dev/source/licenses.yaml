@@ -1,0 +1,532 @@
+openapi: 3.0.2
+info:
+  title: PagerDuty API - Licenses
+  description: Licenses and license allocations for the account.
+  version: 2.0.0
+paths:
+  /license_allocations:
+    get:
+      x-pd-requires-scope: licenses.read
+      tags:
+        - Licenses
+      operationId: listLicenseAllocations
+      description: |
+        List the Licenses allocated to Users within your Account
+
+        Scoped OAuth requires: `licenses.read`
+      summary: List License Allocations
+      parameters:
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+      responses:
+        '200':
+          description: License allocations to Users within your Account
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  license_allocations:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - user
+                        - license
+                        - allocated_at
+                      properties:
+                        user:
+                          $ref: '#/components/schemas/UserReference'
+                        license:
+                          type: object
+                          required:
+                            - id
+                            - description
+                            - name
+                            - valid_roles
+                          properties:
+                            id:
+                              type: string
+                              description: Uniquely identifies the resource
+                            description:
+                              type: string
+                              description: |
+                                Description of the License. May include the names of add-ons associated with
+                                the License, if there are any.
+                            name:
+                              type: string
+                              description: |
+                                Name of the License.
+                            valid_roles:
+                              type: array
+                              description: The roles a User with this License can have
+                              items:
+                                type: string
+                            role_group:
+                              type: string
+                              enum:
+                                - FullUser
+                                - Stakeholder
+                              description: Indicates whether this License is assignable to full or stakeholder Users
+                              example: FullUser
+                            type:
+                              type: string
+                              description: Type of object
+                            self:
+                              type: string
+                              description: API URL to access the License
+                            html_url:
+                              type: string
+                              description: HTML URL to access the License
+                            summary:
+                              type: string
+                              description: Summary of the License
+                        allocated_at:
+                          type: string
+                          description: Indicates the date and time the License was allocated to the User
+                          format: date-time
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    license_allocations:
+                      - license:
+                          id: PIP248G
+                          name: Business (Full User)
+                          description: Event Intelligence
+                          valid_roles:
+                            - owner
+                            - admin
+                            - user
+                            - limited_user
+                            - observer
+                            - restricted_access
+                          role_group: FullUser
+                          summary: Business (Full User)
+                          type: license
+                          self: null
+                          html_url: null
+                        user:
+                          id: PIP248H
+                          type: user_reference
+                        allocated_at: '2021-06-01T00:00:00-05:00'
+                    offset: 0
+                    limit: 1
+                    more: false
+                    total: 2
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    description: The Licenses allocated to Users within your Account
+  /licenses:
+    get:
+      x-pd-requires-scope: licenses.read
+      tags:
+        - Licenses
+      operationId: listLicenses
+      description: |
+        List the Licenses associated with your Account
+
+        Scoped OAuth requires: `licenses.read`
+      summary: List Licenses
+      parameters: []
+      responses:
+        '200':
+          description: Licenses associated with your Account
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  licenses:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LicenseWithCounts'
+              examples:
+                response:
+                  summary: Example Response
+                  value:
+                    licenses:
+                      - id: PIP248G
+                        name: Business (Full User)
+                        description: Event Intelligence
+                        current_value: 234
+                        allocations_available: 4766
+                        valid_roles:
+                          - owner
+                          - admin
+                          - user
+                          - limited_user
+                          - observer
+                          - restricted_access
+                        role_group: FullUser
+                        summary: Business (Full User)
+                        type: license
+                        self: null
+                        html_url: null
+                      - id: PTHH1SQ
+                        name: Business (Full User)
+                        description: ''
+                        current_value: 0
+                        allocations_available: 4766
+                        valid_roles:
+                          - owner
+                          - admin
+                          - user
+                          - limited_user
+                          - observer
+                          - restricted_access
+                        role_group: FullUser
+                        summary: Business (Full User)
+                        type: license
+                        self: null
+                        html_url: null
+                      - id: PQ8W0D0
+                        name: Business (Stakeholder)
+                        description: ''
+                        current_value: 48
+                        allocations_available: 4952
+                        valid_roles:
+                          - read_only_user
+                          - read_only_limited_user
+                        role_group: Stakeholder
+                        summary: Business (Stakeholder)
+                        type: license
+                        self: null
+                        html_url: null
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    description: The Licenses associated with your Account
+components:
+  schemas:
+    UserReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    LicenseWithCounts:
+      type: object
+      required:
+        - id
+        - description
+        - name
+        - valid_roles
+      properties:
+        id:
+          type: string
+          description: Uniquely identifies the resource
+        description:
+          type: string
+          description: |
+            Description of the License. May include the names of add-ons associated with
+            the License, if there are any.
+        name:
+          type: string
+          description: |
+            Name of the License.
+        valid_roles:
+          type: array
+          description: The roles a User with this License can have
+          items:
+            type: string
+        role_group:
+          type: string
+          enum:
+            - FullUser
+            - Stakeholder
+          description: Indicates whether this License is assignable to full or stakeholder Users
+          example: FullUser
+        type:
+          type: string
+          description: Type of object
+        self:
+          type: string
+          description: API URL to access the License
+        html_url:
+          type: string
+          description: HTML URL to access the License
+        summary:
+          type: string
+          description: Summary of the License
+        current_value:
+          type: integer
+          description: How many of these Licenses are currently allocated to Users
+        allocations_available:
+          type: integer
+          nullable: true
+          description: |
+            How many of these licenses are available to be allocated to a user. If this
+            value is "null" then there is no limit on the number of allocations allowed.
+    Pagination:
+      type: object
+      properties:
+        offset:
+          type: integer
+          description: Echoes offset pagination property.
+          readOnly: true
+        limit:
+          type: integer
+          description: Echoes limit pagination property.
+          readOnly: true
+        more:
+          type: boolean
+          description: Indicates if there are additional records to return
+          readOnly: true
+        total:
+          type: integer
+          description: The total number of records matching the given query.
+          nullable: true
+          readOnly: true
+    Reference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        label:
+          type: string
+          description: The label of the tag.
+          maxLength: 191
+      required:
+        - label
+        - type
+      example:
+        type: tag
+        label: Batman
+  responses:
+    Unauthorized:
+      description: |
+        Caller did not supply credentials or did not provide the correct credentials.
+        If you are using an API key, it may be invalid or your Authorization header may be malformed.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Forbidden:
+      description: |
+        Caller is not authorized to view the requested resource.
+        While your authentication is valid, the authenticated user or token does not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Conflict:
+      description: The request conflicts with the current state of the server.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+  parameters:
+    offset_limit:
+      name: limit
+      in: query
+      required: false
+      description: The number of results per page.
+      schema:
+        type: integer
+    offset_offset:
+      name: offset
+      in: query
+      required: false
+      description: Offset to start pagination search results.
+      schema:
+        type: integer
+servers:
+  - url: https://api.pagerduty.com
+    description: PagerDuty V2 API.

@@ -1,0 +1,1450 @@
+openapi: 3.0.2
+info:
+  title: PagerDuty API - Escalation Policies
+  description: Escalation policies determine who is notified and when for incidents on a service.
+  version: 2.0.0
+paths:
+  /escalation_policies:
+    get:
+      tags:
+        - Escalation Policies
+      x-pd-requires-scope: escalation_policies.read
+      operationId: listEscalationPolicies
+      description: |
+        List all of the existing escalation policies.
+
+        Escalation policies define which user should be alerted at which time.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#escalation-policies)
+
+        Scoped OAuth requires: `escalation_policies.read`
+      summary: List escalation policies
+      parameters:
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/user_ids_escalation_policies'
+        - $ref: '#/components/parameters/team_ids'
+        - $ref: '#/components/parameters/include_escalation_policy'
+        - $ref: '#/components/parameters/sort_by_escalation_policy'
+      responses:
+        '200':
+          description: A paginated array of escalation policy objects.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  escalation_policies:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EscalationPolicy'
+                required:
+                  - escalation_policies
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    escalation_policies:
+                      - id: PANZZEQ
+                        type: escalation_policy
+                        summary: Engineering Escalation Policy
+                        on_call_handoff_notifications: if_has_services
+                        self: https://api.pagerduty.com/escalation_policies/PANZZEQ
+                        html_url: https://subdomain.pagerduty.com/escalation_policies/PANZZEQ
+                        name: Engineering Escalation Policy
+                        escalation_rules:
+                          - id: PANZZEQ
+                            escalation_delay_in_minutes: 30
+                            targets:
+                              - id: PEYSGVF
+                                summary: PagerDuty Admin
+                                type: user_reference
+                                self: https://api.pagerduty.com/users/PEYSGVF
+                                html_url: https://subdomain.pagerduty.com/users/PEYSGVF
+                              - id: PI7DH85
+                                summary: Daily Engineering Rotation
+                                type: schedule_reference
+                                self: https://api.pagerduty.com/schedules/PI7DH85
+                                html_url: https://subdomain.pagerduty.com/schedules/PI7DH85
+                        services:
+                          - id: PIJ90N7
+                            type: service_reference
+                            summary: My Mail Service
+                            self: https://api.pagerduty.com/services/PIJ90N7
+                            html_url: https://subdomain.pagerduty.com/service-directory/PIJ90N7
+                        num_loops: 0
+                        teams:
+                          - id: PQ9K7I8
+                            type: team_reference
+                            summary: Engineering
+                            self: https://api.pagerduty.com/teams/PQ9K7I8
+                            html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                    limit: 25
+                    offset: 0
+                    more: false
+                    total: null
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      tags:
+        - Escalation Policies
+      x-pd-requires-scope: escalation_policies.write
+      operationId: createEscalationPolicy
+      description: |
+        Creates a new escalation policy. At least one escalation rule must be provided.
+
+        Escalation policies define which user should be alerted at which time.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#escalation-policies)
+
+        Scoped OAuth requires: `escalation_policies.write`
+      summary: Create an escalation policy
+      parameters:
+        - $ref: '#/components/parameters/optional_from_header'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                escalation_policy:
+                  $ref: '#/components/schemas/EscalationPolicy'
+              required:
+                - escalation_policy
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  escalation_policy:
+                    type: escalation_policy
+                    name: Engineering Escalation Policy
+                    escalation_rules:
+                      - escalation_delay_in_minutes: 30
+                        targets:
+                          - id: PEYSGVF
+                            type: user_reference
+                        escalation_rule_assignment_strategy:
+                          type: round_robin
+                    services:
+                      - id: PIJ90N7
+                        type: service_reference
+                    num_loops: 2
+                    on_call_handoff_notifications: if_has_services
+                    teams:
+                      - id: PQ9K7I8
+                        type: team_reference
+                    description: Here is the ep for the engineering team.
+        description: The escalation policy to be created.
+      responses:
+        '201':
+          description: The escalation policy that was created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  escalation_policy:
+                    $ref: '#/components/schemas/EscalationPolicy'
+                required:
+                  - escalation_policy
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    escalation_policy:
+                      id: PT20YPA
+                      type: escalation_policy
+                      summary: Engineering Escalation Policy
+                      on_call_handoff_notifications: if_has_services
+                      self: https://api.pagerduty.com/escalation_policies/PT20YPA
+                      html_url: https://subdomain.pagerduty.com/escalation_policies/PT20YPA
+                      name: Engineering Escalation Policy
+                      escalation_rules:
+                        - id: PT20YPA
+                          escalation_delay_in_minutes: 22
+                          targets:
+                            - id: PXPGF42
+                              summary: Earline Greenholt
+                              type: user_reference
+                              self: https://api.pagerduty.com/users/PXPGF42
+                              html_url: https://subdomain.pagerduty.com/users/PXPGF42
+                            - id: PI7DH85
+                              summary: Daily Engineering Rotation
+                              type: schedule_reference
+                              self: https://api.pagerduty.com/schedules/PI7DH85
+                              html_url: https://subdomain.pagerduty.com/schedules/PI7DH85
+                      services:
+                        - id: PIJ90N7
+                          type: service_reference
+                          summary: My Mail Service
+                          self: https://api.pagerduty.com/services/PIJ90N7
+                          html_url: https://subdomain.pagerduty.com/service-directory/PIJ90N7
+                      num_loops: 2
+                      teams:
+                        - id: PQ9K7I8
+                          type: team_reference
+                          summary: Engineering
+                          self: https://api.pagerduty.com/teams/PQ9K7I8
+                          html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: List and create escalation policies.
+  /escalation_policies/{id}:
+    get:
+      tags:
+        - Escalation Policies
+      x-pd-requires-scope: escalation_policies.read
+      operationId: getEscalationPolicy
+      description: |
+        Get information about an existing escalation policy and its rules.
+
+        Escalation policies define which user should be alerted at which time.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#escalation-policies)
+
+        Scoped OAuth requires: `escalation_policies.read`
+      summary: Get an escalation policy
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/include_escalation_policy'
+      responses:
+        '200':
+          description: The escalation policy object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  escalation_policy:
+                    $ref: '#/components/schemas/EscalationPolicy'
+                required:
+                  - escalation_policy
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    escalation_policy:
+                      id: PT20YPA
+                      type: escalation_policy
+                      summary: Another Escalation Policy
+                      on_call_handoff_notifications: if_has_services
+                      self: https://api.pagerduty.com/escalation_policies/PT20YPA
+                      html_url: https://subdomain.pagerduty.com/escalation_policies/PT20YPA
+                      name: Another Escalation Policy
+                      escalation_rules:
+                        - id: PGHDV41
+                          escalation_delay_in_minutes: 30
+                          targets:
+                            - id: PAM4FGS
+                              summary: Kyler Kuhn
+                              type: user_reference
+                              self: https://api.pagerduty.com/users/PAM4FGS
+                              html_url: https://subdomain.pagerduty.com/users/PAM4FGS
+                            - id: PI7DH85
+                              summary: Daily Engineering Rotation
+                              type: schedule_reference
+                              self: https://api.pagerduty.com/schedules/PI7DH85
+                              html_url: https://subdomain.pagerduty.com/schedules/PI7DH85
+                      services:
+                        - id: PIJ90N7
+                          type: service_reference
+                          summary: My Mail Service
+                          self: https://api.pagerduty.com/services/PIJ90N7
+                          html_url: https://subdomain.pagerduty.com/service-directory/PIJ90N7
+                      num_loops: 2
+                      teams:
+                        - id: PQ9K7I8
+                          type: team_reference
+                          summary: Engineering
+                          self: https://api.pagerduty.com/teams/PQ9K7I8
+                          html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                      description: This is yet another escalation policy
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+        - Escalation Policies
+      x-pd-requires-scope: escalation_policies.write
+      operationId: deleteEscalationPolicy
+      description: |
+        Deletes an existing escalation policy and rules. The escalation policy must not be in use by any services.
+
+        Escalation policies define which user should be alerted at which time.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#escalation-policies)
+
+        Scoped OAuth requires: `escalation_policies.write`
+      summary: Delete an escalation policy
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: The escalation policy was deleted successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    put:
+      tags:
+        - Escalation Policies
+      x-pd-requires-scope: escalation_policies.write
+      operationId: updateEscalationPolicy
+      description: |
+        Updates an existing escalation policy and rules.
+
+        Escalation policies define which user should be alerted at which time.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#escalation-policies)
+
+        Scoped OAuth requires: `escalation_policies.write`
+      summary: Update an escalation policy
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                escalation_policy:
+                  $ref: '#/components/schemas/EscalationPolicy'
+              required:
+                - escalation_policy
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  escalation_policy:
+                    type: escalation_policy
+                    name: Engineering Escalation Policy
+                    escalation_rules:
+                      - escalation_delay_in_minutes: 30
+                        targets:
+                          - id: PEYSGVF
+                            type: user_reference
+                        escalation_rule_assignment_strategy:
+                          type: round_robin
+                    services:
+                      - id: PIJ90N7
+                        type: service_reference
+                    num_loops: 2
+                    on_call_handoff_notifications: if_has_services
+                    teams:
+                      - id: PQ9K7I8
+                        type: team_reference
+                    description: Here is the ep for the engineering team.
+        description: The escalation policy to be updated.
+      responses:
+        '200':
+          description: The escalation policy that was updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  escalation_policy:
+                    $ref: '#/components/schemas/EscalationPolicy'
+                required:
+                  - escalation_policy
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    escalation_policy:
+                      id: PT20YPA
+                      type: escalation_policy
+                      summary: Another Escalation Policy
+                      on_call_handoff_notifications: if_has_services
+                      self: https://api.pagerduty.com/escalation_policies/PT20YPA
+                      html_url: https://subdomain.pagerduty.com/escalation_policies/PT20YPA
+                      name: Another Escalation Policy
+                      escalation_rules:
+                        - id: PGHDV41
+                          escalation_delay_in_minutes: 30
+                          targets:
+                            - id: PAM4FGS
+                              summary: Kyler Kuhn
+                              type: user_reference
+                              self: https://api.pagerduty.com/users/PAM4FGS
+                              html_url: https://subdomain.pagerduty.com/users/PAM4FGS
+                            - id: PI7DH85
+                              summary: Daily Engineering Rotation
+                              type: schedule_reference
+                              self: https://api.pagerduty.com/schedules/PI7DH85
+                              html_url: https://subdomain.pagerduty.com/schedules/PI7DH85
+                      services:
+                        - id: PIJ90N7
+                          type: service_reference
+                          summary: My Mail Service
+                          self: https://api.pagerduty.com/services/PIJ90N7
+                          html_url: https://subdomain.pagerduty.com/service-directory/PIJ90N7
+                      num_loops: 2
+                      teams:
+                        - id: PQ9K7I8
+                          type: team_reference
+                          summary: Engineering
+                          self: https://api.pagerduty.com/teams/PQ9K7I8
+                          html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                      description: This is yet another escalation policy
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: Manage an escalation policy.
+  /escalation_policies/{id}/audit/records:
+    get:
+      x-pd-requires-scope: audit_records.read
+      tags:
+        - Escalation Policies
+      operationId: listEscalationPolicyAuditRecords
+      summary: List audit records for an escalation policy
+      description: |
+        The returned records are sorted by the `execution_time` from newest to oldest.
+
+        See [`Cursor-based pagination`](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.
+
+        For more information see the [Audit API Document](https://developer.pagerduty.com/docs/rest-api-v2/audit-records-api/).
+
+        Scoped OAuth requires: `audit_records.read`
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/cursor_limit'
+        - $ref: '#/components/parameters/cursor_cursor'
+        - $ref: '#/components/parameters/audit_since'
+        - $ref: '#/components/parameters/audit_until'
+      responses:
+        '200':
+          description: Records matching the query criteria.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditRecordResponseSchema'
+              examples:
+                response:
+                  $ref: '#/components/examples/AuditRecordEscalationPolicyResponse'
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    description: List audit records of changes made to the escalation policy.
+components:
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        offset:
+          type: integer
+          description: Echoes offset pagination property.
+          readOnly: true
+        limit:
+          type: integer
+          description: Echoes limit pagination property.
+          readOnly: true
+        more:
+          type: boolean
+          description: Indicates if there are additional records to return
+          readOnly: true
+        total:
+          type: integer
+          description: The total number of records matching the given query.
+          nullable: true
+          readOnly: true
+    EscalationPolicy:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        name:
+          type: string
+          description: The name of the escalation policy.
+        description:
+          type: string
+          description: Escalation policy description.
+        num_loops:
+          type: integer
+          description: The number of times the escalation policy will repeat after reaching the end of its escalation.
+          default: 0
+          minimum: 0
+        on_call_handoff_notifications:
+          type: string
+          description: Determines how on call handoff notifications will be sent for users on the escalation policy. Defaults to "if_has_services".
+          enum:
+            - if_has_services
+            - always
+        escalation_rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/EscalationRule'
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceReference'
+          minLength: 0
+          readOnly: true
+        teams:
+          type: array
+          description: Team associated with the policy. Account must have the `teams` ability to use this parameter. Only one team may be associated with the policy.
+          items:
+            $ref: '#/components/schemas/TeamReference'
+          minLength: 0
+      required:
+        - type
+        - name
+        - escalation_rules
+      example:
+        id: PQIL2IX
+        type: escalation_policy
+        name: Engineering Escalation Policy
+        escalation_rules:
+          - escalation_delay_in_minutes: 30
+            targets:
+              - id: PEYSGVF
+                type: user_reference
+            escalation_rule_assignment_strategy:
+              - type: round_robin
+        services:
+          - id: PIJ90N7
+            type: service_reference
+        num_loops: 2
+        on_call_handoff_notifications: if_has_services
+        teams:
+          - id: PQ9K7I8
+            type: team_reference
+        description: Here is the ep for the engineering team.
+    AuditRecordResponseSchema:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditRecord'
+        response_metadata:
+          nullable: true
+          anyOf:
+            - $ref: '#/components/schemas/AuditMetadata'
+        limit:
+          type: integer
+          description: The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+          readOnly: true
+        next_cursor:
+          type: string
+          description: |
+            An opaque string than will deliver the next set of results when provided as the `cursor` parameter in a subsequent request.  A `null` value for this field indicates that there are no additional results.
+          example: dXNlcjaVMzc5V0ZYTlo=
+          nullable: true
+          readOnly: true
+      required:
+        - records
+        - limit
+        - next_cursor
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        label:
+          type: string
+          description: The label of the tag.
+          maxLength: 191
+      required:
+        - label
+        - type
+      example:
+        type: tag
+        label: Batman
+    EscalationRule:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        escalation_delay_in_minutes:
+          type: integer
+          description: The number of minutes before an unacknowledged incident escalates away from this rule.
+        targets:
+          type: array
+          minItems: 1
+          maxItems: 10
+          description: The targets an incident should be assigned to upon reaching this rule.
+          items:
+            $ref: '#/components/schemas/EscalationTargetReference'
+        escalation_rule_assignment_strategy:
+          type: string
+          description: The strategy used to assign the escalation rule to an incident.
+          enum:
+            - round_robin
+            - assign_to_everyone
+      required:
+        - escalation_delay_in_minutes
+        - targets
+      example:
+        escalation_delay_in_minutes: 30
+        targets:
+          - id: PAM4FGS
+            type: user_reference
+          - id: PI7DH85
+            type: schedule_reference
+    ServiceReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    TeamReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    AuditRecord:
+      type: object
+      readOnly: true
+      description: An Audit Trail record
+      properties:
+        id:
+          type: string
+        self:
+          type: string
+          nullable: true
+          description: Record URL.
+        execution_time:
+          type: string
+          format: date-time
+          description: The date/time the action executed, in ISO8601 format and millisecond precision.
+        execution_context:
+          type: object
+          description: Action execution context
+          properties:
+            request_id:
+              type: string
+              nullable: true
+              description: Request Id
+            remote_address:
+              type: string
+              nullable: true
+              description: remote address
+          nullable: true
+        actors:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Reference'
+        method:
+          type: object
+          description: The method information
+          properties:
+            description:
+              type: string
+              nullable: true
+            truncated_token:
+              description: Truncated token containing the last 4 chars of the token's actual value.
+              type: string
+              nullable: true
+              example: 3xyz
+            type:
+              type: string
+              description: |
+                Describes the method used to perform the action:
+
+                `browser` -- authenticated user session. Session value is not returned in the `truncated_token` field.
+
+                `oauth` -- access token obtained via the OAuth flow. Truncated token value is returned in the `truncated_token` field.
+
+                `api_token` -- Pagerduty API token. Truncated token value is returned in the `truncated_token` field.
+
+                `identity_provider` -- action performed by an Identity provider on behalf of a user. No value is returned in the `truncated_token` field.
+
+                `other` -- Method that does not fall in the predefined categories. Truncated token value MAY be returned in the `truncated_token` field.
+              enum:
+                - browser
+                - oauth
+                - api_token
+                - identity_provider
+                - other
+          required:
+            - type
+        root_resource:
+          $ref: '#/components/schemas/Reference'
+        action:
+          type: string
+          example: create
+        details:
+          type: object
+          nullable: true
+          description: |
+            Additional details to provide further information about the action or
+            the resource that has been audited.
+          properties:
+            resource:
+              $ref: '#/components/schemas/Reference'
+            fields:
+              description: |
+                A set of fields that have been affected.
+                The fields that have not been affected MAY be returned.
+              type: array
+              nullable: true
+              items:
+                type: object
+                description: |
+                  Information about the affected field.
+                  When available, field's before and after values are returned:
+                    
+                  #### Resource creation
+                  - `value` MAY be returned
+
+                  #### Resource update
+                  - `value` MAY be returned
+                  - `before_value` MAY be returned
+
+                  #### Resource deletion
+                  - `before_value` MAY be returned
+                properties:
+                  name:
+                    type: string
+                    description: Name of the resource field
+                    example: name
+                  description:
+                    type: string
+                    nullable: true
+                    description: Human readable description of the resource field
+                    example: First and Last name
+                  value:
+                    type: string
+                    nullable: true
+                    description: new or updated value of the field
+                    example: Jonathan
+                  before_value:
+                    type: string
+                    nullable: true
+                    description: previous or deleted value of the field
+                    example: John
+                required:
+                  - name
+            references:
+              description: A set of references that have been affected.
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Name of the reference field
+                    example: team_members
+                  description:
+                    type: string
+                    nullable: true
+                    description: Human readable description of the references field
+                    example: First and Last name
+                  added:
+                    type: array
+                    nullable: true
+                    items:
+                      $ref: '#/components/schemas/Reference'
+                  removed:
+                    type: array
+                    nullable: true
+                    items:
+                      $ref: '#/components/schemas/Reference'
+                required:
+                  - name
+          required:
+            - resource
+      required:
+        - id
+        - execution_time
+        - method
+        - root_resource
+        - action
+    AuditMetadata:
+      type: object
+      properties:
+        messages:
+          type: array
+          nullable: true
+          items:
+            type: string
+            example: Message about the result
+    CursorPagination:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+          readOnly: true
+        next_cursor:
+          type: string
+          description: |
+            An opaque string than will deliver the next set of results when provided as the `cursor` parameter in a subsequent request.  A `null` value for this field indicates that there are no additional results.
+          example: dXNlcjaVMzc5V0ZYTlo=
+          nullable: true
+          readOnly: true
+      required:
+        - limit
+        - next_cursor
+    EscalationTargetReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    Reference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+  responses:
+    ArgumentError:
+      description: Caller provided invalid arguments. Please review the response for error details. Retrying with the same arguments will *not* work.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Unauthorized:
+      description: |
+        Caller did not supply credentials or did not provide the correct credentials.
+        If you are using an API key, it may be invalid or your Authorization header may be malformed.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Forbidden:
+      description: |
+        Caller is not authorized to view the requested resource.
+        While your authentication is valid, the authenticated user or token does not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    TooManyRequests:
+      description: Too many requests have been made, the rate limit has been reached.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    PaymentRequired:
+      description: |
+        Account does not have the abilities to perform the action. Please review the response for the required abilities.
+        You can also use the [Abilities API](#resource_Abilities) to determine what features are available to your account.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    InternalServerError:
+      description: Internal Server Error the PagerDuty server experienced an error.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Conflict:
+      description: The request conflicts with the current state of the server.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+  parameters:
+    offset_limit:
+      name: limit
+      in: query
+      required: false
+      description: The number of results per page.
+      schema:
+        type: integer
+    offset_offset:
+      name: offset
+      in: query
+      required: false
+      description: Offset to start pagination search results.
+      schema:
+        type: integer
+    offset_total:
+      name: total
+      in: query
+      required: false
+      description: |
+        By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.
+
+        See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information.
+      schema:
+        default: false
+        type: boolean
+    query:
+      name: query
+      in: query
+      description: Filters the result, showing only the records whose name matches the query.
+      required: false
+      schema:
+        type: string
+    user_ids_escalation_policies:
+      name: user_ids[]
+      in: query
+      description: Filters the results, showing only escalation policies on which any of the users is a target.
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+    team_ids:
+      name: team_ids[]
+      in: query
+      description: An array of team IDs. Only results related to these teams will be returned. Account must have the `teams` ability to use this parameter.
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+    include_escalation_policy:
+      name: include[]
+      in: query
+      description: Array of additional Models to include in response.
+      explode: true
+      schema:
+        type: string
+        enum:
+          - services
+          - teams
+          - targets
+          - escalation_rule_assignment_strategies
+        uniqueItems: true
+    sort_by_escalation_policy:
+      name: sort_by
+      in: query
+      description: Used to specify the field you wish to sort the results on.
+      schema:
+        type: string
+        enum:
+          - name
+          - name:asc
+          - name:desc
+        default: name
+    optional_from_header:
+      name: From
+      in: header
+      description: The email address of a valid user associated with the account making the request. This is optional, and is only used for change tracking.
+      required: false
+      schema:
+        type: string
+        format: email
+    id:
+      name: id
+      description: The ID of the resource.
+      in: path
+      required: true
+      schema:
+        type: string
+    cursor_limit:
+      name: limit
+      in: query
+      required: false
+      description: The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+      schema:
+        type: integer
+    cursor_cursor:
+      name: cursor
+      in: query
+      required: false
+      description: |
+        Optional parameter used to request the "next" set of results from an API.  The value provided here is most commonly obtained from the `next_cursor` field of the previous request.  When no value is provided, the request starts at the beginning of the result set.
+      schema:
+        type: string
+    audit_since:
+      name: since
+      in: query
+      description: The start of the date range over which you want to search. If not specified, defaults to `now() - 24 hours` (past 24 hours)
+      schema:
+        type: string
+        format: date-time
+    audit_until:
+      name: until
+      in: query
+      description: The end of the date range over which you want to search. If not specified, defaults to `now()`. May not be more than 31 days after `since`.
+      schema:
+        type: string
+        format: date-time
+    audit_method_type:
+      name: method_type
+      in: query
+      description: Method type filter.
+      schema:
+        type: string
+        description: |
+          Describes the method used to perform the action:
+
+          `browser` -- authenticated user session. Session value is not returned in the `truncated_token` field.
+
+          `oauth` -- access token obtained via the OAuth flow. Truncated token value is returned in the `truncated_token` field.
+
+          `api_token` -- Pagerduty API token. Truncated token value is returned in the `truncated_token` field.
+
+          `identity_provider` -- action performed by an Identity provider on behalf of a user. No value is returned in the `truncated_token` field.
+
+          `other` -- Method that does not fall in the predefined categories. Truncated token value MAY be returned in the `truncated_token` field.
+        enum:
+          - browser
+          - oauth
+          - api_token
+          - identity_provider
+          - other
+  examples:
+    AuditRecordEscalationPolicyResponse:
+      summary: Response Example
+      value:
+        records:
+          - id: PD_ASSIGN_TEAM_TO_ESCALATION_POLICY
+            action: update
+            actors:
+              - id: PDUSER
+                summary: John Snow
+                type: user_reference
+                self: https://api.pagerduty.com/users/PD_USER123
+                html_url: https://mydomain.pagerduty.com/users/PD_USER123
+            details:
+              references:
+                - added:
+                    - id: PD_TEAM123
+                      summary: Devops
+                      type: team_reference
+                      self: https://api.pagerduty.com/teams/PD_TEAM123
+                      html_url: https://mydomain.pagerduty.com/teams/PD_TEAM123
+                  name: teams
+              resource:
+                id: PD_ESCALATION_ID
+                summary: DevOps Escalation
+                type: escalation_policy_reference
+                self: https://api.pagerduty.com/escalation_policies/PD_ESCALATION_ID
+                html_url: https://mydomain.pagerduty.com/escalation_policies/PD_ESCALATION_ID
+            execution_context:
+              request_id: 0cc413fb-8e7d-4414-b4bc-b7578bf3ba77
+            execution_time: '2021-01-05T16:33:52.026Z'
+            method:
+              type: browser
+            root_resource:
+              id: PD_ESCALATION_ID
+              summary: DevOps Escalation
+              type: escalation_policy_reference
+              self: https://api.pagerduty.com/escalation_policies/PD_ESCALATION_ID
+              html_url: https://mydomain.pagerduty.com/escalation_policies/PD_ESCALATION_ID
+          - id: PD_CREATE_ESCALATION_POLICY
+            action: create
+            actors:
+              - id: PDUSER
+                summary: John Snow
+                type: user_reference
+                self: https://api.pagerduty.com/users/PD_USER123
+                html_url: https://mydomain.pagerduty.com/users/PD_USER123
+            details:
+              fields:
+                - name: name
+                  value: DevOps Escalation
+                - name: description
+                  value: Escalation Policy for devops
+                - name: num_loops
+                  value: '1'
+              resource:
+                id: PD_ESCALATION_ID
+                summary: DevOps Escalation
+                type: escalation_policy_reference
+                self: https://api.pagerduty.com/escalation_policies/PD_ESCALATION_ID
+                html_url: https://mydomain.pagerduty.com/escalation_policies/PD_ESCALATION_ID
+            execution_context:
+              request_id: 0cc413fb-8e7d-4414-b4bc-b7578bf3ba77
+            execution_time: '2021-01-05T16:33:51.951Z'
+            method:
+              type: browser
+            root_resource:
+              id: PD_ESCALATION_ID
+              summary: DevOps Escalation
+              type: escalation_policy_reference
+              self: https://api.pagerduty.com/escalation_policies/PD_ESCALATION_ID
+              html_url: https://mydomain.pagerduty.com/escalation_policies/PD_ESCALATION_ID
+        limit: 10
+        next_cursor: null
+servers:
+  - url: https://api.pagerduty.com
+    description: PagerDuty V2 API.

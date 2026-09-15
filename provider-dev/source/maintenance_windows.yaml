@@ -1,0 +1,907 @@
+openapi: 3.0.2
+info:
+  title: PagerDuty API - Maintenance Windows
+  description: Maintenance windows temporarily disable incident creation on services.
+  version: 2.0.0
+paths:
+  /maintenance_windows:
+    get:
+      x-pd-requires-scope: services.read
+      tags:
+        - Maintenance Windows
+      operationId: listMaintenanceWindows
+      description: |
+        List existing maintenance windows, optionally filtered by service and/or team, or whether they are from the past, present or future.
+
+        A Maintenance Window is used to temporarily disable one or more Services for a set period of time.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)
+
+        Scoped OAuth requires: `services.read`
+      summary: List maintenance windows
+      parameters:
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+        - $ref: '#/components/parameters/team_ids'
+        - $ref: '#/components/parameters/services'
+        - $ref: '#/components/parameters/include_maintenance_window'
+        - $ref: '#/components/parameters/filter_maintenance_windows'
+      responses:
+        '200':
+          description: A paginated array of maintenance windows.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  maintenance_windows:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MaintenanceWindow'
+                required:
+                  - maintenance_windows
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    maintenance_windows:
+                      - id: PW98YIO
+                        type: maintenance_window
+                        summary: Immanentizing the eschaton
+                        self: https://api.pagerduty.com/maintenance_windows/PW98YIO
+                        html_url: https://subdomain.pagerduty.com/service-directory/maintenance-windows/PW98YIO
+                        sequence_number: 1
+                        start_time: '2015-11-09T20:00:00-05:00'
+                        end_time: '2015-11-09T22:00:00-05:00'
+                        description: Immanentizing the eschaton
+                        services:
+                          - id: PIJ90N7
+                            type: service_reference
+                            summary: My Mail Service
+                            self: https://api.pagerduty.com/services/PIJ90N7
+                            html_url: https://subdomain.pagerduty.com/service-directory/PIJ90N7
+                        teams:
+                          - id: PQ9K7I8
+                            type: team_reference
+                            summary: Engineering
+                            self: https://api.pagerduty.com/teams/PQ9K7I8
+                            html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                        created_by:
+                          id: PXPGF42
+                          type: user_reference
+                          summary: Earline Greenholt
+                          self: https://api.pagerduty.com/users/PXPGF42
+                          html_url: https://subdomain.pagerduty.com/users/PXPGF42
+                    limit: 25
+                    offset: 0
+                    more: false
+                    total: null
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      x-pd-requires-scope: services.write
+      tags:
+        - Maintenance Windows
+      operationId: createMaintenanceWindow
+      description: |
+        Create a new maintenance window for the specified services. No new incidents will be created for a service that is in maintenance.
+
+        A Maintenance Window is used to temporarily disable one or more Services for a set period of time.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)
+
+        Scoped OAuth requires: `services.write`
+      summary: Create a maintenance window
+      parameters:
+        - $ref: '#/components/parameters/from_header'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                maintenance_window:
+                  $ref: '#/components/schemas/MaintenanceWindow'
+              required:
+                - maintenance_window
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  maintenance_window:
+                    type: maintenance_window
+                    start_time: '2015-11-09T20:00:00-05:00'
+                    end_time: '2015-11-09T22:00:00-05:00'
+                    description: Immanentizing the eschaton
+                    services:
+                      - id: PIJ90N7
+                        type: service_reference
+        description: The maintenance window object.
+      responses:
+        '201':
+          description: The maintenance window that was created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  maintenance_window:
+                    $ref: '#/components/schemas/MaintenanceWindow'
+                required:
+                  - maintenance_window
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    maintenance_window:
+                      id: PW98YIO
+                      type: maintenance_window
+                      summary: Immanentizing the eschaton
+                      self: https://api.pagerduty.com/maintenance_windows/PW98YIO
+                      html_url: https://subdomain.pagerduty.com/service-directory/maintenance-windows/PW98YIO
+                      sequence_number: 1
+                      start_time: '2015-11-09T20:00:00-05:00'
+                      end_time: '2015-11-09T22:00:00-05:00'
+                      description: Immanentizing the eschaton
+                      services:
+                        - id: PIJ90N7
+                          type: service_reference
+                          summary: My Mail Service
+                          self: https://api.pagerduty.com/services/PIJ90N7
+                          html_url: https://subdomain.pagerduty.com/service-directory/PIJ90N7
+                      teams:
+                        - id: PQ9K7I8
+                          type: team_reference
+                          summary: Engineering
+                          self: https://api.pagerduty.com/teams/PQ9K7I8
+                          html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                      created_by:
+                        id: PXPGF42
+                        type: user_reference
+                        summary: Earline Greenholt
+                        self: https://api.pagerduty.com/users/PXPGF42
+                        html_url: https://subdomain.pagerduty.com/users/PXPGF42
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: List and create maintenance windows.
+  /maintenance_windows/{id}:
+    get:
+      x-pd-requires-scope: services.read
+      tags:
+        - Maintenance Windows
+      operationId: getMaintenanceWindow
+      description: |
+        Get an existing maintenance window.
+
+        A Maintenance Window is used to temporarily disable one or more Services for a set period of time.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)
+
+        Scoped OAuth requires: `services.read`
+      summary: Get a maintenance window
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/include_maintenance_window'
+      responses:
+        '200':
+          description: The maintenance window that was updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  maintenance_window:
+                    $ref: '#/components/schemas/MaintenanceWindow'
+                required:
+                  - maintenance_window
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    maintenance_window:
+                      id: PW98YIO
+                      type: maintenance_window
+                      summary: Immanentizing the eschaton
+                      self: https://api.pagerduty.com/maintenance_windows/PW98YIO
+                      html_url: https://subdomain.pagerduty.com/service-directory/maintenance-windows/PW98YIO
+                      sequence_number: 1
+                      start_time: '2015-11-09T20:00:00-05:00'
+                      end_time: '2015-11-09T22:00:00-05:00'
+                      description: Immanentizing the eschaton
+                      services:
+                        - id: PIJ90N7
+                          type: service_reference
+                          summary: My Mail Service
+                          self: https://api.pagerduty.com/services/PIJ90N7
+                          html_url: https://subdomain.pagerduty.com/service-directory/PIJ90N7
+                      teams:
+                        - id: PQ9K7I8
+                          type: team_reference
+                          summary: Engineering
+                          self: https://api.pagerduty.com/teams/PQ9K7I8
+                          html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                      created_by:
+                        id: PXPGF42
+                        type: user_reference
+                        summary: Earline Greenholt
+                        self: https://api.pagerduty.com/users/PXPGF42
+                        html_url: https://subdomain.pagerduty.com/users/PXPGF42
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      x-pd-requires-scope: services.write
+      tags:
+        - Maintenance Windows
+      operationId: deleteMaintenanceWindow
+      description: |
+        Delete an existing maintenance window if it's in the future, or end it if it's currently on-going. If the maintenance window has already ended it cannot be deleted.
+
+        A Maintenance Window is used to temporarily disable one or more Services for a set period of time.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)
+
+        Scoped OAuth requires: `services.write`
+      summary: Delete or end a maintenance window
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: The maintenance window was deleted successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          description: The maintenance window can't be deleted because it has already ended.
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    put:
+      x-pd-requires-scope: services.write
+      tags:
+        - Maintenance Windows
+      operationId: updateMaintenanceWindow
+      description: |
+        Update an existing maintenance window.
+
+        A Maintenance Window is used to temporarily disable one or more Services for a set period of time.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#maintenance-windows)
+
+        Scoped OAuth requires: `services.write`
+      summary: Update a maintenance window
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                maintenance_window:
+                  $ref: '#/components/schemas/MaintenanceWindow'
+              required:
+                - maintenance_window
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  maintenance_window:
+                    type: maintenance_window
+                    start_time: '2015-11-09T20:00:00-05:00'
+                    end_time: '2015-11-09T22:00:00-05:00'
+                    description: Immanentizing the eschaton
+                    services:
+                      - id: PIJ90N7
+                        type: service_reference
+        description: The maintenance window to be updated.
+      responses:
+        '200':
+          description: The maintenance window that was updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  maintenance_window:
+                    $ref: '#/components/schemas/MaintenanceWindow'
+                required:
+                  - maintenance_window
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    maintenance_window:
+                      id: PW98YIO
+                      type: maintenance_window
+                      summary: Immanentizing the eschaton
+                      self: https://api.pagerduty.com/maintenance_windows/PW98YIO
+                      html_url: https://subdomain.pagerduty.com/service-directory/maintenance-windows/PW98YIO
+                      sequence_number: 1
+                      start_time: '2015-11-09T20:00:00-05:00'
+                      end_time: '2015-11-09T22:00:00-05:00'
+                      description: Immanentizing the eschaton
+                      services:
+                        - id: PIJ90N7
+                          type: service_reference
+                          summary: My Mail Service
+                          self: https://api.pagerduty.com/services/PIJ90N7
+                          html_url: https://subdomain.pagerduty.com/service-directory/PIJ90N7
+                      teams:
+                        - id: PQ9K7I8
+                          type: team_reference
+                          summary: Engineering
+                          self: https://api.pagerduty.com/teams/PQ9K7I8
+                          html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                      created_by:
+                        id: PXPGF42
+                        type: user_reference
+                        summary: Earline Greenholt
+                        self: https://api.pagerduty.com/users/PXPGF42
+                        html_url: https://subdomain.pagerduty.com/users/PXPGF42
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: Manage a maintenance window.
+components:
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        offset:
+          type: integer
+          description: Echoes offset pagination property.
+          readOnly: true
+        limit:
+          type: integer
+          description: Echoes limit pagination property.
+          readOnly: true
+        more:
+          type: boolean
+          description: Indicates if there are additional records to return
+          readOnly: true
+        total:
+          type: integer
+          description: The total number of records matching the given query.
+          nullable: true
+          readOnly: true
+    MaintenanceWindow:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        sequence_number:
+          type: integer
+          readOnly: true
+          description: The order in which the maintenance window was created.
+        start_time:
+          type: string
+          format: date-time
+          description: This maintenance window's start time. This is when the services will stop creating incidents. If this date is in the past, it will be updated to be the current time.
+        end_time:
+          type: string
+          format: date-time
+          description: This maintenance window's end time. This is when the services will start creating incidents again. This date must be in the future and after the `start_time`.
+        description:
+          type: string
+          description: A description for this maintenance window.
+        created_by:
+          $ref: '#/components/schemas/UserReference'
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceReference'
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamReference'
+          readOnly: true
+      required:
+        - start_time
+        - end_time
+        - services
+        - type
+      example:
+        id: PIJ89JD
+        type: maintenance_window
+        start_time: '2015-11-09T20:00:00-05:00'
+        end_time: '2015-11-09T22:00:00-05:00'
+        description: Immanentizing the eschaton
+        services:
+          - id: PIJ90N7
+            type: service_reference
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        label:
+          type: string
+          description: The label of the tag.
+          maxLength: 191
+      required:
+        - label
+        - type
+      example:
+        type: tag
+        label: Batman
+    UserReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    ServiceReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    TeamReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    Reference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+  responses:
+    ArgumentError:
+      description: Caller provided invalid arguments. Please review the response for error details. Retrying with the same arguments will *not* work.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Unauthorized:
+      description: |
+        Caller did not supply credentials or did not provide the correct credentials.
+        If you are using an API key, it may be invalid or your Authorization header may be malformed.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Forbidden:
+      description: |
+        Caller is not authorized to view the requested resource.
+        While your authentication is valid, the authenticated user or token does not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    TooManyRequests:
+      description: Too many requests have been made, the rate limit has been reached.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Conflict:
+      description: The request conflicts with the current state of the server.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+  parameters:
+    query:
+      name: query
+      in: query
+      description: Filters the result, showing only the records whose name matches the query.
+      required: false
+      schema:
+        type: string
+    offset_limit:
+      name: limit
+      in: query
+      required: false
+      description: The number of results per page.
+      schema:
+        type: integer
+    offset_offset:
+      name: offset
+      in: query
+      required: false
+      description: Offset to start pagination search results.
+      schema:
+        type: integer
+    offset_total:
+      name: total
+      in: query
+      required: false
+      description: |
+        By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.
+
+        See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information.
+      schema:
+        default: false
+        type: boolean
+    team_ids:
+      name: team_ids[]
+      in: query
+      description: An array of team IDs. Only results related to these teams will be returned. Account must have the `teams` ability to use this parameter.
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+    services:
+      name: service_ids[]
+      in: query
+      description: An array of service IDs. Only results related to these services will be returned.
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+    include_maintenance_window:
+      name: include[]
+      in: query
+      description: Array of additional Models to include in response.
+      explode: true
+      schema:
+        type: string
+        enum:
+          - teams
+          - services
+          - users
+        uniqueItems: true
+    filter_maintenance_windows:
+      name: filter
+      in: query
+      description: Only return maintenance windows in a given state.
+      schema:
+        type: string
+        enum:
+          - past
+          - future
+          - ongoing
+          - open
+          - all
+    from_header:
+      name: From
+      in: header
+      description: The email address of a valid user associated with the account making the request.
+      required: false
+      schema:
+        type: string
+        format: email
+    id:
+      name: id
+      description: The ID of the resource.
+      in: path
+      required: true
+      schema:
+        type: string
+servers:
+  - url: https://api.pagerduty.com
+    description: PagerDuty V2 API.

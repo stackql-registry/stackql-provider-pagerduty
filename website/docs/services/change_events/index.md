@@ -26,9 +26,9 @@ total resources: __3__
 <div class="row">
 <div class="providerDocColumn">
 <a href="/services/change_events/change_events/">change_events</a><br />
-<a href="/services/change_events/incidents_related_change_events/">incidents_related_change_events</a>
+<a href="/services/change_events/incident_change_events/">incident_change_events</a>
 </div>
 <div class="providerDocColumn">
-<a href="/services/change_events/services/">services</a>
+<a href="/services/change_events/service_change_events/">service_change_events</a>
 </div>
 </div>

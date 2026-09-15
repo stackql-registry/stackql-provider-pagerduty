@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>notes</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>notes</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="notes" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.incidents.notes" /></td></tr>
 </tbody></table>
@@ -32,12 +33,12 @@ Creates, updates, deletes, gets or lists a <code>notes</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_incident_notes"
+    defaultValue="list"
     values={[
-        { label: 'list_incident_notes', value: 'list_incident_notes' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="list_incident_notes">
+<TabItem value="list">
 
 An array of notes.
 
@@ -71,9 +72,14 @@ An array of notes.
     <td>The time at which the note was submitted</td>
 </tr>
 <tr>
+    <td><CopyableCode code="updated_at" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>The time at which the note was last updated</td>
+</tr>
+<tr>
     <td><CopyableCode code="user" /></td>
     <td><code>object</code></td>
-    <td>The user who created a Note. If a service created this Note the `user.type` will be "bot_user_reference" and `user.summary` will list the name of the service rather than the user.</td>
+    <td>(opaque JSON object)</td>
 </tr>
 </tbody>
 </table>
@@ -96,25 +102,32 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_incident_notes"><CopyableCode code="list_incident_notes" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>List existing notes for the specified incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.read`<br /></td>
+    <td></td>
+    <td>List existing notes for the specified incident.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_incident_note"><CopyableCode code="create_incident_note" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-From"><code>From</code></a>, <a href="#parameter-data__note"><code>data__note</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Create a new note for the specified incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />A maximum of 2000 notes can be added to an incident.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-note"><code>note</code></a></td>
+    <td><a href="#parameter-From"><code>From</code></a></td>
+    <td>Create a new note for the specified incident.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;A maximum of 2000 notes can be added to an incident.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#_list_incident_notes"><CopyableCode code="_list_incident_notes" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>List existing notes for the specified incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.read`<br /></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-note_id"><code>note_id</code></a>, <a href="#parameter-note"><code>note</code></a></td>
+    <td><a href="#parameter-From"><code>From</code></a></td>
+    <td>Update an existing note for the specified incident.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;</td>
+</tr>
+<tr>
+    <td><a href="#delete"><CopyableCode code="delete" /></a></td>
+    <td><CopyableCode code="delete" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-note_id"><code>note_id</code></a></td>
+    <td></td>
+    <td>Delete an existing note for the specified incident.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -132,25 +145,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
-<tr id="parameter-From">
-    <td><CopyableCode code="From" /></td>
-    <td><code>string (email)</code></td>
-    <td>The email address of a valid user associated with the account making the request.</td>
-</tr>
 <tr id="parameter-id">
     <td><CopyableCode code="id" /></td>
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
+<tr id="parameter-note_id">
+    <td><CopyableCode code="note_id" /></td>
     <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
+    <td>The id of the note.</td>
 </tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
+<tr id="parameter-From">
+    <td><CopyableCode code="From" /></td>
+    <td><code>string (email)</code></td>
+    <td>The email address of a valid user associated with the account making the request.</td>
 </tr>
 </tbody>
 </table>
@@ -158,14 +166,14 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_incident_notes"
+    defaultValue="list"
     values={[
-        { label: 'list_incident_notes', value: 'list_incident_notes' }
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="list_incident_notes">
+<TabItem value="list">
 
-List existing notes for the specified incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.read`<br />
+List existing notes for the specified incident.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -173,11 +181,10 @@ id,
 channel,
 content,
 created_at,
+updated_at,
 user
 FROM pagerduty.incidents.notes
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
@@ -187,30 +194,26 @@ AND Content-Type = '{{ Content-Type }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_incident_note"
+    defaultValue="create"
     values={[
-        { label: 'create_incident_note', value: 'create_incident_note' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_incident_note">
+<TabItem value="create">
 
-Create a new note for the specified incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />A maximum of 2000 notes can be added to an incident.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br />
+Create a new note for the specified incident.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;A maximum of 2000 notes can be added to an incident.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.incidents.notes (
-data__note,
+note,
 id,
-From,
-Accept,
-Content-Type
+"From"
 )
 SELECT 
 '{{ note }}' /* required */,
 '{{ id }}',
-'{{ From }}',
-'{{ Accept }}',
-'{{ Content-Type }}'
+'{{ From }}'
 RETURNING
 note
 ;
@@ -218,45 +221,69 @@ note
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: notes
   props:
     - name: id
-      value: string
-      description: Required parameter for the notes resource.
-    - name: From
-      value: string (email)
+      value: "{{ id }}"
       description: Required parameter for the notes resource.
     - name: note
-      value: object
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-    - name: Content-Type
-      value: string
+      value:
+        content: "{{ content }}"
+    - name: From
+      value: "{{ From }}"
+      description: The email address of a valid user associated with the account making the request.
+      description: The email address of a valid user associated with the account making the request.
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
+
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Update an existing note for the specified incident.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.incidents.notes
+SET 
+note = '{{ note }}'
+WHERE 
+id = '{{ id }}' --required
+AND note_id = '{{ note_id }}' --required
+AND note = '{{ note }}' --required
+AND From = '{{ From}}'
+RETURNING
+note;
 ```
 </TabItem>
 </Tabs>
 
 
-## Lifecycle Methods
+## `DELETE` examples
 
 <Tabs
-    defaultValue="_list_incident_notes"
+    defaultValue="delete"
     values={[
-        { label: '_list_incident_notes', value: '_list_incident_notes' }
+        { label: 'delete', value: 'delete' }
     ]}
 >
-<TabItem value="_list_incident_notes">
+<TabItem value="delete">
 
-List existing notes for the specified incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.read`<br />
+Delete an existing note for the specified incident.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;
 
 ```sql
-EXEC pagerduty.incidents.notes._list_incident_notes 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
+DELETE FROM pagerduty.incidents.notes
+WHERE id = '{{ id }}' --required
+AND note_id = '{{ note_id }}' --required
 ;
 ```
 </TabItem>

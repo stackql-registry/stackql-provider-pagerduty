@@ -1,0 +1,826 @@
+openapi: 3.0.2
+info:
+  title: PagerDuty API - Tags
+  description: Tags and the entities they are applied to.
+  version: 2.0.0
+paths:
+  /{entity_type}/{id}/change_tags:
+    post:
+      x-pd-requires-scope: tags.write
+      tags:
+        - Tags
+      operationId: createEntityTypeByIdChangeTags
+      description: |
+        Assign existing or new tags.
+
+        A Tag is applied to Escalation Policies, Teams or Users and can be used to filter them.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#tags)
+
+        Scoped OAuth requires: `tags.write`
+      summary: Assign tags
+      parameters:
+        - $ref: '#/components/parameters/entity_type'
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Tags to add to or remove from the entity.
+              properties:
+                add:
+                  type: array
+                  description: |
+                    Array of tags and/or tag references to add to the entity.
+                    For elements with type `tag_reference`, the tag with the corresponding `id` is added to the entity.
+                    For elements with type `tag`, if there is an existing tag with the given
+                    label that tag is added to the entity. If there is no existing tag with that label and the user has permission
+                    to create tags, a new tag is created with that label and assigned to the entity.
+                  items:
+                    title: Tags to add
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                          - tag
+                          - tag_reference
+                      label:
+                        type: string
+                        description: The label of the tag. Should be used when type is "tag".
+                        maxLength: 191
+                      id:
+                        type: string
+                        description: The id of the tag. Should be used when type is "tag_reference".
+                        readOnly: true
+                    required:
+                      - type
+                remove:
+                  type: array
+                  description: Array of tag references to remove from the entity.
+                  items:
+                    title: Tags to remove.
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                          - tag_reference
+                      id:
+                        type: string
+                        description: The id of the tag
+                        readOnly: true
+                    required:
+                      - type
+                      - id
+            examples:
+              tags:
+                summary: Request Example
+                value:
+                  add:
+                    - type: tag
+                      label: Batman
+                    - type: tag_reference
+                      id: P5IYCNZ
+                  remove:
+                    - type: tag_reference
+                      id: POE7RY8
+                    - type: tag_reference
+                      id: PG68P1M
+      responses:
+        '200':
+          description: The tags were added and/or removed.
+          content:
+            application/json:
+              schema:
+                type: string
+                description: (opaque JSON object)
+              examples:
+                response:
+                  summary: Request Example
+                  value:
+                    add:
+                      - type: tag
+                        label: Batman
+                      - type: tag_reference
+                        id: P5IYCNZ
+                    remove:
+                      - type: tag_reference
+                        id: POE7RY8
+                      - type: tag_reference
+                        id: PG68P1M
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /{entity_type}/{id}/tags:
+    get:
+      x-pd-requires-scope: tags.read
+      tags:
+        - Tags
+      operationId: getEntityTypeByIdTags
+      description: |
+        Get related tags for Users, Teams or Escalation Policies.
+
+        A Tag is applied to Escalation Policies, Teams or Users and can be used to filter them.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#tags)
+
+        Scoped OAuth requires: `tags.read`
+      summary: Get tags for entities
+      parameters:
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+        - $ref: '#/components/parameters/entity_type'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: An array of tags.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  tags:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tag'
+                required:
+                  - tags
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    tags:
+                      - type: tag
+                        summary: Batman
+                        self: https://api.pagerduty.com/tags/P5IYCNZ
+                        label: Batman
+                        id: P5IYCNZ
+                        html_url: null
+                    limit: 100
+                    offset: 0
+                    total: 1
+                    more: false
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /tags:
+    get:
+      x-pd-requires-scope: tags.read
+      tags:
+        - Tags
+      operationId: listTags
+      description: |
+        List all of your account's tags.
+
+        A Tag is applied to Escalation Policies, Teams or Users and can be used to filter them.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#tags)
+
+        Scoped OAuth requires: `tags.read`
+      summary: List tags
+      parameters:
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+        - $ref: '#/components/parameters/tag_query'
+      responses:
+        '200':
+          description: An array of tags names.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  tags:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tag'
+                required:
+                  - tags
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    tags:
+                      - type: tag
+                        summary: Batman
+                        self: https://api.pagerduty.com/tags/P5IYCNZ
+                        label: Batman
+                        id: P5IYCNZ
+                        html_url: null
+                    limit: 100
+                    offset: 0
+                    total: 1
+                    more: false
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      x-pd-requires-scope: tags.write
+      tags:
+        - Tags
+      operationId: createTags
+      description: |
+        Create a Tag.
+
+        A Tag is applied to Escalation Policies, Teams or Users and can be used to filter them.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#tags)
+
+        Scoped OAuth requires: `tags.write`
+      summary: Create a tag
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tag:
+                  $ref: '#/components/schemas/Tag'
+              required:
+                - tag
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  tag:
+                    type: tag
+                    label: Batman
+      responses:
+        '201':
+          description: The tag that was created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tag:
+                    $ref: '#/components/schemas/Tag'
+                required:
+                  - tag
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    tag:
+                      type: tag
+                      summary: Batman
+                      self: https://api.pagerduty.com/tags/P5IYCNZ
+                      label: Batman
+                      id: P5IYCNZ
+                      html_url: null
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /tags/{id}:
+    get:
+      x-pd-requires-scope: tags.read
+      tags:
+        - Tags
+      operationId: getTag
+      description: |
+        Get details about an existing Tag.
+
+        A Tag is applied to Escalation Policies, Teams or Users and can be used to filter them.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#tags)
+
+        Scoped OAuth requires: `tags.read`
+      summary: Get a tag
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: The tag requested.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tag:
+                    $ref: '#/components/schemas/Tag'
+                required:
+                  - tag
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    tag:
+                      type: tag
+                      summary: Batman
+                      self: https://api.pagerduty.com/tags/P5IYCNZ
+                      label: Batman
+                      id: P5IYCNZ
+                      html_url: null
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      x-pd-requires-scope: tags.write
+      tags:
+        - Tags
+      operationId: deleteTag
+      description: |
+        Remove an existing Tag.
+
+        A Tag is applied to Escalation Policies, Teams or Users and can be used to filter them.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#tags)
+
+        Scoped OAuth requires: `tags.write`
+      summary: Delete a tag
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: The tag was deleted successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /tags/{id}/{entity_type}:
+    get:
+      x-pd-requires-scope: tags.read
+      tags:
+        - Tags
+      operationId: getTagsByEntityType
+      description: |
+        Get related Users, Teams or Escalation Policies for the Tag.
+
+        A Tag is applied to Escalation Policies, Teams or Users and can be used to filter them.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#tags)
+
+        Scoped OAuth requires: `tags.read`
+      summary: Get connected entities
+      parameters:
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/entity_type'
+      responses:
+        '200':
+          description: An array of connected entities.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EntityReference'
+                  teams:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EntityReference'
+                  escalation_policies:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EntityReference'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    users:
+                      - id: PXPGF42
+                        type: user_reference
+                      - id: PAM4FGS
+                        type: user_reference
+                    limit: 100
+                    offset: 0
+                    total: 2
+                    more: false
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        offset:
+          type: integer
+          description: Echoes offset pagination property.
+          readOnly: true
+        limit:
+          type: integer
+          description: Echoes limit pagination property.
+          readOnly: true
+        more:
+          type: boolean
+          description: Indicates if there are additional records to return
+          readOnly: true
+        total:
+          type: integer
+          description: The total number of records matching the given query.
+          nullable: true
+          readOnly: true
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        label:
+          type: string
+          description: The label of the tag.
+          maxLength: 191
+      required:
+        - label
+        - type
+      example:
+        type: tag
+        label: Batman
+    EntityReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    Reference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+  responses:
+    ArgumentError:
+      description: Caller provided invalid arguments. Please review the response for error details. Retrying with the same arguments will *not* work.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Unauthorized:
+      description: |
+        Caller did not supply credentials or did not provide the correct credentials.
+        If you are using an API key, it may be invalid or your Authorization header may be malformed.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Forbidden:
+      description: |
+        Caller is not authorized to view the requested resource.
+        While your authentication is valid, the authenticated user or token does not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    TooManyRequests:
+      description: Too many requests have been made, the rate limit has been reached.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Conflict:
+      description: The request conflicts with the current state of the server.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+  parameters:
+    entity_type:
+      name: entity_type
+      in: path
+      description: Type of entity related with the tag
+      required: true
+      schema:
+        type: string
+        enum:
+          - users
+          - teams
+          - escalation_policies
+    id:
+      name: id
+      description: The ID of the resource.
+      in: path
+      required: true
+      schema:
+        type: string
+    offset_limit:
+      name: limit
+      in: query
+      required: false
+      description: The number of results per page.
+      schema:
+        type: integer
+    offset_offset:
+      name: offset
+      in: query
+      required: false
+      description: Offset to start pagination search results.
+      schema:
+        type: integer
+    offset_total:
+      name: total
+      in: query
+      required: false
+      description: |
+        By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.
+
+        See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information.
+      schema:
+        default: false
+        type: boolean
+    tag_query:
+      name: query
+      in: query
+      description: Filters the result, showing only the tags whose label matches the query.
+      required: false
+      schema:
+        type: string
+servers:
+  - url: https://api.pagerduty.com
+    description: PagerDuty V2 API.

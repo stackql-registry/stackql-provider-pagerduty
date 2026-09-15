@@ -29,7 +29,7 @@ total resources: __4__
 <a href="/services/status_dashboards/status_dashboards/">status_dashboards</a>
 </div>
 <div class="providerDocColumn">
-<a href="/services/status_dashboards/url_slugs/">url_slugs</a><br />
-<a href="/services/status_dashboards/url_slugs_service_impacts/">url_slugs_service_impacts</a>
+<a href="/services/status_dashboards/url_slug_service_impacts/">url_slug_service_impacts</a><br />
+<a href="/services/status_dashboards/url_slugs/">url_slugs</a>
 </div>
 </div>

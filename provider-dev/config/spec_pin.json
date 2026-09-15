@@ -1,0 +1,15 @@
+{
+  "specs": {
+    "pagerduty-rest-v2": {
+      "url": "https://raw.githubusercontent.com/PagerDuty/api-schema/main/reference/REST/openapiv3.json",
+      "filename": "pagerduty-rest-v2.json",
+      "spec_version": "2.0.0",
+      "openapi": "3.0.2",
+      "paths": 273,
+      "operations": 465,
+      "sha256": "b2e80f8b83b170f29702e96a69adf230702b4ec43dddab7e348a2985c707ef35",
+      "bytes": 2766749,
+      "fetched": "2026-09-14"
+    }
+  }
+}

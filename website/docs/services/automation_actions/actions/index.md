@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>actions</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>actions</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="actions" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.automation_actions.actions" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists an <code>actions</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_automation_action"
+    defaultValue="get"
     values={[
-        { label: 'get_automation_action', value: 'get_automation_action' },
-        { label: 'get_all_automation_actions', value: 'get_all_automation_actions' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_automation_action">
+<TabItem value="get">
 
 Action information
 
@@ -51,10 +52,130 @@ Action information
     </tr>
 </thead>
 <tbody>
+<tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="name" /></td>
+    <td><code>string</code></td>
+    <td> (example: Restart apache)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="action_classification" /></td>
+    <td><code>string</code></td>
+    <td> (diagnostic, remediation)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="action_data_reference" /></td>
+    <td><code>object</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="action_type" /></td>
+    <td><code>string</code></td>
+    <td> (script, process_automation) (example: process_automation)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="allow_invocation_from_event_orchestration" /></td>
+    <td><code>boolean</code></td>
+    <td>If true, the action can only be invoked automatically by an Event Orchestration.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="allow_invocation_manually" /></td>
+    <td><code>boolean</code></td>
+    <td>If true, the action can only be invoked manually by a user.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="creation_time" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>The date/time</td>
+</tr>
+<tr>
+    <td><CopyableCode code="description" /></td>
+    <td><code>string</code></td>
+    <td> (example: Restarts apache on the us-west-2-shopping-cart host)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="html_url" /></td>
+    <td><code>string (url)</code></td>
+    <td>a URL at which the entity is uniquely displayed in the Web app</td>
+</tr>
+<tr>
+    <td><CopyableCode code="last_run" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>The date/time</td>
+</tr>
+<tr>
+    <td><CopyableCode code="last_run_by" /></td>
+    <td><code></code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="map_to_all_services" /></td>
+    <td><code>boolean</code></td>
+    <td>If true, the action will be associated with every service.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="metadata" /></td>
+    <td><code>string</code></td>
+    <td>(opaque JSON object)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="modify_time" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>The date/time</td>
+</tr>
+<tr>
+    <td><CopyableCode code="only_invocable_on_unresolved_incidents" /></td>
+    <td><code>boolean</code></td>
+    <td>If true, the action can only be invoked against an unresolved incident.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="privileges" /></td>
+    <td><code>object</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="runner" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="runner_type" /></td>
+    <td><code>string</code></td>
+    <td>sidecar -- The runner is backed by an external sidecar that polls for invocations. runbook -- The runner communicates directly with a runbook instance.  (sidecar, runbook) (example: runbook)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="self" /></td>
+    <td><code>string (url)</code></td>
+    <td>the API show URL at which the object is accessible</td>
+</tr>
+<tr>
+    <td><CopyableCode code="services" /></td>
+    <td><code>array</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="summary" /></td>
+    <td><code>string</code></td>
+    <td>A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="teams" /></td>
+    <td><code>array</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="type" /></td>
+    <td><code>string</code></td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
+</tr>
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_all_automation_actions">
+<TabItem value="list">
 
 An array of actions
 
@@ -88,60 +209,39 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_automation_action"><CopyableCode code="get_automation_action" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get an Automation Action<br /></td>
+    <td></td>
+    <td>Get an Automation Action&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#get_all_automation_actions"><CopyableCode code="get_all_automation_actions" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-cursor"><code>cursor</code></a>, <a href="#parameter-name"><code>name</code></a>, <a href="#parameter-runner_id"><code>runner_id</code></a>, <a href="#parameter-classification"><code>classification</code></a>, <a href="#parameter-team_id"><code>team_id</code></a>, <a href="#parameter-service_id"><code>service_id</code></a>, <a href="#parameter-action_type"><code>action_type</code></a></td>
-    <td>Lists Automation Actions matching provided query params.<br /><br />The returned records are sorted by action name in alphabetical order.<br /><br />See [`Cursor-based pagination`](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-cursor"><code>cursor</code></a>, <a href="#parameter-name"><code>name</code></a>, <a href="#parameter-runner_id"><code>runner_id</code></a>, <a href="#parameter-classification"><code>classification</code></a>, <a href="#parameter-team_id"><code>team_id</code></a>, <a href="#parameter-service_id"><code>service_id</code></a>, <a href="#parameter-action_type"><code>action_type</code></a></td>
+    <td>Lists Automation Actions matching provided query params.&lt;br /&gt;&lt;br /&gt;The returned records are sorted by action name in alphabetical order.&lt;br /&gt;&lt;br /&gt;See &#91;`Cursor-based pagination`&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_automation_action_invocation"><CopyableCode code="create_automation_action_invocation" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-data__invocation"><code>data__invocation</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Invokes an Action<br /></td>
+    <td><a href="#parameter-action"><code>action</code></a></td>
+    <td></td>
+    <td>Create a Script, Process Automation, or Runbook Automation action&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_automation_action"><CopyableCode code="create_automation_action" /></a></td>
-    <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-data__action"><code>data__action</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Create a Script, Process Automation, or Runbook Automation action<br /></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-action"><code>action</code></a></td>
+    <td></td>
+    <td>Updates an Automation Action&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#delete_automation_action"><CopyableCode code="delete_automation_action" /></a></td>
+    <td><a href="#delete"><CopyableCode code="delete" /></a></td>
     <td><CopyableCode code="delete" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Delete an Automation Action<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_all_automation_actions"><CopyableCode code="_get_all_automation_actions" /></a></td>
-    <td><CopyableCode code="exec" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-cursor"><code>cursor</code></a>, <a href="#parameter-name"><code>name</code></a>, <a href="#parameter-runner_id"><code>runner_id</code></a>, <a href="#parameter-classification"><code>classification</code></a>, <a href="#parameter-team_id"><code>team_id</code></a>, <a href="#parameter-service_id"><code>service_id</code></a>, <a href="#parameter-action_type"><code>action_type</code></a></td>
-    <td>Lists Automation Actions matching provided query params.<br /><br />The returned records are sorted by action name in alphabetical order.<br /><br />See [`Cursor-based pagination`](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_automation_action"><CopyableCode code="_get_automation_action" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get an Automation Action<br /></td>
-</tr>
-<tr>
-    <td><a href="#update_automation_action"><CopyableCode code="update_automation_action" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-action"><code>action</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Updates an Automation Action<br /></td>
+    <td>Delete an Automation Action&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -163,16 +263,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><CopyableCode code="id" /></td>
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
-</tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
 </tr>
 <tr id="parameter-action_type">
     <td><CopyableCode code="action_type" /></td>
@@ -220,37 +310,56 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_automation_action"
+    defaultValue="get"
     values={[
-        { label: 'get_automation_action', value: 'get_automation_action' },
-        { label: 'get_all_automation_actions', value: 'get_all_automation_actions' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_automation_action">
+<TabItem value="get">
 
-Get an Automation Action<br />
+Get an Automation Action&lt;br /&gt;
 
 ```sql
 SELECT
-*
+id,
+name,
+action_classification,
+action_data_reference,
+action_type,
+allow_invocation_from_event_orchestration,
+allow_invocation_manually,
+creation_time,
+description,
+html_url,
+last_run,
+last_run_by,
+map_to_all_services,
+metadata,
+modify_time,
+only_invocable_on_unresolved_incidents,
+privileges,
+runner,
+runner_type,
+self,
+services,
+summary,
+teams,
+type
 FROM pagerduty.automation_actions.actions
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
-<TabItem value="get_all_automation_actions">
+<TabItem value="list">
 
-Lists Automation Actions matching provided query params.<br /><br />The returned records are sorted by action name in alphabetical order.<br /><br />See [`Cursor-based pagination`](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.<br />
+Lists Automation Actions matching provided query params.&lt;br /&gt;&lt;br /&gt;The returned records are sorted by action name in alphabetical order.&lt;br /&gt;&lt;br /&gt;See &#91;`Cursor-based pagination`&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.&lt;br /&gt;
 
 ```sql
 SELECT
 *
 FROM pagerduty.automation_actions.actions
-WHERE Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-AND limit = '{{ limit }}'
+WHERE limit = '{{ limit }}'
 AND cursor = '{{ cursor }}'
 AND name = '{{ name }}'
 AND runner_id = '{{ runner_id }}'
@@ -267,48 +376,22 @@ AND action_type = '{{ action_type }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_automation_action_invocation"
+    defaultValue="create"
     values={[
-        { label: 'create_automation_action_invocation', value: 'create_automation_action_invocation' },
-        { label: 'create_automation_action', value: 'create_automation_action' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_automation_action_invocation">
+<TabItem value="create">
 
-Invokes an Action<br />
-
-```sql
-INSERT INTO pagerduty.automation_actions.actions (
-data__invocation,
-id,
-Accept,
-Content-Type
-)
-SELECT 
-'{{ invocation }}' /* required */,
-'{{ id }}',
-'{{ Accept }}',
-'{{ Content-Type }}'
-RETURNING
-invocation
-;
-```
-</TabItem>
-<TabItem value="create_automation_action">
-
-Create a Script, Process Automation, or Runbook Automation action<br />
+Create a Script, Process Automation, or Runbook Automation action&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.automation_actions.actions (
-data__action,
-Accept,
-Content-Type
+action
 )
 SELECT 
-'{{ action }}' /* required */,
-'{{ Accept }}',
-'{{ Content-Type }}'
+'{{ action }}' /* required */
 RETURNING
 action
 ;
@@ -316,22 +399,62 @@ action
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: actions
   props:
-    - name: id
-      value: string
-      description: Required parameter for the actions resource.
-    - name: invocation
-      value: object
     - name: action
-      value: string
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-    - name: Content-Type
-      value: string
+      value:
+        name: "{{ name }}"
+        description: "{{ description }}"
+        action_classification: "{{ action_classification }}"
+        action_type: "{{ action_type }}"
+        runner: "{{ runner }}"
+        services:
+          - id: "{{ id }}"
+            summary: "{{ summary }}"
+            type: "{{ type }}"
+            self: "{{ self }}"
+            html_url: "{{ html_url }}"
+        teams:
+          - id: "{{ id }}"
+            summary: "{{ summary }}"
+            type: "{{ type }}"
+            self: "{{ self }}"
+            html_url: "{{ html_url }}"
+        only_invocable_on_unresolved_incidents: {{ only_invocable_on_unresolved_incidents }}
+        allow_invocation_manually: {{ allow_invocation_manually }}
+        allow_invocation_from_event_orchestration: {{ allow_invocation_from_event_orchestration }}
+        map_to_all_services: {{ map_to_all_services }}
+        action_data_reference:
+          script: "{{ script }}"
+          invocation_command: "{{ invocation_command }}"
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
+
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Updates an Automation Action&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.automation_actions.actions
+SET 
+action = '{{ action }}'
+WHERE 
+id = '{{ id }}' --required
+AND action = '{{ action }}' --required
+RETURNING
+action;
 ```
 </TabItem>
 </Tabs>
@@ -340,80 +463,18 @@ action
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="delete_automation_action"
+    defaultValue="delete"
     values={[
-        { label: 'delete_automation_action', value: 'delete_automation_action' }
+        { label: 'delete', value: 'delete' }
     ]}
 >
-<TabItem value="delete_automation_action">
+<TabItem value="delete">
 
-Delete an Automation Action<br />
+Delete an Automation Action&lt;br /&gt;
 
 ```sql
 DELETE FROM pagerduty.automation_actions.actions
 WHERE id = '{{ id }}' --required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_get_all_automation_actions"
-    values={[
-        { label: '_get_all_automation_actions', value: '_get_all_automation_actions' },
-        { label: '_get_automation_action', value: '_get_automation_action' },
-        { label: 'update_automation_action', value: 'update_automation_action' }
-    ]}
->
-<TabItem value="_get_all_automation_actions">
-
-Lists Automation Actions matching provided query params.<br /><br />The returned records are sorted by action name in alphabetical order.<br /><br />See [`Cursor-based pagination`](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.<br />
-
-```sql
-EXEC pagerduty.automation_actions.actions._get_all_automation_actions 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@limit='{{ limit }}', 
-@cursor='{{ cursor }}', 
-@name='{{ name }}', 
-@runner_id='{{ runner_id }}', 
-@classification='{{ classification }}', 
-@team_id='{{ team_id }}', 
-@service_id='{{ service_id }}', 
-@action_type='{{ action_type }}'
-;
-```
-</TabItem>
-<TabItem value="_get_automation_action">
-
-Get an Automation Action<br />
-
-```sql
-EXEC pagerduty.automation_actions.actions._get_automation_action 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
-;
-```
-</TabItem>
-<TabItem value="update_automation_action">
-
-Updates an Automation Action<br />
-
-```sql
-EXEC pagerduty.automation_actions.actions.update_automation_action 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"action": "{{ action }}"
-}'
 ;
 ```
 </TabItem>

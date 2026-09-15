@@ -1,0 +1,4425 @@
+openapi: 3.0.2
+info:
+  title: PagerDuty API - Services
+  description: Technical services, their integrations, event rules, custom field values, feature enablements and audit records.
+  version: 2.0.0
+paths:
+  /services:
+    get:
+      tags:
+        - Services
+      operationId: listServices
+      x-pd-requires-scope: services.read
+      description: |
+        List existing Services.
+
+        A service may represent an application, component, or team you wish to open incidents against.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)
+
+        Scoped OAuth requires: `services.read`
+      summary: List services
+      parameters:
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+        - $ref: '#/components/parameters/team_ids'
+        - $ref: '#/components/parameters/time_zone'
+        - $ref: '#/components/parameters/sort_by_service'
+        - $ref: '#/components/parameters/include_services'
+        - $ref: '#/components/parameters/service_name'
+      responses:
+        '200':
+          description: A paginated array of services.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  services:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Service'
+                required:
+                  - services
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    services:
+                      - id: PIJ90N7
+                        summary: My Application Service
+                        type: service
+                        self: https://api.pagerduty.com/services/PIJ90N7
+                        html_url: https://subdomain.pagerduty.com/service-directory/PIJ90N7
+                        name: My Application Service
+                        auto_resolve_timeout: 14400
+                        acknowledgement_timeout: 600
+                        created_at: '2015-11-06T11:12:51-05:00'
+                        status: active
+                        alert_creation: create_alerts_and_incidents
+                        alert_grouping_parameters:
+                          type: intelligent
+                        integrations:
+                          - id: PQ12345
+                            type: generic_email_inbound_integration_reference
+                            summary: Email Integration
+                            self: https://api.pagerduty.com/services/PIJ90N7/integrations/PQ12345
+                            html_url: https://subdomain.pagerduty.com/services/PIJ90N7/integrations/PQ12345
+                        escalation_policy:
+                          id: PT20YPA
+                          type: escalation_policy_reference
+                          summary: Another Escalation Policy
+                          self: https://api.pagerduty.com/escalation_policies/PT20YPA
+                          html_url: https://subdomain.pagerduty.com/escalation_policies/PT20YPA
+                        teams:
+                          - id: PQ9K7I8
+                            type: team_reference
+                            summary: Engineering
+                            self: https://api.pagerduty.com/teams/PQ9K7I8
+                            html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                        incident_urgency_rule:
+                          type: use_support_hours
+                          during_support_hours:
+                            type: constant
+                            urgency: high
+                          outside_support_hours:
+                            type: constant
+                            urgency: low
+                        support_hours:
+                          type: fixed_time_per_day
+                          time_zone: America/Lima
+                          start_time: '09:00:00'
+                          end_time: '17:00:00'
+                          days_of_week:
+                            - 1
+                            - 2
+                            - 3
+                            - 4
+                            - 5
+                        scheduled_actions:
+                          - type: urgency_change
+                            at:
+                              type: named_time
+                              name: support_hours_start
+                            to_urgency: high
+                        auto_pause_notifications_parameters:
+                          enabled: true
+                          timeout: 300
+                    limit: 25
+                    offset: 0
+                    more: false
+                    total: null
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      x-pd-requires-scope: services.write
+      tags:
+        - Services
+      operationId: createService
+      description: |
+        Create a new service.
+
+        If `status` is included in the request, it must have a value of `active` when creating a new service. If a different status is required, make a second request to update the service.
+
+        A service may represent an application, component, or team you wish to open incidents against.
+
+        There is a limit of 25,000 services per account. If the limit is reached, the API will respond with an error. There is also a limit of 100,000 open Incidents per Service. If the limit is reached and `auto_resolve_timeout` is disabled (set to 0 or null), the `auto_resolve_timeout` property will automatically be set to  84600 (1 day).
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)
+
+        Scoped OAuth requires: `services.write`
+      summary: Create a service
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                service:
+                  $ref: '#/components/schemas/Service'
+              required:
+                - service
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  service:
+                    type: service
+                    name: My Web App
+                    description: My cool web application that does things.
+                    auto_resolve_timeout: 14400
+                    acknowledgement_timeout: 600
+                    status: active
+                    escalation_policy:
+                      id: PWIP6CQ
+                      type: escalation_policy_reference
+                    incident_urgency_rule:
+                      type: use_support_hours
+                      during_support_hours:
+                        type: constant
+                        urgency: high
+                      outside_support_hours:
+                        type: constant
+                        urgency: low
+                    support_hours:
+                      type: fixed_time_per_day
+                      time_zone: America/Lima
+                      start_time: '09:00:00'
+                      end_time: '17:00:00'
+                      days_of_week:
+                        - 1
+                        - 2
+                        - 3
+                        - 4
+                        - 5
+                    scheduled_actions:
+                      - type: urgency_change
+                        at:
+                          type: named_time
+                          name: support_hours_start
+                        to_urgency: high
+                    alert_creation: create_alerts_and_incidents
+                    alert_grouping_parameters:
+                      type: time
+                      config:
+                        timeout: 2
+                    auto_pause_notifications_parameters:
+                      enabled: true
+                      timeout: 300
+        description: The service to be created
+      responses:
+        '201':
+          description: The service that was created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  service:
+                    $ref: '#/components/schemas/Service'
+                required:
+                  - service
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    service:
+                      id: PIJ90N7
+                      summary: My Application Service
+                      type: service
+                      self: https://api.pagerduty.com/services/PIJ90N7
+                      html_url: https://subdomain.pagerduty.com/service-directory/PIJ90N7
+                      name: My Application Service
+                      auto_resolve_timeout: 14400
+                      acknowledgement_timeout: 600
+                      created_at: '2015-11-06T11:12:51-05:00'
+                      status: active
+                      alert_creation: create_alerts_and_incidents
+                      integrations:
+                        - id: PQ12345
+                          type: generic_email_inbound_integration_reference
+                          summary: Email Integration
+                          self: https://api.pagerduty.com/services/PIJ90N7/integrations/PQ12345
+                          html_url: https://subdomain.pagerduty.com/services/PIJ90N7/integrations/PQ12345
+                      escalation_policy:
+                        id: PT20YPA
+                        type: escalation_policy_reference
+                        summary: Another Escalation Policy
+                        self: https://api.pagerduty.com/escalation_policies/PT20YPA
+                        html_url: https://subdomain.pagerduty.com/escalation_policies/PT20YPA
+                      teams:
+                        - id: PQ9K7I8
+                          type: team_reference
+                          summary: Engineering
+                          self: https://api.pagerduty.com/teams/PQ9K7I8
+                          html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                      incident_urgency_rule:
+                        type: use_support_hours
+                        during_support_hours:
+                          type: constant
+                          urgency: high
+                        outside_support_hours:
+                          type: constant
+                          urgency: low
+                      support_hours:
+                        type: fixed_time_per_day
+                        time_zone: America/Lima
+                        start_time: '09:00:00'
+                        end_time: '17:00:00'
+                        days_of_week:
+                          - 1
+                          - 2
+                          - 3
+                          - 4
+                          - 5
+                      scheduled_actions:
+                        - type: urgency_change
+                          at:
+                            type: named_time
+                            name: support_hours_start
+                          to_urgency: high
+                      auto_pause_notifications_parameters:
+                        enabled: true
+                        timeout: 300
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    description: List and create services.
+  /services/{id}:
+    get:
+      tags:
+        - Services
+      operationId: getService
+      x-pd-requires-scope: services.read
+      description: |
+        Get details about an existing service.
+
+        A service may represent an application, component, or team you wish to open incidents against.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)
+
+        Scoped OAuth requires: `services.read`
+      summary: Get a service
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/include_services_id'
+      responses:
+        '200':
+          description: The service requested.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  service:
+                    $ref: '#/components/schemas/Service'
+                required:
+                  - service
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    service:
+                      id: PIJ90N7
+                      type: service
+                      summary: My Application Service
+                      self: https://api.pagerduty.com/services/PIJ90N7
+                      html_url: https://subdomain.pagerduty.com/service-directory/PIJ90N7
+                      name: My Application Service
+                      auto_resolve_timeout: 14400
+                      acknowledgement_timeout: 600
+                      created_at: '2015-11-06T11:12:51-05:00'
+                      status: active
+                      alert_creation: create_alerts_and_incidents
+                      integrations:
+                        - id: PQ12345
+                          type: generic_email_inbound_integration_reference
+                          summary: Email Integration
+                          self: https://api.pagerduty.com/services/PIJ90N7/integrations/PQ12345
+                          html_url: https://subdomain.pagerduty.com/services/PIJ90N7/integrations/PQ12345
+                      escalation_policy:
+                        id: PT20YPA
+                        type: escalation_policy_reference
+                        summary: Another Escalation Policy
+                        self: https://api.pagerduty.com/escalation_policies/PT20YPA
+                        html_url: https://subdomain.pagerduty.com/escalation_policies/PT20YPA
+                      teams:
+                        - id: PQ9K7I8
+                          type: team_reference
+                          summary: Engineering
+                          self: https://api.pagerduty.com/teams/PQ9K7I8
+                          html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                      incident_urgency_rule:
+                        type: use_support_hours
+                        during_support_hours:
+                          type: constant
+                          urgency: high
+                        outside_support_hours:
+                          type: constant
+                          urgency: low
+                      support_hours:
+                        type: fixed_time_per_day
+                        time_zone: America/Lima
+                        start_time: '09:00:00'
+                        end_time: '17:00:00'
+                        days_of_week:
+                          - 1
+                          - 2
+                          - 3
+                          - 4
+                          - 5
+                      scheduled_actions:
+                        - type: urgency_change
+                          at:
+                            type: named_time
+                            name: support_hours_start
+                          to_urgency: high
+                      auto_pause_notifications_parameters:
+                        enabled: true
+                        timeout: 300
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      x-pd-requires-scope: services.write
+      tags:
+        - Services
+      operationId: deleteService
+      description: |
+        Delete an existing service.
+
+        Once the service is deleted, it will not be accessible from the web UI and new incidents won't be able to be created for this service.
+
+        A service may represent an application, component, or team you wish to open incidents against.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)
+
+        Scoped OAuth requires: `services.write`
+      summary: Delete a service
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: The service was deleted successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    put:
+      x-pd-requires-scope: services.write
+      tags:
+        - Services
+      description: |
+        Update an existing service.
+
+        A service may represent an application, component, or team you wish to open incidents against.
+
+        There is a limit of 100,000 open Incidents per Service. If the limit is reached and you disable `auto_resolve_timeout` (set to 0 or null), the API will respond with an error.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)
+
+        Scoped OAuth requires: `services.write`
+      summary: Update a service
+      parameters:
+        - $ref: '#/components/parameters/id'
+      operationId: updateService
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                service:
+                  $ref: '#/components/schemas/Service'
+              required:
+                - service
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  service:
+                    type: service
+                    name: My Web App
+                    description: My cool web application that does things.
+                    auto_resolve_timeout: 14400
+                    acknowledgement_timeout: 600
+                    status: active
+                    escalation_policy:
+                      id: PWIP6CQ
+                      type: escalation_policy_reference
+                    incident_urgency_rule:
+                      type: use_support_hours
+                      during_support_hours:
+                        type: constant
+                        urgency: high
+                      outside_support_hours:
+                        type: constant
+                        urgency: low
+                    support_hours:
+                      type: fixed_time_per_day
+                      time_zone: America/Lima
+                      start_time: '09:00:00'
+                      end_time: '17:00:00'
+                      days_of_week:
+                        - 1
+                        - 2
+                        - 3
+                        - 4
+                        - 5
+                    scheduled_actions:
+                      - type: urgency_change
+                        at:
+                          type: named_time
+                          name: support_hours_start
+                        to_urgency: high
+                    alert_creation: create_alerts_and_incidents
+                    alert_grouping_parameters:
+                      type: time
+                      config:
+                        timeout: 2
+                    auto_pause_notifications_parameters:
+                      enabled: true
+                      timeout: 300
+        description: The service to be updated.
+      responses:
+        '200':
+          description: The service that was updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  service:
+                    $ref: '#/components/schemas/Service'
+                required:
+                  - service
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    service:
+                      id: PIJ90N7
+                      type: service
+                      summary: My Application Service
+                      self: https://api.pagerduty.com/services/PIJ90N7
+                      html_url: https://subdomain.pagerduty.com/service-directory/PIJ90N7
+                      name: My Application Service
+                      auto_resolve_timeout: 14400
+                      acknowledgement_timeout: 600
+                      created_at: '2015-11-06T11:12:51-05:00'
+                      status: active
+                      alert_creation: create_alerts_and_incidents
+                      alert_grouping_parameters:
+                        type: time
+                        config:
+                          timeout: 2
+                      integrations:
+                        - id: PQ12345
+                          type: generic_email_inbound_integration_reference
+                          summary: Email Integration
+                          self: https://api.pagerduty.com/services/PIJ90N7/integrations/PQ12345
+                          html_url: https://subdomain.pagerduty.com/services/PIJ90N7/integrations/PQ12345
+                      escalation_policy:
+                        id: PT20YPA
+                        type: escalation_policy_reference
+                        summary: Another Escalation Policy
+                        self: https://api.pagerduty.com/escalation_policies/PT20YPA
+                        html_url: https://subdomain.pagerduty.com/escalation_policies/PT20YPA
+                      teams:
+                        - id: PQ9K7I8
+                          type: team_reference
+                          summary: Engineering
+                          self: https://api.pagerduty.com/teams/PQ9K7I8
+                          html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                      incident_urgency_rule:
+                        type: use_support_hours
+                        during_support_hours:
+                          type: constant
+                          urgency: high
+                        outside_support_hours:
+                          type: constant
+                          urgency: low
+                      support_hours:
+                        type: fixed_time_per_day
+                        time_zone: America/Lima
+                        start_time: '09:00:00'
+                        end_time: '17:00:00'
+                        days_of_week:
+                          - 1
+                          - 2
+                          - 3
+                          - 4
+                          - 5
+                      scheduled_actions:
+                        - type: urgency_change
+                          at:
+                            type: named_time
+                            name: support_hours_start
+                          to_urgency: high
+                      auto_pause_notifications_parameters:
+                        enabled: true
+                        timeout: 300
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    description: Manage a service.
+  /services/{id}/audit/records:
+    get:
+      x-pd-requires-scope: audit_records.read
+      tags:
+        - Services
+      operationId: listServiceAuditRecords
+      summary: List audit records for a service
+      description: |
+        The returned records are sorted by the `execution_time` from newest to oldest.
+
+        See [`Cursor-based pagination`](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for instructions on how to paginate through the result set.
+
+        For more information see the [Audit API Document](https://developer.pagerduty.com/docs/rest-api-v2/audit-records-api/).
+
+        Scoped OAuth requires: `audit_records.read`
+      parameters:
+        - $ref: '#/components/parameters/schedule_id'
+        - $ref: '#/components/parameters/cursor_limit'
+        - $ref: '#/components/parameters/cursor_cursor'
+        - $ref: '#/components/parameters/audit_since'
+        - $ref: '#/components/parameters/audit_until'
+      responses:
+        '200':
+          description: Records matching the query criteria.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditRecordResponseSchema'
+              examples:
+                response:
+                  $ref: '#/components/examples/AuditRecordServiceResponse'
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    description: List audit records for a service.
+  /services/{id}/integrations:
+    post:
+      x-pd-requires-scope: services.write
+      tags:
+        - Services
+      operationId: createServiceIntegration
+      summary: Create a new integration
+      description: |
+        Create a new integration belonging to a Service.
+
+        A service may represent an application, component, or team you wish to open incidents against.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)
+
+        Scoped OAuth requires: `services.write`
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                integration:
+                  $ref: '#/components/schemas/Integration'
+              required:
+                - integration
+            examples:
+              email_integration:
+                summary: Request Example for Email Integration
+                value:
+                  integration:
+                    type: generic_email_inbound_integration
+                    name: Email
+                    service:
+                      id: PQL78HM
+                      type: service_reference
+                    integration_email: my-email-based-integration@subdomain.pagerduty.com
+                    vendor:
+                      type: vendor_reference
+                      id: PZD94QK
+              email_integration_with_filters:
+                summary: Email Integration With Filters
+                value:
+                  integration:
+                    type: generic_email_inbound_integration
+                    name: Email with Filters
+                    integration_email: your-service@subdomain.pd-staging.com
+                    email_incident_creation: on_new_email_subject
+                    email_filter_mode: or-rules-email
+                    email_parsers:
+                      - action: trigger
+                        match_predicate:
+                          type: any
+                          matcher: this thing
+                          part: body
+                          children: []
+                        value_extractors:
+                          - type: entire
+                            part: body
+                            value_name: incident_key
+                    email_parsing_fallback: discard
+                    email_filters:
+                      - subject_mode: match
+                        subject_regex: alert
+                        body_mode: match
+                        body_regex: alert
+                        from_email_mode: match
+                        from_email_regex: alert
+              events_v2_integration:
+                summary: Request Example for Events v2 Integration
+                value:
+                  integration:
+                    type: events_api_v2_inbound_integration
+                    name: Events V2
+                    service:
+                      id: PQL78HM
+                      type: service_reference
+        description: The integration to be created
+      responses:
+        '201':
+          description: The integration that was created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  integration:
+                    $ref: '#/components/schemas/Integration'
+                required:
+                  - integration
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    integration:
+                      id: PE1U9CH
+                      type: generic_email_inbound_integration
+                      summary: Email
+                      self: https://api.pagerduty.com/services/PQL78HM/integrations/PE1U9CH
+                      html_url: https://subdomain.pagerduty.com/services/PQL78HM/integrations/PE1U9CH
+                      name: Email
+                      service:
+                        id: PQL78HM
+                        type: service_reference
+                        summary: My Email-Based Integration
+                        self: https://api.pagerduty.com/services/PQL78HM
+                        html_url: https://subdomain.pagerduty.com/service-directory/PQL78HM
+                      created_at: '2015-10-14T13:33:02-07:00'
+                      integration_email: my-email-based-integration@subdomain.pagerduty.com
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: Create integrations belonging to a service.
+  /services/{id}/integrations/{integration_id}:
+    put:
+      x-pd-requires-scope: services.write
+      tags:
+        - Services
+      operationId: updateServiceIntegration
+      summary: Update an existing integration
+      description: |
+        Update an integration belonging to a Service.
+
+        A service may represent an application, component, or team you wish to open incidents against.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)
+
+        Scoped OAuth requires: `services.write`
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/integration_id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                integration:
+                  $ref: '#/components/schemas/Integration'
+              required:
+                - integration
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  integration:
+                    type: generic_email_inbound_integration
+                    name: Email
+                    service:
+                      id: PQL78HM
+                      type: service_reference
+                      summary: My Email-Based Integration
+                      self: https://api.pagerduty.com/services/PQL78HM
+                      html_url: https://subdomain.pagerduty.com/service-directory/PQL78HM
+                    integration_email: my-email-based-integration@subdomain.pagerduty.com
+                    vendor:
+                      type: vendor_reference
+                      id: PZD94QK
+        description: The integration to be updated
+      responses:
+        '200':
+          description: The integration that was updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  integration:
+                    $ref: '#/components/schemas/Integration'
+                required:
+                  - integration
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    integration:
+                      id: PE1U9CH
+                      type: generic_email_inbound_integration
+                      summary: Email
+                      self: https://api.pagerduty.com/services/PQL78HM/integrations/PE1U9CH
+                      html_url: https://subdomain.pagerduty.com/services/PQL78HM/integrations/PE1U9CH
+                      name: Email
+                      service:
+                        id: PQL78HM
+                        type: service_reference
+                        summary: My Email-Based Integration
+                        self: https://api.pagerduty.com/services/PQL78HM
+                        html_url: https://subdomain.pagerduty.com/service-directory/PQL78HM
+                      created_at: '2015-10-14T13:33:02-07:00'
+                      integration_email: my-email-based-integration@subdomain.pagerduty.com
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    get:
+      x-pd-requires-scope: services.read
+      tags:
+        - Services
+      operationId: getServiceIntegration
+      summary: View an integration
+      description: |
+        Get details about an integration belonging to a service.
+
+        A service may represent an application, component, or team you wish to open incidents against.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#services)
+
+        Scoped OAuth requires: `services.read`
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/integration_id'
+        - $ref: '#/components/parameters/include_services_integrations'
+      responses:
+        '200':
+          description: The integration that was requested.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  integration:
+                    $ref: '#/components/schemas/Integration'
+                required:
+                  - integration
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    integration:
+                      id: PE1U9CH
+                      type: generic_email_inbound_integration
+                      summary: Email
+                      self: https://api.pagerduty.com/services/PQL78HM/integrations/PE1U9CH
+                      html_url: https://subdomain.pagerduty.com/services/PQL78HM/integrations/PE1U9CH
+                      name: Email
+                      service:
+                        id: PQL78HM
+                        type: service_reference
+                        summary: My Email-Based Integration
+                        self: https://api.pagerduty.com/services/PQL78HM
+                        html_url: https://subdomain.pagerduty.com/service-directory/PQL78HM
+                      created_at: '2015-10-14T13:33:02-07:00'
+                      vendor:
+                        id: P8JX75F
+                        type: vendor_reference
+                        summary: Autotask
+                        self: https://api.pagerduty.com/vendors/P8JX75F
+                      integration_email: my-email-based-integration@subdomain.pagerduty.com
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: View or update integrations belonging to a service.
+  /services/{id}/rules:
+    get:
+      x-pd-requires-scope: services.read
+      tags:
+        - Services
+      operationId: listServiceEventRules
+      description: |
+        List Event Rules on a Service.
+        <!-- theme: warning -->
+        > ### End-of-life
+        > Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.
+
+        Scoped OAuth requires: `services.read`
+      summary: List Service's Event Rules
+      parameters:
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/include_ruleset_migrated_metadata'
+      responses:
+        '200':
+          description: A paginated array of Event Rule objects.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  migrated_at:
+                    type: string
+                    format: date-time
+                    description: The date/time the service's Event Rules were converted to a Service Orchestration. This property is only included if the `migrated_metadata` query parameter is provided.
+                    readOnly: true
+                  migrated_by:
+                    type: object
+                    description: Reference to the user that converted the service's Event Rules to a Service Orchestration. This property is only included if the `migrated_metadata` query parameter is provided.
+                    properties:
+                      id:
+                        type: string
+                        readOnly: true
+                      type:
+                        type: string
+                        description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+                        readOnly: true
+                      self:
+                        type: string
+                        format: url
+                        description: The API show URL at which the object is accessible
+                        readOnly: true
+                    readOnly: true
+                  migrated_status:
+                    type: string
+                    description: The status indicating whether the service's Event Rules were successfully converted to a Service Orchestration. This property is only included if the `migrated_metadata` query parameter is provided.
+                    enum:
+                      - completed
+                    readOnly: true
+                  migrated_to:
+                    type: object
+                    description: Reference to the Service Orchestration that the service's Event Rules were converted to. This property is only included if the `migrated_metadata` query parameter is provided.
+                    properties:
+                      id:
+                        type: string
+                        readOnly: true
+                      type:
+                        type: string
+                        description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+                        readOnly: true
+                      self:
+                        type: string
+                        format: url
+                        description: The API show URL at which the object is accessible
+                        readOnly: true
+                    readOnly: true
+                  migrated_via:
+                    type: string
+                    description: Indicates whether the conversion was performed via the PagerDuty API or PagerDuty website. This property is only included if the `migrated_metadata` query parameter is provided.
+                    enum:
+                      - API
+                      - UI
+                    readOnly: true
+                  rules:
+                    type: array
+                    description: The paginated list of Event Rules of the Service.
+                    items:
+                      $ref: '#/components/schemas/ServiceEventRule'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    rules:
+                      - id: 14e56445-ebab-4dd0-ba9d-fc28a41b7e7b
+                        position: 0
+                        disabled: false
+                        self: https://api.pagerduty.com/service-directory/PI2KBWI/rules/14e56445-ebab-4dd0-ba9d-fc28a41b7e7b
+                        conditions:
+                          operator: and
+                          subconditions:
+                            - operator: contains
+                              parameters:
+                                value: mysql
+                                path: class
+                        time_frame:
+                          active_between:
+                            start_time: 1577880000000
+                            end_time: 1580558400000
+                        actions:
+                          severity:
+                            value: info
+                          extractions:
+                            - target: dedup_key
+                              template: '{{error_level}} error on host {{host}}'
+                        variables:
+                          - name: error_level
+                            type: regex
+                            parameters:
+                              value: .*error level is (\w+)\.
+                              path: summary
+                          - name: host
+                            type: regex
+                            parameters:
+                              value: (.*)-USW2
+                              path: source
+                    limit: 25
+                    migrated_at: '2023-06-14T13:51:31Z'
+                    migrated_by:
+                      id: P8B9WR8
+                      self: https://api.pagerduty.com/users/P8B9WR8
+                      type: user_reference
+                    migrated_status: completed
+                    migrated_to:
+                      id: PI2KBWI
+                      self: https://api.pagerduty.com/event_orchestrations/services/PI2KBWI
+                      type: event_orchestration_reference
+                    migrated_via: API
+                    offset: 0
+                    more: false
+                    total: null
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      x-pd-requires-scope: services.write
+      tags:
+        - Services
+      operationId: createServiceEventRule
+      description: |
+        Create a new Event Rule on a Service.
+        <!-- theme: warning -->
+        > ### End-of-life
+        > Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.
+
+        Scoped OAuth requires: `services.write`
+      summary: Create an Event Rule on a Service
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rule:
+                  $ref: '#/components/schemas/ServiceEventRule'
+              required:
+                - rule
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  rule:
+                    id: 14e56445-ebab-4dd0-ba9d-fc28a41b7e7b
+                    position: 0
+                    disabled: false
+                    conditions:
+                      operator: and
+                      subconditions:
+                        - operator: contains
+                          parameters:
+                            value: mysql
+                            path: class
+                    time_frame:
+                      active_between:
+                        start_time: 1577880000000
+                        end_time: 1580558400000
+                    actions:
+                      annotate:
+                        value: This incident was modified by an Event Rule
+                      priority:
+                        value: PCMUB6F
+                      severity:
+                        value: warning
+                      extractions:
+                        - target: dedup_key
+                          source: custom_details.error_summary
+                          regex: Host (.*) is experiencing errors
+      responses:
+        '201':
+          description: The Event Rule that was created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rule:
+                    $ref: '#/components/schemas/ServiceEventRule'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    ruleset:
+                      id: 14e56445-ebab-4dd0-ba9d-fc28a41b7e7b
+                      position: 0
+                      disabled: false
+                      self: https://api.pagerduty.com/services/PI2KBWI/rules/14e56445-ebab-4dd0-ba9d-fc28a41b7e7b
+                      conditions:
+                        operator: and
+                        subconditions:
+                          - operator: contains
+                            parameters:
+                              value: mysql
+                              path: class
+                      time_frame:
+                        active_between:
+                          start_time: 1577880000000
+                          end_time: 1580558400000
+                      actions:
+                        annotate:
+                          value: This incident was modified by an Event Rule
+                        priority:
+                          value: PCMUB6F
+                        severity:
+                          value: warning
+                        extractions:
+                          - target: dedup_key
+                            source: custom_details.error_summary
+                            regex: Host (.*) is experiencing errors
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /services/{id}/rules/convert:
+    post:
+      x-pd-requires-scope: services.write
+      tags:
+        - Services
+      operationId: convertServiceEventRulesToEventOrchestration
+      summary: Convert a Service's Event Rules into Event Orchestration Rules
+      description: |
+        Convert this Service's Event Rules into functionally equivalent Event Orchestration Rules.
+
+        Sending a request to this API endpoint has several effects:
+
+        1. Automatically creates Event Orchestration Rules for this Service that will behave identically as this Service's currently configured Event Rules.
+        2. Makes all existing Event Rules for this Service read-only. All future updates need to be made via the newly created Event Orchestration rules.
+
+        Sending a request to this API endpoint will **not** change how future events will be processed. If past events for this Service have been evaluated via Event Rules then new events sent to this Service will also continue to be evaluated via the (now read-only) Event Rules. To change this Service so that new events start being evaluated via the newly created Event Orchestration Rules use the [Update the Service Orchestration active status for a Service API](https://developer.pagerduty.com/api-reference/855659be83d9e-update-the-service-orchestration-active-status-for-a-service).
+
+        > ### End-of-life
+        > Event Rules will end-of-life soon. We highly recommend that you use this API to [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.
+
+        Scoped OAuth requires: `services.write`
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: The Event Orchestration Rules were successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  convert_status:
+                    type: string
+                    readOnly: true
+                    description: Did PagerDuty successfully create equivalent Event Orchestration rules
+                  converted_to:
+                    type: string
+                    format: url
+                    readOnly: true
+                    description: the API URL at which the newly created Event Orchestration rules are accessible
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    convert_status: completed
+                    converted_to: https://api.pagerduty.com/event_orchestrations/service/PC2D9ML
+        '400':
+          description: Could not create equivalent Event Orchestration Rules based on the Service's current Event Rules
+          content:
+            application/json:
+              schema:
+                type: object
+                readOnly: true
+                properties:
+                  error:
+                    type: object
+                    readOnly: true
+                    properties:
+                      message:
+                        type: string
+                        readOnly: true
+                        description: Error message string
+                      errors:
+                        type: array
+                        readOnly: true
+                        items:
+                          type: object
+                          readOnly: true
+                          description: Convertion error Details
+                          properties:
+                            rule_id:
+                              type: string
+                              readOnly: true
+                              description: The ID of the Service Event Rule that couldn't be successfully converted.
+                            position:
+                              type: integer
+                              readOnly: true
+                              description: The position of the Service Event Rule that couldn't be successfully converted.
+                            messages:
+                              type: array
+                              readOnly: true
+                              description: Human friendly explanations of why this Event Rule couldn't be converted into an equivalent Event Orchestration Rule.
+                              items:
+                                type: string
+                                readOnly: true
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    error:
+                      message: Unable to convert given Ruleset to an Event Orchestration
+                      errors:
+                        - rule_id: 693cdcd1-ecfd-4064-a834-5cb28a74c060
+                          position: 0
+                          messages:
+                            - Unable to convert a rule that has a `time_frame` with both `active_between` and `scheduled_weekly` settings.
+                        - rule_id: 9f6896c0-b435-401f-b25f-62e145d9ccf4
+                          position: 5
+                          messages:
+                            - Unable to convert `actions.extractions`; Should have a most 25 extractions but this rule has 42 extractions.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    description: Convert a Service's Event Rules into Event Orchestration Rules
+  /services/{id}/rules/{rule_id}:
+    get:
+      x-pd-requires-scope: services.read
+      tags:
+        - Services
+      operationId: getServiceEventRule
+      description: |
+        Get an Event Rule from a Service.
+        <!-- theme: warning -->
+        > ### End-of-life
+        > Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.
+
+        Scoped OAuth requires: `services.read`
+      summary: Get an Event Rule from a Service
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/rule_id'
+      responses:
+        '200':
+          description: The Event Rule object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rule:
+                    $ref: '#/components/schemas/ServiceEventRule'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    rule:
+                      id: 14e56445-ebab-4dd0-ba9d-fc28a41b7e7b
+                      position: 0
+                      disabled: false
+                      self: https://api.pagerduty.com/services/PI2KBWI/rules/14e56445-ebab-4dd0-ba9d-fc28a41b7e7b
+                      conditions:
+                        operator: and
+                        subconditions:
+                          - operator: contains
+                            parameters:
+                              value: mysql
+                              path: class
+                      time_frame:
+                        active_between:
+                          start_time: 1577880000000
+                          end_time: 1580558400000
+                      actions:
+                        annotate:
+                          value: This incident was modified by an Event Rule
+                        priority:
+                          value: PCMUB6F
+                        severity:
+                          value: warning
+                        extractions:
+                          - target: dedup_key
+                            source: custom_details.error_summary
+                            regex: Host (.*) is experiencing errors
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      x-pd-requires-scope: services.write
+      tags:
+        - Services
+      operationId: updateServiceEventRule
+      summary: Update an Event Rule on a Service
+      description: |
+        Update an Event Rule on a Service. Note that the endpoint supports partial updates, so any number of the writable fields can be provided.
+        <!-- theme: warning -->
+        > ### End-of-life
+        > Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.
+
+        Scoped OAuth requires: `services.write`
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/rule_id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rule:
+                  $ref: '#/components/schemas/ServiceEventRule'
+                rule_id:
+                  description: The id of the Event Rule to update on the Service.
+                  type: string
+              required:
+                - rule_id
+            examples:
+              suppress_action:
+                summary: 'Example: Enable suppress action'
+                value:
+                  rule_id: 7123bdd1-74e8-4aa7-aa38-4a9ebe123456
+                  rule:
+                    actions:
+                      suppress:
+                        value: true
+              disable_rule:
+                summary: 'Example: Disable rule'
+                value:
+                  rule_id: 7123bdd1-74e8-4aa7-aa38-4a9ebe123456
+                  rule:
+                    disabled: true
+      responses:
+        '200':
+          description: The Event Rule that was updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rule:
+                    $ref: '#/components/schemas/ServiceEventRule'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    rule:
+                      id: 14e56445-ebab-4dd0-ba9d-fc28a41b7e7b
+                      position: 0
+                      disabled: false
+                      self: https://api.pagerduty.com/services/PI2KBWI/rules/14e56445-ebab-4dd0-ba9d-fc28a41b7e7b
+                      conditions:
+                        operator: and
+                        subconditions:
+                          - operator: contains
+                            parameters:
+                              value: mysql
+                              path: class
+                      time_frame:
+                        active_between:
+                          start_time: 1577880000000
+                          end_time: 1580558400000
+                      actions:
+                        annotate:
+                          value: This incident was modified by an Event Rule
+                        priority:
+                          value: PCMUB6F
+                        severity:
+                          value: warning
+                        extractions:
+                          - target: dedup_key
+                            source: custom_details.error_summary
+                            regex: Host (.*) is experiencing errors
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    delete:
+      x-pd-requires-scope: services.write
+      tags:
+        - Services
+      operationId: deleteServiceEventRule
+      description: |
+        Delete an Event Rule from a Service.
+        <!-- theme: warning -->
+        > ### End-of-life
+        > Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.
+
+        Scoped OAuth requires: `services.write`
+      summary: Delete an Event Rule from a Service
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/rule_id'
+      responses:
+        '204':
+          description: The Event Rule was deleted successfully.
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /services/{id}/custom_fields/values:
+    get:
+      tags:
+        - Services
+      x-pd-requires-scope: services.read
+      operationId: getServiceCustomFieldValues
+      description: |
+        Get custom field values for a service.
+
+        Scoped OAuth requires: `services.read`
+      summary: Get Custom Field Values
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: The list of custom field values.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_fields:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ServiceCustomFieldsFieldValueReadModel'
+              examples:
+                single_value_example:
+                  summary: Response Example
+                  value:
+                    custom_fields:
+                      - data_type: string
+                        description: environment where service instance runs
+                        display_name: Runtime Environment
+                        field_type: single_value_fixed
+                        id: PT4KHEE
+                        name: environment
+                        type: field_value
+                        value: production
+                multi_value_example:
+                  summary: Response Example
+                  value:
+                    custom_fields:
+                      - data_type: string
+                        description: environment where service instance runs
+                        display_name: Runtime Environment
+                        field_type: multi_value_fixed
+                        id: PT4KHEE
+                        name: environment
+                        type: field_value
+                        value:
+                          - production
+                          - staging
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - Services
+      x-pd-requires-scope: services.write
+      operationId: updateServiceCustomFieldValues
+      description: |
+        Set custom field values for a service.
+
+        Scoped OAuth requires: `services.write`
+      summary: Update Custom Field Values
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                custom_fields:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ServiceCustomFieldsFieldValueUpdateModel'
+              required:
+                - custom_fields
+            examples:
+              example_with_custom_field_id:
+                summary: Request Example
+                value:
+                  custom_fields:
+                    - id: PT4KHEE
+                      value: production
+              example_with_custom_field_name:
+                summary: Request Example
+                value:
+                  custom_fields:
+                    - name: environment
+                      value: production
+              example_with_multiple_value_field:
+                summary: Request Example
+                value:
+                  custom_fields:
+                    - id: PT4KHEE
+                      value:
+                        - production
+                        - staging
+      responses:
+        '201':
+          description: The custom field values were updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_fields:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ServiceCustomFieldsFieldValueReadModel'
+                required:
+                  - custom_fields
+              examples:
+                single_value_example:
+                  summary: Response Example
+                  value:
+                    custom_fields:
+                      - data_type: string
+                        description: environment where service instance runs
+                        display_name: Runtime Environment
+                        field_type: single_value_fixed
+                        id: PT4KHEE
+                        name: environment
+                        type: field_value
+                        value: production
+                multi_value_example:
+                  summary: Response Example
+                  value:
+                    custom_fields:
+                      - data_type: string
+                        description: environment where service instance runs
+                        display_name: Runtime Environment
+                        field_type: multi_value_fixed
+                        id: PT4KHEE
+                        name: environment
+                        type: field_value
+                        value:
+                          - production
+                          - staging
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    description: Retrieve and update service custom fields.
+  /services/{id}/enablements:
+    get:
+      tags:
+        - Services
+      x-pd-requires-scope: services.read
+      operationId: listServiceFeatureEnablements
+      summary: Get Enablements for a Service
+      description: |
+        List all feature enablement settings for a service. Currently, only the `aiops` enablement is supported.
+
+        For any account with the AIOps product addon, every service will have AIOps features enabled by default.
+
+        **Warning conditions**:
+        - If the account is not entitled to use AIOps features, a warning will be returned alongside the enablement data.
+
+        Scoped OAuth requires: `services.read`
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: The list of feature enablement settings for the service.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  enablements:
+                    type: array
+                    description: Array of feature enablement settings.
+                    items:
+                      $ref: '#/components/schemas/FeatureEnablement'
+              examples:
+                success_response:
+                  $ref: '#/components/examples/FeatureEnablementListResponseSuccess'
+                response_with_warning:
+                  $ref: '#/components/examples/FeatureEnablementListResponseWarningForService'
+                default_response:
+                  $ref: '#/components/examples/FeatureEnablementListResponseDefault'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    description: Get Enablements for a Service.
+  /services/{id}/enablements/{feature_name}:
+    put:
+      tags:
+        - Services
+      x-pd-requires-scope: services.write
+      operationId: updateServiceFeatureEnablement
+      summary: Update an Enablement for a Service
+      description: |
+        Update the feature enablement setting for a specific product addon on a service. This setting controls enabling or disabling the set of features contained within the addon.
+        Currently, only `aiops` is supported as a valid feature enablement.
+
+        **Warning conditions**:
+        - If the account is not entitled to use AIOps features, the setting will be updated, but a warning will be returned.
+
+        Scoped OAuth requires: `services.write`
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/enablement_feature_name'
+      requestBody:
+        description: The feature enablement setting to apply.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enablement:
+                  $ref: '#/components/schemas/FeatureEnablement'
+              required:
+                - enablement
+            examples:
+              enable_aiops:
+                $ref: '#/components/examples/FeatureEnablementPutRequestEnable'
+              disable_aiops:
+                $ref: '#/components/examples/FeatureEnablementPutRequestDisable'
+      responses:
+        '200':
+          description: The feature enablement setting was updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  enablement:
+                    $ref: '#/components/schemas/FeatureEnablement'
+              examples:
+                success_response:
+                  $ref: '#/components/examples/FeatureEnablementPutResponseSuccess'
+                response_with_warning:
+                  $ref: '#/components/examples/FeatureEnablementPutResponseWarningForService'
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    description: Update an Enablement for a Service.
+components:
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        offset:
+          type: integer
+          description: Echoes offset pagination property.
+          readOnly: true
+        limit:
+          type: integer
+          description: Echoes limit pagination property.
+          readOnly: true
+        more:
+          type: boolean
+          description: Indicates if there are additional records to return
+          readOnly: true
+        total:
+          type: integer
+          description: The total number of records matching the given query.
+          nullable: true
+          readOnly: true
+    Service:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        name:
+          type: string
+          description: The name of the service.
+        description:
+          type: string
+          description: The user-provided description of the service.
+        auto_resolve_timeout:
+          type: integer
+          description: Time in seconds that an incident is automatically resolved if left open for that long. Value is `null` if the feature is disabled. Value must not be negative. Setting this field to `0`, `null` (or unset in POST request) will disable the feature.
+          default: 14400
+        acknowledgement_timeout:
+          type: integer
+          description: Time in seconds that an incident changes to the Triggered State after being Acknowledged. Value is `null` if the feature is disabled. Value must not be negative. Setting this field to `0`, `null` (or unset in POST request) will disable the feature.
+          default: 1800
+        created_at:
+          type: string
+          format: date-time
+          description: The date/time when this service was created
+          readOnly: true
+        status:
+          type: string
+          description: |
+            The current state of the Service. Valid statuses are:
+
+
+            - `active`: The service is enabled and has no open incidents. This is the only status a service can be created with.
+            - `warning`: The service is enabled and has one or more acknowledged incidents.
+            - `critical`: The service is enabled and has one or more triggered incidents.
+            - `maintenance`: The service is under maintenance, no new incidents will be triggered during maintenance mode.
+            - `disabled`: The service is disabled and will not have any new triggered incidents.
+          enum:
+            - active
+            - warning
+            - critical
+            - maintenance
+            - disabled
+          default: active
+        last_incident_timestamp:
+          type: string
+          format: date-time
+          description: The date/time when the most recent incident was created for this service.
+          readOnly: true
+        escalation_policy:
+          $ref: '#/components/schemas/EscalationPolicyReference'
+        response_play:
+          deprecated: true
+          description: Response plays associated with this service.
+        teams:
+          type: array
+          description: The set of teams associated with this service.
+          items:
+            $ref: '#/components/schemas/TeamReference'
+          readOnly: true
+        integrations:
+          type: array
+          description: An array containing Integration objects that belong to this service. If `integrations` is passed as an argument, these are full objects - otherwise, these are references.
+          items:
+            $ref: '#/components/schemas/IntegrationReference'
+          readOnly: true
+        incident_urgency_rule:
+          $ref: '#/components/schemas/IncidentUrgencyRule'
+        support_hours:
+          $ref: '#/components/schemas/SupportHours'
+        scheduled_actions:
+          type: array
+          description: An array containing scheduled actions for the service.
+          items:
+            $ref: '#/components/schemas/ScheduledAction'
+        addons:
+          type: array
+          description: The array of Add-ons associated with this service.
+          items:
+            $ref: '#/components/schemas/AddonReference'
+          readOnly: true
+        alert_creation:
+          type: string
+          deprecated: true
+          description: |
+            Whether a service creates only incidents, or both alerts and incidents. A service must create alerts in order to enable incident merging.
+            * "create_incidents" - The service will create one incident and zero alerts for each incoming event.
+            * "create_alerts_and_incidents" - The service will create one incident and one associated alert for each incoming event.
+            This attribute has been deprecated as all services will be migrated to use alerts and incidents. Afterward, the incident only service setting will no longer be available. For details, please refer to the knowledge base: https://support.pagerduty.com/docs/alerts#enable-and-disable-alerts-on-a-service.
+          enum:
+            - create_incidents
+            - create_alerts_and_incidents
+          default: create_alerts_and_incidents
+        alert_grouping_parameters:
+          description: Alert Grouping Parameters
+          deprecated: true
+          oneOf:
+            - $ref: '#/components/schemas/AlertGroupingParameters'
+            - type: object
+              title: Alert Grouping Settings Reference
+              deprecated: true
+              description: When a service uses alert grouping configuration that is unsupported via the services api, and can only be configured via the [Alert Grouping Settings API](https://developer.pagerduty.com/api-reference/587edbc8ff416-create-an-alert-grouping-setting). The reference object includes the new location details for the service's Alert Grouping Setting. When an `alert_grouping_settings_reference` is included in a create or update request it will be ignored and no changes are applied to the service.
+              properties:
+                id:
+                  type: string
+                  readOnly: true
+                  description: id of the related alert grouping setting
+                type:
+                  readOnly: true
+                  type: string
+                  description: type of reference eg. alert_grouping_setting_reference
+                summary:
+                  readOnly: true
+                  type: string
+                  description: an explanation of this reference
+                self:
+                  readOnly: true
+                  type: string
+                  description: link to api endpoint for this setting
+                html_url:
+                  readOnly: true
+                  type: string
+                  description: link to the ui page to edit the setting
+        alert_grouping:
+          type: string
+          deprecated: true
+          description: |
+            Defines how alerts on this service will be automatically grouped into incidents. Note that the alert grouping features are available only on certain plans. There are three available options:
+            * null - No alert grouping on the service. Each alert will create a separate incident;
+            * "time" - All alerts within a specified duration will be grouped into the same incident. This duration is set in the `alert_grouping_timeout` setting (described below). Available on Standard, Enterprise, and Event Intelligence plans;
+            * "intelligent" - Alerts will be intelligently grouped based on a machine learning model that looks at the alert summary, timing, and the history of grouped alerts. Available on Enterprise and Event Intelligence plans
+
+            This attribute has been deprecated and configuration via [Alert Grouping Settings](https://developer.pagerduty.com/api-reference/587edbc8ff416-create-an-alert-grouping-setting) resource is encouraged.
+          enum:
+            - time
+            - intelligent
+        alert_grouping_timeout:
+          type: integer
+          deprecated: true
+          description: |
+            The duration in minutes within which to automatically group incoming alerts. This setting applies only when `alert_grouping` is set to `time`. To continue grouping alerts until the Incident is resolved, set this value to `0`.
+
+            This attribute has been deprecated and configuration via [Alert Grouping Settings](https://developer.pagerduty.com/api-reference/587edbc8ff416-create-an-alert-grouping-setting) resource is encouraged.
+        auto_pause_notifications_parameters:
+          $ref: '#/components/schemas/AutoPauseNotificationsParameters'
+      required:
+        - type
+        - escalation_policy
+      example:
+        id: PSI2I2O
+        summary: string
+        type: service
+        self: string
+        html_url: string
+        name: My Web App
+        description: My cool web application that does things.
+        auto_resolve_timeout: 14400
+        acknowledgement_timeout: 600
+        status: active
+        escalation_policy:
+          id: PWIP6CQ
+          type: escalation_policy_reference
+        incident_urgency_rule:
+          type: use_support_hours
+          during_support_hours:
+            type: constant
+            urgency: high
+          outside_support_hours:
+            type: constant
+            urgency: low
+        support_hours:
+          type: fixed_time_per_day
+          time_zone: America/Lima
+          start_time: '09:00:00'
+          end_time: '17:00:00'
+          days_of_week:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+        scheduled_actions:
+          - type: urgency_change
+            at:
+              type: named_time
+              name: support_hours_start
+            to_urgency: high
+        alert_creation: create_alerts_and_incidents
+        auto_pause_notifications_parameters:
+          enabled: true
+          timeout: 300
+    AuditRecordResponseSchema:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditRecord'
+        response_metadata:
+          nullable: true
+          anyOf:
+            - $ref: '#/components/schemas/AuditMetadata'
+        limit:
+          type: integer
+          description: The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+          readOnly: true
+        next_cursor:
+          type: string
+          description: |
+            An opaque string than will deliver the next set of results when provided as the `cursor` parameter in a subsequent request.  A `null` value for this field indicates that there are no additional results.
+          example: dXNlcjaVMzc5V0ZYTlo=
+          nullable: true
+          readOnly: true
+      required:
+        - records
+        - limit
+        - next_cursor
+    Integration:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        name:
+          type: string
+          description: The name of this integration.
+        service:
+          $ref: '#/components/schemas/ServiceReference'
+        created_at:
+          type: string
+          format: date-time
+          description: The date/time when this integration was created.
+          readOnly: true
+        vendor:
+          $ref: '#/components/schemas/VendorReference'
+        integration_email:
+          type: string
+          description: Specify for generic_email_inbound_integration. Must be set to an email address @your-subdomain.pagerduty.com
+        email_incident_creation:
+          type: string
+          description: Specify for generic_email_inbound_integration
+          enum:
+            - on_new_email
+            - on_new_email_subject
+            - only_if_no_open_incidents
+            - use_rules
+        email_filter_mode:
+          type: string
+          description: Specify for generic_email_inbound_integration. May override email_incident_creation
+          enum:
+            - all-email
+            - or-rules-email
+            - and-rules-email
+        email_parsers:
+          type: array
+          description: Specify for generic_email_inbound_integration.
+          uniqueItems: true
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/EmailParser'
+        email_parsing_fallback:
+          type: string
+          description: Specify for generic_email_inbound_integration.
+          enum:
+            - open_new_incident
+            - discard
+        email_filters:
+          type: array
+          description: Specify for generic_email_inbound_integration.
+          uniqueItems: true
+          minItems: 1
+          items:
+            type: object
+            properties:
+              subject_mode:
+                type: string
+                enum:
+                  - match
+                  - no-match
+                  - always
+              subject_regex:
+                type: string
+                description: Specify if subject_mode is set to match or no-match
+              body_mode:
+                type: string
+                enum:
+                  - match
+                  - no-match
+                  - always
+              body_regex:
+                type: string
+                description: Specify if body_mode is set to match or no-match
+              from_email_mode:
+                type: string
+                enum:
+                  - match
+                  - no-match
+                  - always
+              from_email_regex:
+                type: string
+                description: Specify if from_email_mode is set to match or no-match
+            required:
+              - subject_mode
+              - body_mode
+              - from_email_mode
+          required:
+            - type
+            - name
+    ServiceEventRule:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: ID of the Event Rule.
+        self:
+          type: string
+          format: url
+          description: the API show URL at which the object is accessible.
+          readOnly: true
+        disabled:
+          type: boolean
+          description: Indicates whether the Event Rule is disabled and would therefore not be evaluated.
+        conditions:
+          type: object
+          description: Conditions evaluated to check if an event matches this Event Rule. Is always empty for the catch_all rule, though.
+          properties:
+            operator:
+              type: string
+              description: Operator to combine sub-conditions.
+              enum:
+                - and
+                - or
+            subconditions:
+              type: array
+              description: Array of sub-conditions.
+              items:
+                type: object
+                properties:
+                  operator:
+                    type: string
+                    description: The type of operator to apply.
+                    enum:
+                      - exists
+                      - nexists
+                      - equals
+                      - nequals
+                      - contains
+                      - ncontains
+                      - matches
+                      - nmatches
+                  parameters:
+                    type: object
+                    properties:
+                      path:
+                        type: string
+                        description: Path to a field in an event, in dot-notation.  For Event Rules on a serivce, this will have to be a PD-CEF field.
+                      value:
+                        type: string
+                        description: Value to apply to the operator.
+                      options:
+                        type: string
+                        description: Options to configure the operator. (opaque JSON object)
+                    required:
+                      - value
+                      - path
+                required:
+                  - operator
+                  - parameters
+          required:
+            - operator
+            - subconditions
+        time_frame:
+          description: Time-based conditions for limiting when the rule is active.
+          type: object
+          properties:
+            active_between:
+              type: object
+              required:
+                - start_time
+                - end_time
+              description: A fixed window of time during which the rule is active.
+              properties:
+                start_time:
+                  type: integer
+                  description: The start time in milliseconds.
+                end_time:
+                  type: integer
+                  description: End time in milliseconds.
+            scheduled_weekly:
+              type: object
+              required:
+                - start_time
+                - duration
+                - timezone
+                - weekdays
+              description: A reccuring window of time based on the day of the week, during which the rule is active.
+              properties:
+                start_time:
+                  type: integer
+                  description: The amount of milliseconds into the day at which the window starts.
+                duration:
+                  type: integer
+                  description: The duration of the window in milliseconds.
+                timezone:
+                  type: string
+                  description: The timezone.
+                weekdays:
+                  type: array
+                  description: An array of day values. Ex [1, 3, 5] is Monday, Wednesday, Friday.
+                  items:
+                    type: integer
+        variables:
+          type: array
+          description: '[Early Access] Populate variables from event payloads and use those variables in other event actions.'
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: The type of operation to populate the variable.
+                enum:
+                  - regex
+              name:
+                type: string
+                description: The name of the variable.
+              parameters:
+                type: object
+                description: The parameters for performing the operation to populate the
+                properties:
+                  value:
+                    type: string
+                    description: The value for the operation. For example, an RE2 regular expression for regex-type variables.
+                  path:
+                    type: string
+                    description: Path to a field in an event, in dot-notation. For Event Rules on a Service, this will have to be a PD-CEF field.
+                required:
+                  - value
+                  - path
+            required:
+              - type
+              - name
+              - parameters
+        position:
+          type: integer
+          description: Position/index of the Event Rule on the Service.  Starting from position 0 (the first rule), rules are evaluated one-by-one until a matching Event Rule is found or the end of the list is reached.
+        actions:
+          $ref: '#/components/schemas/EventRuleActionsCommon'
+    ServiceCustomFieldsFieldValueReadModel:
+      type: object
+      properties:
+        data_type:
+          type: string
+          description: The kind of data the custom field is allowed to contain.
+          enum:
+            - boolean
+            - integer
+            - float
+            - string
+            - datetime
+            - url
+        description:
+          type: string
+          nullable: true
+          description: A description of the data this field contains.
+          maxLength: 1000
+        display_name:
+          type: string
+          description: The human-readable name of the field. This must be unique across an account.
+          maxLength: 50
+        field_type:
+          type: string
+          description: The type of data this field contains. In combination with the `data_type` field.
+          enum:
+            - single_value
+            - single_value_fixed
+            - multi_value
+            - multi_value_fixed
+        id:
+          type: string
+          description: The ID of the resource.
+        name:
+          type: string
+          title: Field Name
+          description: The name of the field. May include ASCII characters, specifically lowercase letters, digits, and underescores. The `name` for a Field must be unique and cannot be changed once created.
+          maxLength: 50
+        type:
+          type: string
+          description: Determines the type of the reference.
+          enum:
+            - field_value
+        value:
+          type: object
+          title: Boolean
+          properties:
+            value:
+              type: boolean
+              nullable: true
+    ServiceCustomFieldsFieldValueUpdateModel:
+      title: Custom Field Value
+      description: |
+        During updates:
+        - Omitted fields remain unchanged
+        - Null values reset fields
+        - Provided values update fields
+
+        Note: All updates succeed or none are applied.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the resource.
+        value:
+          oneOf:
+            - type: object
+              title: Boolean
+              properties:
+                value:
+                  type: boolean
+                  nullable: true
+            - type: object
+              title: Datetime
+              properties:
+                value:
+                  type: string
+                  nullable: true
+                  format: date-time
+            - type: object
+              title: Float
+              properties:
+                value:
+                  type: number
+                  nullable: true
+            - type: object
+              title: Integer
+              properties:
+                value:
+                  type: integer
+                  nullable: true
+            - type: object
+              title: String
+              properties:
+                value:
+                  oneOf:
+                    - type: string
+                      maxLength: 200
+                      nullable: true
+                    - type: array
+                      items:
+                        type: string
+                        maxLength: 200
+                      maxItems: 10
+                      uniqueItems: true
+                      nullable: true
+            - type: object
+              title: Url
+              properties:
+                value:
+                  type: string
+                  format: uri
+                  maxLength: 200
+                  nullable: true
+        name:
+          type: string
+          title: Field Name
+          description: The name of the field. May include ASCII characters, specifically lowercase letters, digits, and underescores. The `name` for a Field must be unique and cannot be changed once created.
+          maxLength: 50
+      required:
+        - id
+        - value
+        - name
+    FeatureEnablement:
+      type: object
+      properties:
+        feature:
+          readOnly: true
+          type: string
+          description: The name of the product addon whose set of features will be enabled or disabled.
+          example: aiops
+        enabled:
+          type: boolean
+          description: A boolean value indicating whether the specified product addon is enabled or disabled.
+        updated_at:
+          readOnly: true
+          type: string
+          format: date-time
+          description: The time the feature enablement was last updated.
+        warnings:
+          readOnly: true
+          type: array
+          description: An array of warnings related to this feature enablement. Only present if warning conditions are met.
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: The warning message.
+      required:
+        - enabled
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        label:
+          type: string
+          description: The label of the tag.
+          maxLength: 191
+      required:
+        - label
+        - type
+      example:
+        type: tag
+        label: Batman
+    EscalationPolicyReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    TeamReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    IntegrationReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    IncidentUrgencyRule:
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'The type of incident urgency: whether it''s constant, or it''s dependent on the support hours.'
+          default: constant
+          enum:
+            - constant
+            - use_support_hours
+        urgency:
+          type: string
+          description: The incidents' urgency, if type is constant.
+          default: high
+          enum:
+            - low
+            - high
+            - severity_based
+        during_support_hours:
+          $ref: '#/components/schemas/IncidentUrgencyType'
+        outside_support_hours:
+          $ref: '#/components/schemas/IncidentUrgencyType'
+    SupportHours:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of support hours
+          default: fixed_time_per_day
+          enum:
+            - fixed_time_per_day
+        time_zone:
+          type: string
+          format: activesupport-time-zone
+          description: The time zone for the support hours
+        days_of_week:
+          type: array
+          readOnly: true
+          items:
+            type: integer
+            readOnly: true
+            description: The days of the week (1 through 7, for Monday through Sunday)
+        start_time:
+          type: string
+          format: time
+          description: The support hours' starting time of day (date portion is ignored)
+        end_time:
+          type: string
+          format: time
+          description: The support hours' ending time of day (date portion is ignored)
+    ScheduledAction:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of schedule action. Must be set to urgency_change.
+          enum:
+            - urgency_change
+        at:
+          type: object
+          description: Represents when scheduled action will occur.
+          properties:
+            type:
+              type: string
+              description: Must be set to named_time.
+              enum:
+                - named_time
+            name:
+              type: string
+              description: Designates either the start or the end of support hours.
+              enum:
+                - support_hours_start
+                - support_hours_end
+          required:
+            - type
+            - name
+        to_urgency:
+          type: string
+          description: Urgency level. Must be set to high.
+          enum:
+            - high
+      required:
+        - type
+        - at
+        - to_urgency
+    AddonReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        src:
+          type: string
+          format: url
+          description: The URL source of the Addon
+        name:
+          type: string
+          description: The user entered name of the Addon.
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    AlertGroupingParameters:
+      type: object
+      title: Alert Grouping Parameters
+      deprecated: true
+      description: |
+        Defines how alerts on this service will be automatically grouped into incidents. Note that the alert grouping features are available only on certain plans. To turn grouping off set the type to null.
+        This attribute has been deprecated and configuration via [Alert Grouping Settings](https://developer.pagerduty.com/api-reference/587edbc8ff416-create-an-alert-grouping-setting) resource is encouraged.
+      properties:
+        type:
+          type: string
+          nullable: true
+          enum:
+            - time
+            - intelligent
+            - content_based
+            - null
+        config:
+          type: object
+          title: Intelligent Alert Grouping
+          description: The configuration for Intelligent Alert Grouping. Note that this configuration is only available for certain plans.
+          properties:
+            time_window:
+              type: integer
+              minimum: 300
+              maximum: 3600
+              description: The maximum amount of time allowed between Alerts. Any Alerts arriving greater than `time_window` seconds apart will not be grouped together. This is a rolling time window and is counted from the most recently grouped alert. The window is extended every time a new alert is added to the group, up to 24 hours. To use the "recommended_time_window," set the value to 0, otherwise the value must be between 300 and 3600.
+            recommended_time_window:
+              readOnly: true
+              type: integer
+              description: In order to ensure your Service has the optimal grouping window, we use data science to calculate your Service's average Alert inter-arrival time. We encourage customers to use this value. Please set `time_window` to 0 to use the `recommended_time_window`.
+            timeout:
+              type: integer
+              minimum: 1
+              maximum: 1440
+              description: The duration in minutes within which to automatically group incoming Alerts. To continue grouping Alerts until the Incident is resolved, set this value to 0.
+            aggregate:
+              type: string
+              description: Whether Alerts should be grouped if `all` or `any` specified fields match. If `all` is selected, an exact match on every specified field name must occur for Alerts to be grouped. If `any` is selected, Alerts will be grouped when there is an exact match on at least one of the specified fields.
+              enum:
+                - all, any
+            fields:
+              type: array
+              description: An array of strings which represent the fields with which to group against. Depending on the aggregate, Alerts will group if some or all the fields match.
+              items:
+                type: string
+    AutoPauseNotificationsParameters:
+      title: AutoPauseNotificationsParameters
+      type: object
+      description: Defines how alerts on this service are automatically suspended for a period of time before triggering, when identified as likely being transient. Note that automatically pausing notifications is only available on certain plans.
+      properties:
+        enabled:
+          type: boolean
+          default: false
+          description: Indicates whether alerts should be automatically suspended when identified as transient
+        timeout:
+          type: integer
+          enum:
+            - 0
+            - 120
+            - 180
+            - 300
+            - 600
+            - 900
+          description: Indicates in seconds how long alerts should be suspended before triggering. To automatically select the recommended timeout for a service, set this value to `0`.
+        recommended_timeout:
+          type: integer
+          enum:
+            - 120
+            - 180
+            - 300
+            - 600
+            - 900
+          description: The recommended timeout setting for this service based on prior alert patterns.
+      example:
+        enabled: true
+        timeout: 300
+    AuditRecord:
+      type: object
+      readOnly: true
+      description: An Audit Trail record
+      properties:
+        id:
+          type: string
+        self:
+          type: string
+          nullable: true
+          description: Record URL.
+        execution_time:
+          type: string
+          format: date-time
+          description: The date/time the action executed, in ISO8601 format and millisecond precision.
+        execution_context:
+          type: object
+          description: Action execution context
+          properties:
+            request_id:
+              type: string
+              nullable: true
+              description: Request Id
+            remote_address:
+              type: string
+              nullable: true
+              description: remote address
+          nullable: true
+        actors:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Reference'
+        method:
+          type: object
+          description: The method information
+          properties:
+            description:
+              type: string
+              nullable: true
+            truncated_token:
+              description: Truncated token containing the last 4 chars of the token's actual value.
+              type: string
+              nullable: true
+              example: 3xyz
+            type:
+              type: string
+              description: |
+                Describes the method used to perform the action:
+
+                `browser` -- authenticated user session. Session value is not returned in the `truncated_token` field.
+
+                `oauth` -- access token obtained via the OAuth flow. Truncated token value is returned in the `truncated_token` field.
+
+                `api_token` -- Pagerduty API token. Truncated token value is returned in the `truncated_token` field.
+
+                `identity_provider` -- action performed by an Identity provider on behalf of a user. No value is returned in the `truncated_token` field.
+
+                `other` -- Method that does not fall in the predefined categories. Truncated token value MAY be returned in the `truncated_token` field.
+              enum:
+                - browser
+                - oauth
+                - api_token
+                - identity_provider
+                - other
+          required:
+            - type
+        root_resource:
+          $ref: '#/components/schemas/Reference'
+        action:
+          type: string
+          example: create
+        details:
+          type: object
+          nullable: true
+          description: |
+            Additional details to provide further information about the action or
+            the resource that has been audited.
+          properties:
+            resource:
+              $ref: '#/components/schemas/Reference'
+            fields:
+              description: |
+                A set of fields that have been affected.
+                The fields that have not been affected MAY be returned.
+              type: array
+              nullable: true
+              items:
+                type: object
+                description: |
+                  Information about the affected field.
+                  When available, field's before and after values are returned:
+                    
+                  #### Resource creation
+                  - `value` MAY be returned
+
+                  #### Resource update
+                  - `value` MAY be returned
+                  - `before_value` MAY be returned
+
+                  #### Resource deletion
+                  - `before_value` MAY be returned
+                properties:
+                  name:
+                    type: string
+                    description: Name of the resource field
+                    example: name
+                  description:
+                    type: string
+                    nullable: true
+                    description: Human readable description of the resource field
+                    example: First and Last name
+                  value:
+                    type: string
+                    nullable: true
+                    description: new or updated value of the field
+                    example: Jonathan
+                  before_value:
+                    type: string
+                    nullable: true
+                    description: previous or deleted value of the field
+                    example: John
+                required:
+                  - name
+            references:
+              description: A set of references that have been affected.
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Name of the reference field
+                    example: team_members
+                  description:
+                    type: string
+                    nullable: true
+                    description: Human readable description of the references field
+                    example: First and Last name
+                  added:
+                    type: array
+                    nullable: true
+                    items:
+                      $ref: '#/components/schemas/Reference'
+                  removed:
+                    type: array
+                    nullable: true
+                    items:
+                      $ref: '#/components/schemas/Reference'
+                required:
+                  - name
+          required:
+            - resource
+      required:
+        - id
+        - execution_time
+        - method
+        - root_resource
+        - action
+    AuditMetadata:
+      type: object
+      properties:
+        messages:
+          type: array
+          nullable: true
+          items:
+            type: string
+            example: Message about the result
+    CursorPagination:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+          readOnly: true
+        next_cursor:
+          type: string
+          description: |
+            An opaque string than will deliver the next set of results when provided as the `cursor` parameter in a subsequent request.  A `null` value for this field indicates that there are no additional results.
+          example: dXNlcjaVMzc5V0ZYTlo=
+          nullable: true
+          readOnly: true
+      required:
+        - limit
+        - next_cursor
+    ServiceReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    VendorReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    EmailParser:
+      type: object
+      properties:
+        action:
+          type: string
+          enum:
+            - trigger
+            - resolve
+        match_predicate:
+          $ref: '#/components/schemas/MatchPredicate'
+        value_extractors:
+          type: array
+          description: Additional values that will be pulled in to the Incident object. Exactly one value extractor must have a `value_name` of `incident_key`.
+          uniqueItems: true
+          minItems: 1
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum:
+                  - entire
+                  - regex
+                  - between
+              part:
+                type: string
+                enum:
+                  - body
+                  - subject
+                  - from_addresses
+              value_name:
+                type: string
+                minLength: 1
+                description: The field name to set in the Incident object. Exactly one must use the `value_name` of `incident_key`
+              regex:
+                type: string
+              starts_after:
+                type: string
+              ends_with:
+                type: string
+            required:
+              - type
+              - part
+              - value_name
+      required:
+        - action
+        - match_predicate
+    EventRule:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: ID of the Event Rule.
+        self:
+          type: string
+          format: url
+          description: the API show URL at which the object is accessible.
+          readOnly: true
+        disabled:
+          type: boolean
+          description: Indicates whether the Event Rule is disabled and would therefore not be evaluated.
+        conditions:
+          type: object
+          description: Conditions evaluated to check if an event matches this Event Rule. Is always empty for the catch_all rule, though.
+          properties:
+            operator:
+              type: string
+              description: Operator to combine sub-conditions.
+              enum:
+                - and
+                - or
+            subconditions:
+              type: array
+              description: Array of sub-conditions.
+              items:
+                type: object
+                properties:
+                  operator:
+                    type: string
+                    description: The type of operator to apply.
+                    enum:
+                      - exists
+                      - nexists
+                      - equals
+                      - nequals
+                      - contains
+                      - ncontains
+                      - matches
+                      - nmatches
+                  parameters:
+                    type: object
+                    properties:
+                      path:
+                        type: string
+                        description: Path to a field in an event, in dot-notation.  For Event Rules on a serivce, this will have to be a PD-CEF field.
+                      value:
+                        type: string
+                        description: Value to apply to the operator.
+                      options:
+                        type: string
+                        description: Options to configure the operator. (opaque JSON object)
+                    required:
+                      - value
+                      - path
+                required:
+                  - operator
+                  - parameters
+          required:
+            - operator
+            - subconditions
+        time_frame:
+          description: Time-based conditions for limiting when the rule is active.
+          type: object
+          properties:
+            active_between:
+              type: object
+              required:
+                - start_time
+                - end_time
+              description: A fixed window of time during which the rule is active.
+              properties:
+                start_time:
+                  type: integer
+                  description: The start time in milliseconds.
+                end_time:
+                  type: integer
+                  description: End time in milliseconds.
+            scheduled_weekly:
+              type: object
+              required:
+                - start_time
+                - duration
+                - timezone
+                - weekdays
+              description: A reccuring window of time based on the day of the week, during which the rule is active.
+              properties:
+                start_time:
+                  type: integer
+                  description: The amount of milliseconds into the day at which the window starts.
+                duration:
+                  type: integer
+                  description: The duration of the window in milliseconds.
+                timezone:
+                  type: string
+                  description: The timezone.
+                weekdays:
+                  type: array
+                  description: An array of day values. Ex [1, 3, 5] is Monday, Wednesday, Friday.
+                  items:
+                    type: integer
+        variables:
+          type: array
+          description: '[Early Access] Populate variables from event payloads and use those variables in other event actions.'
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: The type of operation to populate the variable.
+                enum:
+                  - regex
+              name:
+                type: string
+                description: The name of the variable.
+              parameters:
+                type: object
+                description: The parameters for performing the operation to populate the
+                properties:
+                  value:
+                    type: string
+                    description: The value for the operation. For example, an RE2 regular expression for regex-type variables.
+                  path:
+                    type: string
+                    description: Path to a field in an event, in dot-notation. For Event Rules on a Service, this will have to be a PD-CEF field.
+                required:
+                  - value
+                  - path
+            required:
+              - type
+              - name
+              - parameters
+        position:
+          type: integer
+          description: Position/index of the Event Rule in the Ruleset.  Starting from position 0 (the first rule), rules are evaluated one-by-one until a matching rule is found.
+        catch_all:
+          type: boolean
+          readOnly: true
+          description: Indicates whether the Event Rule is the last Event Rule of the Ruleset that serves as a catch-all. It has limited functionality compared to other rules and always matches.
+        actions:
+          description: When an event matches this rule, the actions that will be taken to change the resulting alert and incident.
+          type: object
+          properties:
+            annotate:
+              description: Set a note on the resulting incident.
+              type: object
+              nullable: true
+              required:
+                - value
+              properties:
+                value:
+                  type: string
+                  description: The content of the note.
+            event_action:
+              description: Set whether the resulting alert status is trigger or resolve.
+              type: object
+              required:
+                - value
+              nullable: true
+              properties:
+                value:
+                  type: string
+                  enum:
+                    - trigger
+                    - resolve
+            extractions:
+              type: array
+              description: Dynamically extract values to set and modify new and existing PD-CEF fields.
+              items:
+                oneOf:
+                  - type: object
+                    required:
+                      - target
+                      - source
+                      - regex
+                    properties:
+                      target:
+                        type: string
+                        description: The PD-CEF field that will be set with the value from the regex.
+                      source:
+                        type: string
+                        description: The path to the event field where the regex will be applied to extract a value.
+                      regex:
+                        type: string
+                        description: A RE2 regular expression.  If it contains one or more capture groups, their values will be extracted and appended together.  If it contains no capture groups, the whole match is used.
+                  - type: object
+                    required:
+                      - target
+                      - template
+                    properties:
+                      target:
+                        type: string
+                        description: The PD-CEF field that will be set with the value from the regex.
+                      template:
+                        type: string
+                        description: A value that will be used to populate the target PD-CEF field.  You can include variables extracted from the payload by using string interpolation.
+                        example: Error number {{count}} on host {{host}}
+            priority:
+              description: Set the priority ID for the resulting incident. You can find the priority you want by calling the priorities endpoint.
+              type: object
+              required:
+                - value
+              nullable: true
+              properties:
+                value:
+                  type: string
+                  description: The priority ID.
+            severity:
+              description: Set the severity of the resulting alert.
+              type: object
+              required:
+                - value
+              nullable: true
+              properties:
+                value:
+                  type: string
+                  enum:
+                    - info
+                    - warning
+                    - error
+                    - critical
+            suppress:
+              description: Set whether the resulting alert is suppressed. Can optionally be used with a threshold where resulting alerts will be suppressed until the threshold is met in a window of time. If using a threshold the rule must also set a route action.
+              type: object
+              required:
+                - value
+              properties:
+                value:
+                  type: boolean
+                threshold_value:
+                  type: integer
+                  description: The number of occurences needed during the window of time to trigger the theshold.
+                threshold_time_unit:
+                  type: string
+                  description: The time unit for the window of time.
+                  enum:
+                    - seconds
+                    - minutes
+                    - hours
+                threshold_time_amount:
+                  type: integer
+                  description: The amount of time units for the window of time.
+            suspend:
+              description: Set the length of time to suspend the resulting alert before triggering. Rules with a suspend action must also set a route action, and cannot have a suppress with threshold action
+              type: object
+              required:
+                - value
+              nullable: true
+              properties:
+                value:
+                  type: integer
+                  description: The amount of time to suspend the alert in seconds.
+            route:
+              description: Set the service ID of the target service for the resulting alert. You can find the service you want to route to by calling the services endpoint.
+              type: object
+              required:
+                - value
+              nullable: true
+              properties:
+                value:
+                  type: string
+                  description: The target service's ID.
+    EventRuleActionsCommon:
+      type: object
+      description: When an event matches this Event Rule, the actions that will be taken to change the resulting Alert and Incident.
+      properties:
+        annotate:
+          description: Set a note on the resulting incident.
+          type: object
+          nullable: true
+          required:
+            - value
+          properties:
+            value:
+              type: string
+              description: The content of the note.
+        event_action:
+          description: Set whether the resulting alert status is trigger or resolve.
+          type: object
+          required:
+            - value
+          nullable: true
+          properties:
+            value:
+              type: string
+              enum:
+                - trigger
+                - resolve
+        extractions:
+          type: array
+          description: Dynamically extract values to set and modify new and existing PD-CEF fields.
+          items:
+            oneOf:
+              - type: object
+                required:
+                  - target
+                  - source
+                  - regex
+                properties:
+                  target:
+                    type: string
+                    description: The PD-CEF field that will be set with the value from the regex.
+                  source:
+                    type: string
+                    description: The path to the event field where the regex will be applied to extract a value.
+                  regex:
+                    type: string
+                    description: A RE2 regular expression.  If it contains one or more capture groups, their values will be extracted and appended together.  If it contains no capture groups, the whole match is used.
+              - type: object
+                required:
+                  - target
+                  - template
+                properties:
+                  target:
+                    type: string
+                    description: The PD-CEF field that will be set with the value from the regex.
+                  template:
+                    type: string
+                    description: A value that will be used to populate the target PD-CEF field.  You can include variables extracted from the payload by using string interpolation.
+                    example: Error number {{count}} on host {{host}}
+        priority:
+          description: Set the priority ID for the resulting incident. You can find the priority you want by calling the priorities endpoint.
+          type: object
+          required:
+            - value
+          nullable: true
+          properties:
+            value:
+              type: string
+              description: The priority ID.
+        severity:
+          description: Set the severity of the resulting alert.
+          type: object
+          required:
+            - value
+          nullable: true
+          properties:
+            value:
+              type: string
+              enum:
+                - info
+                - warning
+                - error
+                - critical
+        suppress:
+          description: Set whether the resulting alert is suppressed. Can optionally be used with a threshold where resulting alerts will be suppressed until the threshold is met in a window of time. If using a threshold the rule must also set a route action.
+          type: object
+          required:
+            - value
+          properties:
+            value:
+              type: boolean
+            threshold_value:
+              type: integer
+              description: The number of occurences needed during the window of time to trigger the theshold.
+            threshold_time_unit:
+              type: string
+              description: The time unit for the window of time.
+              enum:
+                - seconds
+                - minutes
+                - hours
+            threshold_time_amount:
+              type: integer
+              description: The amount of time units for the window of time.
+        suspend:
+          description: Set the length of time to suspend the resulting alert before triggering. Rules with a suspend action must also set a route action, and cannot have a suppress with threshold action
+          type: object
+          required:
+            - value
+          nullable: true
+          properties:
+            value:
+              type: integer
+              description: The amount of time to suspend the alert in seconds.
+    CustomFieldsFieldValue:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id of the field.
+        name:
+          type: string
+          title: Field Name
+          description: The name of the field. May include ASCII characters, specifically lowercase letters, digits, and underescores. The `name` for a Field must be unique and cannot be changed once created.
+          maxLength: 50
+        type:
+          type: string
+          description: Determines the type of the reference.
+          enum:
+            - field_value
+        display_name:
+          type: string
+          description: The human-readable name of the field. This must be unique across an account.
+          maxLength: 50
+        field_type:
+          type: string
+          description: The type of data this field contains. In combination with the `data_type` field.
+          enum:
+            - single_value
+            - single_value_fixed
+            - multi_value
+            - multi_value_fixed
+        data_type:
+          type: string
+          description: The kind of data the custom field is allowed to contain.
+          enum:
+            - boolean
+            - integer
+            - float
+            - string
+            - datetime
+            - url
+        description:
+          type: string
+          nullable: true
+          description: A description of the data this field contains.
+          maxLength: 1000
+        value:
+          type: object
+          title: Boolean
+          properties:
+            value:
+              type: boolean
+              nullable: true
+      required:
+        - id
+        - type
+        - name
+        - value
+        - display_name
+        - data_type
+        - field_type
+        - description
+    ServiceCustomFieldsFieldReadModel:
+      type: object
+      description: Details of the custom field.
+      properties:
+        created_at:
+          title: Datetime
+          type: string
+          format: date-time
+          description: The date/time the object was created at.
+        data_type:
+          type: string
+          description: The kind of data the custom field is allowed to contain.
+          enum:
+            - boolean
+            - integer
+            - float
+            - string
+            - datetime
+            - url
+        description:
+          type: string
+          nullable: true
+          description: A description of the data this field contains.
+          maxLength: 1000
+        display_name:
+          type: string
+          description: The human-readable name of the field. This must be unique across an account.
+          maxLength: 50
+        enabled:
+          type: boolean
+          description: Whether the field is enabled.
+          enum:
+            - true
+            - false
+        field_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCustomFieldsFieldOptionReadModel'
+          description: The options for the custom field. Applies only to `single_value_fixed` and `multi_value_fixed` field types. These options are returned only if the `include[]` parameter specifies `field_options`.
+        field_type:
+          type: string
+          description: The type of data this field contains. In combination with the `data_type` field.
+          enum:
+            - single_value
+            - single_value_fixed
+            - multi_value
+            - multi_value_fixed
+        id:
+          type: string
+          description: The ID of the resource.
+        name:
+          type: string
+          title: Field Name
+          description: The name of the field. May include ASCII characters, specifically lowercase letters, digits, and underescores. The `name` for a Field must be unique and cannot be changed once created.
+          maxLength: 50
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: The API show URL at which the object is accessible
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `display_name`.
+        type:
+          type: string
+          enum:
+            - field
+          readOnly: true
+        updated_at:
+          title: Datetime
+          type: string
+          format: date-time
+          description: The date/time the object was updated at.
+    Reference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    IncidentUrgencyType:
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'The type of incident urgency: whether it''s constant, or it''s dependent on the support hours.'
+          default: constant
+          enum:
+            - constant
+            - use_support_hours
+        urgency:
+          type: string
+          description: The incidents' urgency, if type is constant.
+          default: high
+          enum:
+            - low
+            - high
+            - severity_based
+    FlexibleTimeWindowIntelligentAlertGroupingConfig:
+      type: object
+      title: Intelligent Alert Grouping
+      description: The configuration for Intelligent Alert Grouping. Note that this configuration is only available for certain plans.
+      properties:
+        time_window:
+          type: integer
+          minimum: 300
+          maximum: 3600
+          description: The maximum amount of time allowed between Alerts. Any Alerts arriving greater than `time_window` seconds apart will not be grouped together. This is a rolling time window and is counted from the most recently grouped alert. The window is extended every time a new alert is added to the group, up to 24 hours. To use the "recommended_time_window," set the value to 0, otherwise the value must be between 300 and 3600.
+        recommended_time_window:
+          readOnly: true
+          type: integer
+          description: In order to ensure your Service has the optimal grouping window, we use data science to calculate your Service's average Alert inter-arrival time. We encourage customers to use this value. Please set `time_window` to 0 to use the `recommended_time_window`.
+    TimeBasedAlertGroupingConfiguration:
+      type: object
+      title: Time Grouping
+      description: The configuration for Time Based Alert Grouping
+      properties:
+        timeout:
+          type: integer
+          minimum: 1
+          maximum: 1440
+          description: The duration in minutes within which to automatically group incoming Alerts. To continue grouping Alerts until the Incident is resolved, set this value to 0.
+    ContentBasedAlertGroupingConfiguration:
+      type: object
+      title: Content Only Grouping
+      description: The configuration for Content Based Alert Grouping
+      properties:
+        aggregate:
+          type: string
+          description: Whether Alerts should be grouped if `all` or `any` specified fields match. If `all` is selected, an exact match on every specified field name must occur for Alerts to be grouped. If `any` is selected, Alerts will be grouped when there is an exact match on at least one of the specified fields.
+          enum:
+            - all, any
+        fields:
+          type: array
+          description: An array of strings which represent the fields with which to group against. Depending on the aggregate, Alerts will group if some or all the fields match.
+          items:
+            type: string
+        time_window:
+          type: integer
+          minimum: 300
+          maximum: 86400
+          description: The maximum amount of time allowed between Alerts. Any Alerts arriving greater than `time_window` seconds apart will not be grouped together. This is a rolling time window up to 24 hours and is counted from the most recently grouped alert. The window is extended every time a new alert is added to the group, up to 24 hours (24 hours only applies to single-service settings). To use the "recommended_time_window," set the value to 0, otherwise the value must be between 300 <= time_window <= 3600 or 86400(i.e. 24 hours).
+        recommended_time_window:
+          readOnly: true
+          type: integer
+          description: In order to ensure your Service has the optimal grouping window, we use data science to calculate your Service's average Alert inter-arrival time. We encourage customers to use this value. Please set `time_window` to 0 to use the `recommended_time_window`.
+    MatchPredicate:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - all
+            - any
+            - not
+            - contains
+            - exactly
+            - regex
+        matcher:
+          type: string
+          description: Required if the type is `contains`, `exactly` or `regex`.
+          minLength: 1
+        part:
+          type: string
+          description: The email field that will attempt to use the matcher expression. Required if the type is `contains`, `exactly` or `regex`.
+          enum:
+            - body
+            - subject
+            - from_addresses
+        children:
+          type: array
+          description: Additional matchers to be run. Must be not empty if the type is `all`, `any`, or `not`.
+          items:
+            $ref: '#/components/schemas/MatchPredicate'
+      required:
+        - type
+        - part
+        - children
+    CustomFieldsEditableField:
+      type: object
+      properties:
+        display_name:
+          type: string
+          description: The human-readable name of the field. This must be unique across an account.
+          maxLength: 50
+        description:
+          type: string
+          nullable: true
+          description: A description of the data this field contains.
+          maxLength: 1000
+        default_value:
+          nullable: true
+          type: object
+          title: Boolean
+          properties:
+            value:
+              type: boolean
+              nullable: true
+        enabled:
+          type: boolean
+          description: Whether the field is enabled.
+          enum:
+            - true
+            - false
+    ServiceCustomFieldsFieldOptionReadModel:
+      type: object
+      properties:
+        created_at:
+          title: Datetime
+          type: string
+          format: date-time
+          description: The date/time the object was created at.
+        data:
+          type: object
+          properties:
+            data_type:
+              type: string
+              description: The kind of data represented by this option. Must match the Field's `data_type`.
+              enum:
+                - string
+            value:
+              type: string
+              maxLength: 200
+        id:
+          type: string
+          description: The ID of the resource.
+        type:
+          type: string
+          enum:
+            - field_option
+        updated_at:
+          title: Datetime
+          type: string
+          format: date-time
+          description: The date/time the object was updated at.
+    IncidentTypeCustomFields:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Whether the custom field is enabled.
+          readOnly: true
+        id:
+          type: string
+          readOnly: true
+          description: The ID of the resource.
+        name:
+          type: string
+          title: Field Name
+          description: The name of the field. May include ASCII characters, specifically lowercase letters, digits, and underescores. The `name` for a Field must be unique and cannot be changed once created.
+          maxLength: 50
+        type:
+          type: string
+          enum:
+            - field
+          readOnly: true
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: The API show URL at which the object is accessible
+        description:
+          type: string
+          nullable: true
+          description: A description of the data this field contains.
+          maxLength: 1000
+        field_type:
+          type: string
+          description: The type of data this field contains. In combination with the `data_type` field.
+          enum:
+            - single_value
+            - single_value_fixed
+            - multi_value
+            - multi_value_fixed
+        data_type:
+          type: string
+          description: The kind of data the custom field is allowed to contain.
+          enum:
+            - boolean
+            - integer
+            - float
+            - string
+            - datetime
+            - url
+        updated_at:
+          type: string
+          format: date-time
+          description: The date/time the custom field was last updated.
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          description: The date/time the custom field was created at.
+          readOnly: true
+        display_name:
+          type: string
+          description: The human-readable name of the field. This must be unique across an account.
+          maxLength: 50
+        default_value:
+          nullable: true
+          type: object
+          title: Boolean
+          properties:
+            value:
+              type: boolean
+              nullable: true
+        incident_type:
+          type: string
+          description: The id of the incident type the custom field is associated with.
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        field_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldsEditableFieldOption'
+          description: The options for the custom field.
+      required:
+        - id
+        - summary
+        - self
+        - type
+        - name
+        - display_name
+        - created_at
+        - updated_at
+        - data_type
+        - field_type
+        - enabled
+        - incident_type
+        - field_options
+    CustomFieldsEditableFieldOption:
+      type: object
+      properties:
+        data:
+          discriminator:
+            propertyName: data_type
+            mapping:
+              string: '#/paths/~1incidents~1custom_fields/get/responses/200/content/application~1json/schema/allOf/0/properties/fields/items/allOf/0/properties/field_options/items/allOf/0/properties/data/oneOf/0'
+          type: object
+          properties:
+            data_type:
+              type: string
+              description: The kind of data represented by this option. Must match the Field's `data_type`.
+              enum:
+                - string
+            value:
+              type: string
+              maxLength: 100
+          required:
+            - data_type
+            - value
+        id:
+          type: string
+          readOnly: true
+          description: The ID of the resource.
+        type:
+          type: string
+          enum:
+            - field_option
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          description: The date/time the object was last updated.
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          description: The date/time the object was created at.
+          readOnly: true
+      required:
+        - id
+        - type
+        - created_at
+        - updated_at
+      description: ''
+  responses:
+    ArgumentError:
+      description: Caller provided invalid arguments. Please review the response for error details. Retrying with the same arguments will *not* work.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Unauthorized:
+      description: |
+        Caller did not supply credentials or did not provide the correct credentials.
+        If you are using an API key, it may be invalid or your Authorization header may be malformed.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Forbidden:
+      description: |
+        Caller is not authorized to view the requested resource.
+        While your authentication is valid, the authenticated user or token does not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    PaymentRequired:
+      description: |
+        Account does not have the abilities to perform the action. Please review the response for the required abilities.
+        You can also use the [Abilities API](#resource_Abilities) to determine what features are available to your account.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    TooManyRequests:
+      description: Too many requests have been made, the rate limit has been reached.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    InternalServerError:
+      description: Internal Server Error the PagerDuty server experienced an error.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Conflict:
+      description: The request conflicts with the current state of the server.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    NotAllowed:
+      description: The request was received and recognized by the server, but its HTTP method was rejected for the requested resource.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+  parameters:
+    query:
+      name: query
+      in: query
+      description: Filters the result, showing only the records whose name matches the query.
+      required: false
+      schema:
+        type: string
+    offset_limit:
+      name: limit
+      in: query
+      required: false
+      description: The number of results per page.
+      schema:
+        type: integer
+    offset_offset:
+      name: offset
+      in: query
+      required: false
+      description: Offset to start pagination search results.
+      schema:
+        type: integer
+    offset_total:
+      name: total
+      in: query
+      required: false
+      description: |
+        By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.
+
+        See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information.
+      schema:
+        default: false
+        type: boolean
+    team_ids:
+      name: team_ids[]
+      in: query
+      description: An array of team IDs. Only results related to these teams will be returned. Account must have the `teams` ability to use this parameter.
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+    time_zone:
+      name: time_zone
+      in: query
+      description: Time zone in which results will be rendered. This will default to the account time zone.
+      schema:
+        type: string
+        format: tzinfo
+    sort_by_service:
+      name: sort_by
+      in: query
+      description: Used to specify the field you wish to sort the results on.
+      schema:
+        type: string
+        enum:
+          - name
+          - name:asc
+          - name:desc
+        default: name
+    include_services:
+      name: include[]
+      in: query
+      description: Array of additional details to include.
+      explode: true
+      schema:
+        type: string
+        enum:
+          - escalation_policies
+          - teams
+          - integrations
+          - auto_pause_notifications_parameters
+        uniqueItems: true
+    service_name:
+      name: name
+      in: query
+      description: Filters the results, showing only services with the specified name.
+      schema:
+        type: string
+    id:
+      name: id
+      description: The ID of the resource.
+      in: path
+      required: true
+      schema:
+        type: string
+    include_services_id:
+      name: include[]
+      in: query
+      description: Array of additional details to include.
+      explode: true
+      schema:
+        type: string
+        enum:
+          - escalation_policies
+          - teams
+          - auto_pause_notifications_parameters
+          - integrations
+        uniqueItems: true
+    schedule_id:
+      name: id
+      description: The ID of the schedule.
+      in: path
+      required: true
+      schema:
+        type: string
+      example: P2LJD7G
+    cursor_limit:
+      name: limit
+      in: query
+      required: false
+      description: The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+      schema:
+        type: integer
+    cursor_cursor:
+      name: cursor
+      in: query
+      required: false
+      description: |
+        Optional parameter used to request the "next" set of results from an API.  The value provided here is most commonly obtained from the `next_cursor` field of the previous request.  When no value is provided, the request starts at the beginning of the result set.
+      schema:
+        type: string
+    audit_since:
+      name: since
+      in: query
+      description: The start of the date range over which you want to search. If not specified, defaults to `now() - 24 hours` (past 24 hours)
+      schema:
+        type: string
+        format: date-time
+    audit_until:
+      name: until
+      in: query
+      description: The end of the date range over which you want to search. If not specified, defaults to `now()`. May not be more than 31 days after `since`.
+      schema:
+        type: string
+        format: date-time
+    integration_id:
+      name: integration_id
+      in: path
+      description: The integration ID on the service.
+      required: true
+      schema:
+        type: string
+    include_services_integrations:
+      name: include[]
+      in: query
+      description: Array of additional details to include.
+      explode: true
+      schema:
+        type: string
+        enum:
+          - services
+          - vendors
+        uniqueItems: true
+    include_ruleset_migrated_metadata:
+      name: include[]
+      in: query
+      description: Array of additional Models to include in response.
+      explode: true
+      schema:
+        type: string
+        enum:
+          - migrated_metadata
+        uniqueItems: true
+    rule_id:
+      name: rule_id
+      in: path
+      description: The id of the Event Rule to retrieve.
+      required: true
+      schema:
+        type: string
+    enablement_feature_name:
+      name: feature_name
+      description: The feature enablement identifier, typically the name of the product addon. Currently only `aiops` is supported.
+      in: path
+      required: true
+      schema:
+        type: string
+        enum:
+          - aiops
+    audit_method_type:
+      name: method_type
+      in: query
+      description: Method type filter.
+      schema:
+        type: string
+        description: |
+          Describes the method used to perform the action:
+
+          `browser` -- authenticated user session. Session value is not returned in the `truncated_token` field.
+
+          `oauth` -- access token obtained via the OAuth flow. Truncated token value is returned in the `truncated_token` field.
+
+          `api_token` -- Pagerduty API token. Truncated token value is returned in the `truncated_token` field.
+
+          `identity_provider` -- action performed by an Identity provider on behalf of a user. No value is returned in the `truncated_token` field.
+
+          `other` -- Method that does not fall in the predefined categories. Truncated token value MAY be returned in the `truncated_token` field.
+        enum:
+          - browser
+          - oauth
+          - api_token
+          - identity_provider
+          - other
+  examples:
+    AuditRecordServiceResponse:
+      summary: Response Example
+      value:
+        records:
+          - id: PDRECORDID1_SERVICE_CREATED
+            execution_time: '2020-06-04T15:30:16.272Z'
+            execution_context:
+              request_id: 111lDEOIH-534-4ljhLHJjh111
+              remote_address: 201.19.20.19
+            actors:
+              - id: PDUSER
+                summary: John Snow
+                type: user_reference
+            method:
+              type: api_token
+              truncated_token: 3usr
+            root_resource:
+              id: PN2YA40
+              type: service_reference
+              summary: Documentation Hub
+            action: create
+            details:
+              resource:
+                id: PD_SERVICE_ID
+                type: service_reference
+                summary: Documentation Hub
+              fields:
+                - name: name
+                  value: Documentation Hub
+                - name: description
+                  value: Centralized documentation
+                - name: incident_severity
+                  value: always_high
+                - name: alert_creation
+                  value: create_alerts_and_incidents
+                - name: auto_resolve_timeout
+                  value: ''
+                - name: acknowledgement_timeout
+                  value: ''
+                - name: alert_grouping
+                  value: null
+                - name: alert_grouping_timeout
+                  value: ''
+              references:
+                - name: escalation_policy
+                  added:
+                    - id: PD_SERVICE_ID
+                      summary: Default
+                      type: escalation_policy_reference
+        next_cursor: null
+        limit: 10
+    FeatureEnablementListResponseSuccess:
+      summary: Success Response
+      value:
+        enablements:
+          - feature: aiops
+            enabled: true
+            updated_at: '2025-04-25T15:00:00Z'
+    FeatureEnablementListResponseWarningForService:
+      summary: Response with No Entitlement Warning
+      value:
+        enablements:
+          - feature: aiops
+            enabled: true
+            updated_at: '2025-04-25T15:00:00Z'
+            warnings:
+              - message: Your account is not entitled to use AIOps features for this Service.
+    FeatureEnablementListResponseDefault:
+      summary: Default Response (No Settings Configured)
+      value:
+        enablements:
+          - feature: aiops
+            enabled: true
+            updated_at: null
+    FeatureEnablementPutRequestEnable:
+      summary: Enable AIOps
+      value:
+        enablement:
+          enabled: true
+    FeatureEnablementPutRequestDisable:
+      summary: Disable AIOps
+      value:
+        enablement:
+          enabled: false
+    FeatureEnablementPutResponseSuccess:
+      summary: Success Response
+      value:
+        enablement:
+          - feature: aiops
+            enabled: true
+            updated_at: '2025-04-25T15:00:00Z'
+    FeatureEnablementPutResponseWarningForService:
+      summary: Response with No Entitlement Warning
+      value:
+        enablement:
+          - feature: aiops
+            enabled: true
+            updated_at: '2025-04-25T15:00:00Z'
+            warnings:
+              - message: Your account is not entitled to use AIOps features for this Service.
+servers:
+  - url: https://api.pagerduty.com
+    description: PagerDuty V2 API.

@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>invocations</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>invocations</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="invocations" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.automation_actions.invocations" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists an <code>invocations</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_automation_actions_invocation"
+    defaultValue="get"
     values={[
-        { label: 'get_automation_actions_invocation', value: 'get_automation_actions_invocation' },
-        { label: 'list_automation_action_invocations', value: 'list_automation_action_invocations' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_automation_actions_invocation">
+<TabItem value="get">
 
 Invocation information
 
@@ -94,7 +95,7 @@ Invocation information
 <tr>
     <td><CopyableCode code="state" /></td>
     <td><code>string</code></td>
-    <td>prepared -- the invocation exists and can be referenced, but is NOT available to a Runner <br /> created -- the invocation exists and is waiting for a Runner <br /> sent -- invocation sent to a Runner <br /> queued -- invocation queued by a Runner <br /> running -- invocation is being ran by a Runner <br /> aborted -- invocation was aborted on a Runner <br /> completed -- invocation completed on a Runner <br /> error -- invocation encountered an error on a Runner (example: sent)</td>
+    <td>prepared -- the invocation exists and can be referenced, but is NOT available to a Runner &lt;br /&gt; created -- the invocation exists and is waiting for a Runner &lt;br /&gt; sent -- invocation sent to a Runner &lt;br /&gt; queued -- invocation queued by a Runner &lt;br /&gt; running -- invocation is being ran by a Runner &lt;br /&gt; aborted -- invocation was aborted on a Runner &lt;br /&gt; completed -- invocation completed on a Runner &lt;br /&gt; error -- invocation encountered an error on a Runner unknown -- transient error encountered when fetching invocation state (prepared, created, sent, queued, running, aborted, completed, error, unknown) (example: sent)</td>
 </tr>
 <tr>
     <td><CopyableCode code="summary" /></td>
@@ -104,7 +105,7 @@ Invocation information
 <tr>
     <td><CopyableCode code="timing" /></td>
     <td><code>array</code></td>
-    <td>A list of state transitions with timestamps. Only the 'created' transition is guaranteed to exist at any time.</td>
+    <td>A list of state transitions with timestamps, sorted in ascending order by timestamp. Only the 'created' transition is guaranteed to exist at any time.</td>
 </tr>
 <tr>
     <td><CopyableCode code="type" /></td>
@@ -114,7 +115,7 @@ Invocation information
 </tbody>
 </table>
 </TabItem>
-<TabItem value="list_automation_action_invocations">
+<TabItem value="list">
 
 Invocations matching the criteria
 
@@ -170,7 +171,7 @@ Invocations matching the criteria
 <tr>
     <td><CopyableCode code="state" /></td>
     <td><code>string</code></td>
-    <td>prepared -- the invocation exists and can be referenced, but is NOT available to a Runner <br /> created -- the invocation exists and is waiting for a Runner <br /> sent -- invocation sent to a Runner <br /> queued -- invocation queued by a Runner <br /> running -- invocation is being ran by a Runner <br /> aborted -- invocation was aborted on a Runner <br /> completed -- invocation completed on a Runner <br /> error -- invocation encountered an error on a Runner (example: sent)</td>
+    <td>prepared -- the invocation exists and can be referenced, but is NOT available to a Runner &lt;br /&gt; created -- the invocation exists and is waiting for a Runner &lt;br /&gt; sent -- invocation sent to a Runner &lt;br /&gt; queued -- invocation queued by a Runner &lt;br /&gt; running -- invocation is being ran by a Runner &lt;br /&gt; aborted -- invocation was aborted on a Runner &lt;br /&gt; completed -- invocation completed on a Runner &lt;br /&gt; error -- invocation encountered an error on a Runner unknown -- transient error encountered when fetching invocation state (prepared, created, sent, queued, running, aborted, completed, error, unknown) (example: sent)</td>
 </tr>
 <tr>
     <td><CopyableCode code="summary" /></td>
@@ -180,7 +181,7 @@ Invocations matching the criteria
 <tr>
     <td><CopyableCode code="timing" /></td>
     <td><code>array</code></td>
-    <td>A list of state transitions with timestamps. Only the 'created' transition is guaranteed to exist at any time.</td>
+    <td>A list of state transitions with timestamps, sorted in ascending order by timestamp. Only the 'created' transition is guaranteed to exist at any time.</td>
 </tr>
 <tr>
     <td><CopyableCode code="type" /></td>
@@ -208,32 +209,25 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_automation_actions_invocation"><CopyableCode code="get_automation_actions_invocation" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get an Automation Action Invocation<br /></td>
+    <td></td>
+    <td>Get an Automation Action Invocation&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#list_automation_action_invocations"><CopyableCode code="list_automation_action_invocations" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-incident_id"><code>incident_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-invocation_state"><code>invocation_state</code></a></td>
-    <td>List Invocations<br /></td>
+    <td></td>
+    <td><a href="#parameter-invocation_state"><code>invocation_state</code></a>, <a href="#parameter-not_invocation_state"><code>not_invocation_state</code></a>, <a href="#parameter-incident_id"><code>incident_id</code></a>, <a href="#parameter-action_id"><code>action_id</code></a></td>
+    <td>List Invocations&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#_list_automation_action_invocations"><CopyableCode code="_list_automation_action_invocations" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-incident_id"><code>incident_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-invocation_state"><code>invocation_state</code></a></td>
-    <td>List Invocations<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_automation_actions_invocation"><CopyableCode code="_get_automation_actions_invocation" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get an Automation Action Invocation<br /></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
+    <td><CopyableCode code="insert" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-invocation"><code>invocation</code></a></td>
+    <td></td>
+    <td>Invokes an Action&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -256,25 +250,25 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
 </tr>
+<tr id="parameter-action_id">
+    <td><CopyableCode code="action_id" /></td>
+    <td><code>string</code></td>
+    <td>Action ID</td>
+</tr>
 <tr id="parameter-incident_id">
     <td><CopyableCode code="incident_id" /></td>
     <td><code>string</code></td>
     <td>Incident ID</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 <tr id="parameter-invocation_state">
     <td><CopyableCode code="invocation_state" /></td>
     <td><code>string</code></td>
     <td>Invocation state</td>
+</tr>
+<tr id="parameter-not_invocation_state">
+    <td><CopyableCode code="not_invocation_state" /></td>
+    <td><code>string</code></td>
+    <td>Invocation state inverse filter (matches invocations NOT in the specified state)</td>
 </tr>
 </tbody>
 </table>
@@ -282,15 +276,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_automation_actions_invocation"
+    defaultValue="get"
     values={[
-        { label: 'get_automation_actions_invocation', value: 'get_automation_actions_invocation' },
-        { label: 'list_automation_action_invocations', value: 'list_automation_action_invocations' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_automation_actions_invocation">
+<TabItem value="get">
 
-Get an Automation Action Invocation<br />
+Get an Automation Action Invocation&lt;br /&gt;
 
 ```sql
 SELECT
@@ -308,14 +302,12 @@ timing,
 type
 FROM pagerduty.automation_actions.invocations
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
-<TabItem value="list_automation_action_invocations">
+<TabItem value="list">
 
-List Invocations<br />
+List Invocations&lt;br /&gt;
 
 ```sql
 SELECT
@@ -332,48 +324,56 @@ summary,
 timing,
 type
 FROM pagerduty.automation_actions.invocations
-WHERE incident_id = '{{ incident_id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-AND invocation_state = '{{ invocation_state }}'
+WHERE invocation_state = '{{ invocation_state }}'
+AND not_invocation_state = '{{ not_invocation_state }}'
+AND incident_id = '{{ incident_id }}'
+AND action_id = '{{ action_id }}'
 ;
 ```
 </TabItem>
 </Tabs>
 
 
-## Lifecycle Methods
+## `INSERT` examples
 
 <Tabs
-    defaultValue="_list_automation_action_invocations"
+    defaultValue="create"
     values={[
-        { label: '_list_automation_action_invocations', value: '_list_automation_action_invocations' },
-        { label: '_get_automation_actions_invocation', value: '_get_automation_actions_invocation' }
+        { label: 'create', value: 'create' },
+        { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="_list_automation_action_invocations">
+<TabItem value="create">
 
-List Invocations<br />
+Invokes an Action&lt;br /&gt;
 
 ```sql
-EXEC pagerduty.automation_actions.invocations._list_automation_action_invocations 
-@incident_id='{{ incident_id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@invocation_state='{{ invocation_state }}'
+INSERT INTO pagerduty.automation_actions.invocations (
+invocation,
+id
+)
+SELECT 
+'{{ invocation }}' /* required */,
+'{{ id }}'
+RETURNING
+invocation
 ;
 ```
 </TabItem>
-<TabItem value="_get_automation_actions_invocation">
+<TabItem value="manifest">
 
-Get an Automation Action Invocation<br />
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
+- name: invocations
+  props:
+    - name: id
+      value: "{{ id }}"
+      description: Required parameter for the invocations resource.
+    - name: invocation
+      value:
+        metadata:
+          incident_id: "{{ incident_id }}"
+          alert_id: "{{ alert_id }}"
+`}</CodeBlock>
 
-```sql
-EXEC pagerduty.automation_actions.invocations._get_automation_actions_invocation 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
-;
-```
 </TabItem>
 </Tabs>

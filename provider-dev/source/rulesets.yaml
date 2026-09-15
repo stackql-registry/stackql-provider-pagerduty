@@ -1,0 +1,1659 @@
+openapi: 3.0.2
+info:
+  title: PagerDuty API - Rulesets
+  description: Rulesets and event rules (legacy event rules; superseded by Event Orchestrations).
+  version: 2.0.0
+paths:
+  /rulesets:
+    get:
+      x-pd-requires-scope: event_rules.read
+      tags:
+        - Rulesets
+      operationId: listRulesets
+      description: |
+        List all Rulesets
+        <!-- theme: warning -->
+        > ### End-of-life
+        > Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.
+
+        Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)
+
+        Scoped OAuth requires: `event_rules.read`
+      summary: List Rulesets
+      parameters:
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+      responses:
+        '200':
+          description: A paginated array of Ruleset objects.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  rulesets:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Ruleset'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    rulesets:
+                      - id: 0e84de00-9511-4380-9f4f-a7b568bb49a0
+                        name: MySQL Clusters
+                        type: global
+                        routing_keys:
+                          - R0212P1QXGEIQE2NMTQ7L7WXD00DWHIN
+                        self: https://api.pagerduty.com/rulesets/0e84de00-9511-4380-9f4f-a7b568bb49a0
+                        created_at: '2019-12-24T21:18:52Z'
+                        creator:
+                          type: user_reference
+                          self: https://api.pagerduty.com/users/PABO808
+                          id: PABO808
+                        updated_at: '2019-12-25T14:54:23Z'
+                        updater:
+                          type: user_reference
+                          self: https://api.pagerduty.com/users/PABO808
+                          id: PABO808
+                        team:
+                          type: team_reference
+                          self: https://api.pagerduty.com/teams/P3ZQXDF
+                          id: P3ZQXDF
+                    limit: 25
+                    offset: 0
+                    more: false
+                    total: null
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      x-pd-requires-scope: event_rules.write
+      tags:
+        - Rulesets
+      operationId: createRuleset
+      description: |
+        Create a new Ruleset.
+        <!-- theme: warning -->
+        > ### End-of-life
+        > Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.
+
+        Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)
+
+        Scoped OAuth requires: `event_rules.write`
+      summary: Create a Ruleset
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ruleset:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      readOnly: true
+                      description: ID of the Ruleset.
+                    self:
+                      type: string
+                      format: url
+                      description: the API show URL at which the object is accessible
+                      readOnly: true
+                    type:
+                      type: string
+                      readOnly: true
+                      enum:
+                        - global
+                        - default_global
+                    name:
+                      type: string
+                      description: Name of the Ruleset.
+                    routing_keys:
+                      type: array
+                      readOnly: true
+                      description: Routing keys routed to this Ruleset.
+                      items:
+                        type: string
+                    created_at:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                      description: The date the Ruleset was created at.
+                    creator:
+                      type: object
+                      readOnly: true
+                      description: Reference to the user that has created the Ruleset.
+                      properties:
+                        id:
+                          type: string
+                          readOnly: true
+                        type:
+                          type: string
+                          description: A string that determines the schema of the object
+                          readOnly: true
+                        self:
+                          type: string
+                          format: url
+                          description: The API show URL at which the object is accessible
+                          readOnly: true
+                    updated_at:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                      description: The date the Ruleset was last updated.
+                    updater:
+                      type: object
+                      readOnly: true
+                      description: Reference to the user that has updated the Ruleset last.
+                      properties:
+                        id:
+                          type: string
+                          readOnly: true
+                        type:
+                          type: string
+                          description: A string that determines the schema of the object
+                          readOnly: true
+                        self:
+                          type: string
+                          format: url
+                          description: The API show URL at which the object is accessible
+                          readOnly: true
+                    team:
+                      type: object
+                      description: Reference to the team that owns the Ruleset. If none is specified, only admins have access.
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                          description: A string that determines the schema of the object
+                          readOnly: true
+                        self:
+                          type: string
+                          format: url
+                          description: The API show URL at which the object is accessible
+                          readOnly: true
+                      required:
+                        - id
+                        - type
+                  example:
+                    id: 0e84de00-9511-4380-9f4f-a7b568bb49a0
+                    name: MySQL Clusters
+                    type: global
+                    routing_keys:
+                      - R0212P1QXGEIQE2NMTQ7L7WXD00DWHIN
+                    self: https://api.pagerduty.com/rulesets/0e84de00-9511-4380-9f4f-a7b568bb49a0
+                    created_at: '2019-12-24T21:18:52Z'
+                    creator:
+                      type: user_reference
+                      self: https://api.pagerduty.com/users/PABO808
+                      id: PABO808
+                    updated_at: '2019-12-25T14:54:23Z'
+                    updater:
+                      type: user_reference
+                      self: https://api.pagerduty.com/users/PABO808
+                      id: PABO808
+                    team:
+                      type: team_reference
+                      self: https://api.pagerduty.com/teams/P3ZQXDF
+                      id: P3ZQXDF
+                  required:
+                    - name
+                  description: (opaque JSON object)
+              required:
+                - ruleset
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  ruleset:
+                    name: MySQL Clusters
+                    team:
+                      id: PWL7QXS
+                      type: team_reference
+      responses:
+        '201':
+          description: The Ruleset that was created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ruleset:
+                    $ref: '#/components/schemas/Ruleset'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    rulesets:
+                      id: 0e84de00-9511-4380-9f4f-a7b568bb49a0
+                      name: MySQL Clusters
+                      type: global
+                      routing_keys:
+                        - R0212P1QXGEIQE2NMTQ7L7WXD00DWHIN
+                      self: https://api.pagerduty.com/rulesets/0e84de00-9511-4380-9f4f-a7b568bb49a0
+                      created_at: '2019-12-24T21:18:52Z'
+                      creator:
+                        type: user_reference
+                        self: https://api.pagerduty.com/users/PABO808
+                        id: PABO808
+                      updated_at: '2019-12-25T14:54:23Z'
+                      updater:
+                        type: user_reference
+                        self: https://api.pagerduty.com/users/PABO808
+                        id: PABO808
+                      team:
+                        type: team_reference
+                        self: https://api.pagerduty.com/teams/P3ZQXDF
+                        id: P3ZQXDF
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    description: Create, list, update and delete Rulesets.
+  /rulesets/{id}:
+    get:
+      x-pd-requires-scope: event_rules.read
+      tags:
+        - Rulesets
+      operationId: getRuleset
+      description: |
+        Get a Ruleset.
+        <!-- theme: warning -->
+        > ### End-of-life
+        > Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.
+
+        Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)
+
+        Scoped OAuth requires: `event_rules.read`
+      summary: Get a Ruleset
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: The Ruleset object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ruleset:
+                    $ref: '#/components/schemas/Ruleset'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    ruleset:
+                      id: 0e84de00-9511-4380-9f4f-a7b568bb49a0
+                      name: MySQL Clusters
+                      type: global
+                      routing_keys:
+                        - R0212P1QXGEIQE2NMTQ7L7WXD00DWHIN
+                      self: https://api.pagerduty.com/rulesets/0e84de00-9511-4380-9f4f-a7b568bb49a0
+                      created_at: '2019-12-24T21:18:52Z'
+                      creator:
+                        type: user_reference
+                        self: https://api.pagerduty.com/users/PABO808
+                        id: PABO808
+                      updated_at: '2019-12-25T14:54:23Z'
+                      updater:
+                        type: user_reference
+                        self: https://api.pagerduty.com/users/PABO808
+                        id: PABO808
+                      team:
+                        type: team_reference
+                        self: https://api.pagerduty.com/teams/P3ZQXDF
+                        id: P3ZQXDF
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      x-pd-requires-scope: event_rules.write
+      tags:
+        - Rulesets
+      operationId: updateRuleset
+      description: |
+        Update a Ruleset.
+        <!-- theme: warning -->
+        > ### End-of-life
+        > Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.
+
+        Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)
+
+        Scoped OAuth requires: `event_rules.write`
+      summary: Update a Ruleset
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ruleset:
+                  $ref: '#/components/schemas/Ruleset'
+              required:
+                - ruleset
+            examples:
+              change_name:
+                summary: 'Example: Change name'
+                value:
+                  ruleset:
+                    name: MySQL Clusters
+              change_team:
+                summary: 'Example: Change team'
+                value:
+                  ruleset:
+                    team:
+                      id: PWL7QXS
+                      type: team_reference
+      responses:
+        '200':
+          description: The Ruleset that was updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ruleset:
+                    $ref: '#/components/schemas/Ruleset'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    rulesets:
+                      id: 0e84de00-9511-4380-9f4f-a7b568bb49a0
+                      name: MySQL Clusters
+                      type: global
+                      routing_keys:
+                        - R0212P1QXGEIQE2NMTQ7L7WXD00DWHIN
+                      self: https://api.pagerduty.com/rulesets/0e84de00-9511-4380-9f4f-a7b568bb49a0
+                      created_at: '2019-12-24T21:18:52Z'
+                      creator:
+                        type: user_reference
+                        self: https://api.pagerduty.com/users/PABO808
+                        id: PABO808
+                      updated_at: '2019-12-25T14:54:23Z'
+                      updater:
+                        type: user_reference
+                        self: https://api.pagerduty.com/users/PABO808
+                        id: PABO808
+                      team:
+                        type: team_reference
+                        self: https://api.pagerduty.com/teams/P3ZQXDF
+                        id: P3ZQXDF
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    delete:
+      x-pd-requires-scope: event_rules.write
+      tags:
+        - Rulesets
+      operationId: deleteRuleset
+      description: |
+        Delete a Ruleset.
+        <!-- theme: warning -->
+        > ### End-of-life
+        > Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.
+
+        Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)
+
+        Scoped OAuth requires: `event_rules.write`
+      summary: Delete a Ruleset
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: The Ruleset was deleted successfully.
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    description: Manage Rulesets.
+  /rulesets/{id}/rules:
+    get:
+      x-pd-requires-scope: event_rules.read
+      tags:
+        - Rulesets
+      operationId: listRulesetEventRules
+      description: |
+        List all Event Rules on a Ruleset.
+        <!-- theme: warning -->
+        > ### End-of-life
+        > Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.
+
+        Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)
+
+        Note: Create and Update on rules will accept 'description' or 'summary' interchangeably as an extraction action target. Get and List on rules will always return 'summary' as the target. If you are expecting 'description' please change your automation code to expect 'summary' instead.
+
+        Scoped OAuth requires: `event_rules.read`
+      summary: List Event Rules
+      parameters:
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: A paginated array of Event Rule objects.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  rules:
+                    type: array
+                    description: The paginated list of rules of the Ruleset.
+                    items:
+                      $ref: '#/components/schemas/EventRule'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    rules:
+                      - id: 14e56445-ebab-4dd0-ba9d-fc28a41b7e7b
+                        position: 0
+                        disabled: false
+                        catch_all: false
+                        self: https://api.pagerduty.com/rulesets/0e84de00-9511-4380-9f4f-a7b568bb49a0/rules/14e56445-ebab-4dd0-ba9d-fc28a41b7e7b
+                        conditions:
+                          operator: and
+                          subconditions:
+                            - operator: contains
+                              parameters:
+                                value: mysql
+                                path: details.host
+                        time_frame:
+                          active_between:
+                            start_time: 1577880000000
+                            end_time: 1580558400000
+                        actions:
+                          annotate:
+                            value: This incident was created by a Global Event Rule
+                          route:
+                            value: PI2KBWI
+                          priority:
+                            value: PCMUB6F
+                          severity:
+                            value: warning
+                          extractions:
+                            - target: dedup_key
+                              source: details.error_summary
+                              regex: Host (.*) is experiencing errors
+                      - id: 0d819a5a-b714-4bae-9333-dc73ea0daefb
+                        position: 1
+                        disabled: false
+                        catch_all: true
+                        self: https://api.pagerduty.com/rulesets/0e84de00-9511-4380-9f4f-a7b568bb49a0/rules/0d819a5a-b714-4bae-9333-dc73ea0daefb
+                        actions:
+                          suppress:
+                            value: true
+                          severity: null
+                          route: null
+                          priority: null
+                          extractions: []
+                          event_action: null
+                          annotate: null
+                    limit: 25
+                    offset: 0
+                    more: false
+                    total: null
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      x-pd-requires-scope: event_rules.write
+      tags:
+        - Rulesets
+      operationId: createRulesetEventRule
+      description: |
+        Create a new Event Rule.
+        <!-- theme: warning -->
+        > ### End-of-life
+        > Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.
+
+        Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)
+
+        Note: Create and Update on rules will accept 'description' or 'summary' interchangeably as an extraction action target. Get and List on rules will always return 'summary' as the target. If you are expecting 'description' please change your automation code to expect 'summary' instead.
+
+        Scoped OAuth requires: `event_rules.write`
+      summary: Create an Event Rule
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rule:
+                  $ref: '#/components/schemas/EventRule'
+              required:
+                - rule
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  rule:
+                    id: 14e56445-ebab-4dd0-ba9d-fc28a41b7e7b
+                    position: 0
+                    disabled: false
+                    catch_all: false
+                    conditions:
+                      operator: and
+                      subconditions:
+                        - operator: contains
+                          parameters:
+                            value: mysql
+                            path: details.host
+                    time_frame:
+                      active_between:
+                        start_time: 1577880000000
+                        end_time: 1580558400000
+                    actions:
+                      annotate:
+                        value: This incident was created by a Global Event Rule
+                      route:
+                        value: PI2KBWI
+                      priority:
+                        value: PCMUB6F
+                      severity:
+                        value: warning
+                      extractions:
+                        - target: dedup_key
+                          source: details.error_summary
+                          regex: Host (.*) is experiencing errors
+      responses:
+        '201':
+          description: The Event Rule that was created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rule:
+                    $ref: '#/components/schemas/EventRule'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    ruleset:
+                      id: 14e56445-ebab-4dd0-ba9d-fc28a41b7e7b
+                      position: 0
+                      disabled: false
+                      catch_all: false
+                      self: https://api.pagerduty.com/rulesets/0e84de00-9511-4380-9f4f-a7b568bb49a0/rules/14e56445-ebab-4dd0-ba9d-fc28a41b7e7b
+                      conditions:
+                        operator: and
+                        subconditions:
+                          - operator: contains
+                            parameters:
+                              value: mysql
+                              path: details.host
+                      time_frame:
+                        active_between:
+                          start_time: 1577880000000
+                          end_time: 1580558400000
+                      actions:
+                        annotate:
+                          value: This incident was created by a Global Event Rule
+                        route:
+                          value: PI2KBWI
+                        priority:
+                          value: PCMUB6F
+                        severity:
+                          value: warning
+                        extractions:
+                          - target: dedup_key
+                            source: details.error_summary
+                            regex: Host (.*) is experiencing errors
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    description: Create, list, update and delete Event Rules.
+  /rulesets/{id}/rules/{rule_id}:
+    get:
+      x-pd-requires-scope: event_rules.read
+      tags:
+        - Rulesets
+      operationId: getRulesetEventRule
+      description: |
+        Get an Event Rule.
+        <!-- theme: warning -->
+        > ### End-of-life
+        > Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.
+
+        Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)
+
+        Note: Create and Update on rules will accept 'description' or 'summary' interchangeably as an extraction action target. Get and List on rules will always return 'summary' as the target. If you are expecting 'description' please change your automation code to expect 'summary' instead.
+
+        Scoped OAuth requires: `event_rules.read`
+      summary: Get an Event Rule
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/rule_id'
+      responses:
+        '200':
+          description: The Event Rule object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rule:
+                    $ref: '#/components/schemas/EventRule'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    rule:
+                      id: 14e56445-ebab-4dd0-ba9d-fc28a41b7e7b
+                      position: 0
+                      disabled: false
+                      catch_all: false
+                      self: https://api.pagerduty.com/rulesets/0e84de00-9511-4380-9f4f-a7b568bb49a0/rules/14e56445-ebab-4dd0-ba9d-fc28a41b7e7b
+                      conditions:
+                        operator: and
+                        subconditions:
+                          - operator: contains
+                            parameters:
+                              value: mysql
+                              path: details.host
+                      time_frame:
+                        active_between:
+                          start_time: 1577880000000
+                          end_time: 1580558400000
+                      actions:
+                        annotate:
+                          value: This incident was created by a Global Event Rule
+                        route:
+                          value: PI2KBWI
+                        priority:
+                          value: PCMUB6F
+                        severity:
+                          value: warning
+                        extractions:
+                          - target: dedup_key
+                            template: '{{error_level}} error on host {{host}}'
+                      variables:
+                        - name: error_level
+                          type: regex
+                          parameters:
+                            value: .*error level is (\w+)\.
+                            path: payload.summary
+                        - name: host
+                          type: regex
+                          parameters:
+                            value: (.*)-USW2
+                            path: payload.host.human_name
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      x-pd-requires-scope: event_rules.write
+      tags:
+        - Rulesets
+      operationId: updateRulesetEventRule
+      summary: Update an Event Rule
+      description: |
+        Update an Event Rule. Note that the endpoint supports partial updates, so any number of the writable fields can be provided.
+        <!-- theme: warning -->
+        > ### End-of-life
+        > Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.
+
+        Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)
+
+        Note: Create and Update on rules will accept 'description' or 'summary' interchangeably as an extraction action target. Get and List on rules will always return 'summary' as the target. If you are expecting 'description' please change your automation code to expect 'summary' instead.
+
+        Scoped OAuth requires: `event_rules.write`
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/rule_id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rule:
+                  $ref: '#/components/schemas/EventRule'
+                rule_id:
+                  description: The id of the Event Rule to update.
+                  type: string
+              required:
+                - rule_id
+            examples:
+              suppress_action:
+                summary: 'Example: Enable suppress action'
+                value:
+                  rule_id: 7123bdd1-74e8-4aa7-aa38-4a9ebe123456
+                  rule:
+                    actions:
+                      suppress:
+                        value: true
+              disable_rule:
+                summary: 'Example: Disable rule'
+                value:
+                  rule_id: 7123bdd1-74e8-4aa7-aa38-4a9ebe123456
+                  rule:
+                    disabled: true
+                    actions:
+                      suppress:
+                        value: true
+      responses:
+        '200':
+          description: The Event Rule that was updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rule:
+                    $ref: '#/components/schemas/EventRule'
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    rule:
+                      id: 14e56445-ebab-4dd0-ba9d-fc28a41b7e7b
+                      position: 0
+                      disabled: false
+                      catch_all: false
+                      self: https://api.pagerduty.com/rulesets/0e84de00-9511-4380-9f4f-a7b568bb49a0/rules/14e56445-ebab-4dd0-ba9d-fc28a41b7e7b
+                      conditions:
+                        operator: and
+                        subconditions:
+                          - operator: contains
+                            parameters:
+                              value: mysql
+                              path: details.host
+                      time_frame:
+                        active_between:
+                          start_time: 1577880000000
+                          end_time: 1580558400000
+                      actions:
+                        annotate:
+                          value: This incident was created by a Global Event Rule
+                        route:
+                          value: PI2KBWI
+                        priority:
+                          value: PCMUB6F
+                        severity:
+                          value: warning
+                        extractions:
+                          - target: dedup_key
+                            source: details.error_summary
+                            regex: Host (.*) is experiencing errors
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    delete:
+      x-pd-requires-scope: event_rules.write
+      tags:
+        - Rulesets
+      operationId: deleteRulesetEventRule
+      description: |
+        Delete an Event Rule.
+        <!-- theme: warning -->
+        > ### End-of-life
+        > Rulesets and Event Rules will end-of-life soon. We highly recommend that you [migrate to Event Orchestration](https://support.pagerduty.com/docs/migrate-to-event-orchestration) as soon as possible so you can take advantage of the new functionality, such as improved UI, rule creation, APIs and Terraform support, advanced conditions, and rule nesting.
+
+        Rulesets allow you to route events to an endpoint and create collections of Event Rules, which define sets of actions to take based on event content.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#rulesets)
+
+        Scoped OAuth requires: `event_rules.write`
+      summary: Delete an Event Rule
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/rule_id'
+      responses:
+        '204':
+          description: The Event Rule was deleted successfully.
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    description: Manage Event Rules.
+components:
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        offset:
+          type: integer
+          description: Echoes offset pagination property.
+          readOnly: true
+        limit:
+          type: integer
+          description: Echoes limit pagination property.
+          readOnly: true
+        more:
+          type: boolean
+          description: Indicates if there are additional records to return
+          readOnly: true
+        total:
+          type: integer
+          description: The total number of records matching the given query.
+          nullable: true
+          readOnly: true
+    Ruleset:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: ID of the Ruleset.
+        self:
+          type: string
+          format: url
+          description: the API show URL at which the object is accessible
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+          enum:
+            - global
+            - default_global
+        name:
+          type: string
+          description: Name of the Ruleset.
+        routing_keys:
+          type: array
+          readOnly: true
+          description: Routing keys routed to this Ruleset.
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date the Ruleset was created at.
+        creator:
+          type: object
+          readOnly: true
+          description: Reference to the user that has created the Ruleset.
+          properties:
+            id:
+              type: string
+              readOnly: true
+            type:
+              type: string
+              description: A string that determines the schema of the object
+              readOnly: true
+            self:
+              type: string
+              format: url
+              description: The API show URL at which the object is accessible
+              readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date the Ruleset was last updated.
+        updater:
+          type: object
+          readOnly: true
+          description: Reference to the user that has updated the Ruleset last.
+          properties:
+            id:
+              type: string
+              readOnly: true
+            type:
+              type: string
+              description: A string that determines the schema of the object
+              readOnly: true
+            self:
+              type: string
+              format: url
+              description: The API show URL at which the object is accessible
+              readOnly: true
+        team:
+          type: object
+          description: Reference to the team that owns the Ruleset. If none is specified, only admins have access.
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              description: A string that determines the schema of the object
+              readOnly: true
+            self:
+              type: string
+              format: url
+              description: The API show URL at which the object is accessible
+              readOnly: true
+          required:
+            - id
+            - type
+      example:
+        id: 0e84de00-9511-4380-9f4f-a7b568bb49a0
+        name: MySQL Clusters
+        type: global
+        routing_keys:
+          - R0212P1QXGEIQE2NMTQ7L7WXD00DWHIN
+        self: https://api.pagerduty.com/rulesets/0e84de00-9511-4380-9f4f-a7b568bb49a0
+        created_at: '2019-12-24T21:18:52Z'
+        creator:
+          type: user_reference
+          self: https://api.pagerduty.com/users/PABO808
+          id: PABO808
+        updated_at: '2019-12-25T14:54:23Z'
+        updater:
+          type: user_reference
+          self: https://api.pagerduty.com/users/PABO808
+          id: PABO808
+        team:
+          type: team_reference
+          self: https://api.pagerduty.com/teams/P3ZQXDF
+          id: P3ZQXDF
+    EventRule:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: ID of the Event Rule.
+        self:
+          type: string
+          format: url
+          description: the API show URL at which the object is accessible.
+          readOnly: true
+        disabled:
+          type: boolean
+          description: Indicates whether the Event Rule is disabled and would therefore not be evaluated.
+        conditions:
+          type: object
+          description: Conditions evaluated to check if an event matches this Event Rule. Is always empty for the catch_all rule, though.
+          properties:
+            operator:
+              type: string
+              description: Operator to combine sub-conditions.
+              enum:
+                - and
+                - or
+            subconditions:
+              type: array
+              description: Array of sub-conditions.
+              items:
+                type: object
+                properties:
+                  operator:
+                    type: string
+                    description: The type of operator to apply.
+                    enum:
+                      - exists
+                      - nexists
+                      - equals
+                      - nequals
+                      - contains
+                      - ncontains
+                      - matches
+                      - nmatches
+                  parameters:
+                    type: object
+                    properties:
+                      path:
+                        type: string
+                        description: Path to a field in an event, in dot-notation.  For Event Rules on a serivce, this will have to be a PD-CEF field.
+                      value:
+                        type: string
+                        description: Value to apply to the operator.
+                      options:
+                        type: string
+                        description: Options to configure the operator. (opaque JSON object)
+                    required:
+                      - value
+                      - path
+                required:
+                  - operator
+                  - parameters
+          required:
+            - operator
+            - subconditions
+        time_frame:
+          description: Time-based conditions for limiting when the rule is active.
+          type: object
+          properties:
+            active_between:
+              type: object
+              required:
+                - start_time
+                - end_time
+              description: A fixed window of time during which the rule is active.
+              properties:
+                start_time:
+                  type: integer
+                  description: The start time in milliseconds.
+                end_time:
+                  type: integer
+                  description: End time in milliseconds.
+            scheduled_weekly:
+              type: object
+              required:
+                - start_time
+                - duration
+                - timezone
+                - weekdays
+              description: A reccuring window of time based on the day of the week, during which the rule is active.
+              properties:
+                start_time:
+                  type: integer
+                  description: The amount of milliseconds into the day at which the window starts.
+                duration:
+                  type: integer
+                  description: The duration of the window in milliseconds.
+                timezone:
+                  type: string
+                  description: The timezone.
+                weekdays:
+                  type: array
+                  description: An array of day values. Ex [1, 3, 5] is Monday, Wednesday, Friday.
+                  items:
+                    type: integer
+        variables:
+          type: array
+          description: '[Early Access] Populate variables from event payloads and use those variables in other event actions.'
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: The type of operation to populate the variable.
+                enum:
+                  - regex
+              name:
+                type: string
+                description: The name of the variable.
+              parameters:
+                type: object
+                description: The parameters for performing the operation to populate the
+                properties:
+                  value:
+                    type: string
+                    description: The value for the operation. For example, an RE2 regular expression for regex-type variables.
+                  path:
+                    type: string
+                    description: Path to a field in an event, in dot-notation. For Event Rules on a Service, this will have to be a PD-CEF field.
+                required:
+                  - value
+                  - path
+            required:
+              - type
+              - name
+              - parameters
+        position:
+          type: integer
+          description: Position/index of the Event Rule in the Ruleset.  Starting from position 0 (the first rule), rules are evaluated one-by-one until a matching rule is found.
+        catch_all:
+          type: boolean
+          readOnly: true
+          description: Indicates whether the Event Rule is the last Event Rule of the Ruleset that serves as a catch-all. It has limited functionality compared to other rules and always matches.
+        actions:
+          description: When an event matches this rule, the actions that will be taken to change the resulting alert and incident.
+          type: object
+          properties:
+            annotate:
+              description: Set a note on the resulting incident.
+              type: object
+              nullable: true
+              required:
+                - value
+              properties:
+                value:
+                  type: string
+                  description: The content of the note.
+            event_action:
+              description: Set whether the resulting alert status is trigger or resolve.
+              type: object
+              required:
+                - value
+              nullable: true
+              properties:
+                value:
+                  type: string
+                  enum:
+                    - trigger
+                    - resolve
+            extractions:
+              type: array
+              description: Dynamically extract values to set and modify new and existing PD-CEF fields.
+              items:
+                oneOf:
+                  - type: object
+                    required:
+                      - target
+                      - source
+                      - regex
+                    properties:
+                      target:
+                        type: string
+                        description: The PD-CEF field that will be set with the value from the regex.
+                      source:
+                        type: string
+                        description: The path to the event field where the regex will be applied to extract a value.
+                      regex:
+                        type: string
+                        description: A RE2 regular expression.  If it contains one or more capture groups, their values will be extracted and appended together.  If it contains no capture groups, the whole match is used.
+                  - type: object
+                    required:
+                      - target
+                      - template
+                    properties:
+                      target:
+                        type: string
+                        description: The PD-CEF field that will be set with the value from the regex.
+                      template:
+                        type: string
+                        description: A value that will be used to populate the target PD-CEF field.  You can include variables extracted from the payload by using string interpolation.
+                        example: Error number {{count}} on host {{host}}
+            priority:
+              description: Set the priority ID for the resulting incident. You can find the priority you want by calling the priorities endpoint.
+              type: object
+              required:
+                - value
+              nullable: true
+              properties:
+                value:
+                  type: string
+                  description: The priority ID.
+            severity:
+              description: Set the severity of the resulting alert.
+              type: object
+              required:
+                - value
+              nullable: true
+              properties:
+                value:
+                  type: string
+                  enum:
+                    - info
+                    - warning
+                    - error
+                    - critical
+            suppress:
+              description: Set whether the resulting alert is suppressed. Can optionally be used with a threshold where resulting alerts will be suppressed until the threshold is met in a window of time. If using a threshold the rule must also set a route action.
+              type: object
+              required:
+                - value
+              properties:
+                value:
+                  type: boolean
+                threshold_value:
+                  type: integer
+                  description: The number of occurences needed during the window of time to trigger the theshold.
+                threshold_time_unit:
+                  type: string
+                  description: The time unit for the window of time.
+                  enum:
+                    - seconds
+                    - minutes
+                    - hours
+                threshold_time_amount:
+                  type: integer
+                  description: The amount of time units for the window of time.
+            suspend:
+              description: Set the length of time to suspend the resulting alert before triggering. Rules with a suspend action must also set a route action, and cannot have a suppress with threshold action
+              type: object
+              required:
+                - value
+              nullable: true
+              properties:
+                value:
+                  type: integer
+                  description: The amount of time to suspend the alert in seconds.
+            route:
+              description: Set the service ID of the target service for the resulting alert. You can find the service you want to route to by calling the services endpoint.
+              type: object
+              required:
+                - value
+              nullable: true
+              properties:
+                value:
+                  type: string
+                  description: The target service's ID.
+    EventRuleActionsCommon:
+      type: object
+      description: When an event matches this Event Rule, the actions that will be taken to change the resulting Alert and Incident.
+      properties:
+        annotate:
+          description: Set a note on the resulting incident.
+          type: object
+          nullable: true
+          required:
+            - value
+          properties:
+            value:
+              type: string
+              description: The content of the note.
+        event_action:
+          description: Set whether the resulting alert status is trigger or resolve.
+          type: object
+          required:
+            - value
+          nullable: true
+          properties:
+            value:
+              type: string
+              enum:
+                - trigger
+                - resolve
+        extractions:
+          type: array
+          description: Dynamically extract values to set and modify new and existing PD-CEF fields.
+          items:
+            oneOf:
+              - type: object
+                required:
+                  - target
+                  - source
+                  - regex
+                properties:
+                  target:
+                    type: string
+                    description: The PD-CEF field that will be set with the value from the regex.
+                  source:
+                    type: string
+                    description: The path to the event field where the regex will be applied to extract a value.
+                  regex:
+                    type: string
+                    description: A RE2 regular expression.  If it contains one or more capture groups, their values will be extracted and appended together.  If it contains no capture groups, the whole match is used.
+              - type: object
+                required:
+                  - target
+                  - template
+                properties:
+                  target:
+                    type: string
+                    description: The PD-CEF field that will be set with the value from the regex.
+                  template:
+                    type: string
+                    description: A value that will be used to populate the target PD-CEF field.  You can include variables extracted from the payload by using string interpolation.
+                    example: Error number {{count}} on host {{host}}
+        priority:
+          description: Set the priority ID for the resulting incident. You can find the priority you want by calling the priorities endpoint.
+          type: object
+          required:
+            - value
+          nullable: true
+          properties:
+            value:
+              type: string
+              description: The priority ID.
+        severity:
+          description: Set the severity of the resulting alert.
+          type: object
+          required:
+            - value
+          nullable: true
+          properties:
+            value:
+              type: string
+              enum:
+                - info
+                - warning
+                - error
+                - critical
+        suppress:
+          description: Set whether the resulting alert is suppressed. Can optionally be used with a threshold where resulting alerts will be suppressed until the threshold is met in a window of time. If using a threshold the rule must also set a route action.
+          type: object
+          required:
+            - value
+          properties:
+            value:
+              type: boolean
+            threshold_value:
+              type: integer
+              description: The number of occurences needed during the window of time to trigger the theshold.
+            threshold_time_unit:
+              type: string
+              description: The time unit for the window of time.
+              enum:
+                - seconds
+                - minutes
+                - hours
+            threshold_time_amount:
+              type: integer
+              description: The amount of time units for the window of time.
+        suspend:
+          description: Set the length of time to suspend the resulting alert before triggering. Rules with a suspend action must also set a route action, and cannot have a suppress with threshold action
+          type: object
+          required:
+            - value
+          nullable: true
+          properties:
+            value:
+              type: integer
+              description: The amount of time to suspend the alert in seconds.
+  responses:
+    Unauthorized:
+      description: |
+        Caller did not supply credentials or did not provide the correct credentials.
+        If you are using an API key, it may be invalid or your Authorization header may be malformed.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Forbidden:
+      description: |
+        Caller is not authorized to view the requested resource.
+        While your authentication is valid, the authenticated user or token does not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    ArgumentError:
+      description: Caller provided invalid arguments. Please review the response for error details. Retrying with the same arguments will *not* work.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    NotAllowed:
+      description: The request was received and recognized by the server, but its HTTP method was rejected for the requested resource.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Conflict:
+      description: The request conflicts with the current state of the server.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+  parameters:
+    offset_limit:
+      name: limit
+      in: query
+      required: false
+      description: The number of results per page.
+      schema:
+        type: integer
+    offset_offset:
+      name: offset
+      in: query
+      required: false
+      description: Offset to start pagination search results.
+      schema:
+        type: integer
+    offset_total:
+      name: total
+      in: query
+      required: false
+      description: |
+        By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.
+
+        See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information.
+      schema:
+        default: false
+        type: boolean
+    id:
+      name: id
+      description: The ID of the resource.
+      in: path
+      required: true
+      schema:
+        type: string
+    rule_id:
+      name: rule_id
+      in: path
+      description: The id of the Event Rule to retrieve.
+      required: true
+      schema:
+        type: string
+servers:
+  - url: https://api.pagerduty.com
+    description: PagerDuty V2 API.

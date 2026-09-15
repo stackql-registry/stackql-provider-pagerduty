@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>alerts</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>alerts</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="alerts" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.incidents.alerts" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists an <code>alerts</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_incident_alert"
+    defaultValue="get"
     values={[
-        { label: 'get_incident_alert', value: 'get_incident_alert' },
-        { label: 'list_incident_alerts', value: 'list_incident_alerts' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_incident_alert">
+<TabItem value="get">
 
 The alert requested.
 
@@ -74,7 +75,7 @@ The alert requested.
 <tr>
     <td><CopyableCode code="first_trigger_log_entry" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="html_url" /></td>
@@ -84,12 +85,12 @@ The alert requested.
 <tr>
     <td><CopyableCode code="incident" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="integration" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="self" /></td>
@@ -99,17 +100,17 @@ The alert requested.
 <tr>
     <td><CopyableCode code="service" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="severity" /></td>
     <td><code>string</code></td>
-    <td>The magnitude of the problem as reported by the monitoring tool.</td>
+    <td>The magnitude of the problem as reported by the monitoring tool. (info, warning, error, critical)</td>
 </tr>
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>The current status of the alert.</td>
+    <td>The current status of the alert. (triggered, resolved)</td>
 </tr>
 <tr>
     <td><CopyableCode code="summary" /></td>
@@ -124,12 +125,12 @@ The alert requested.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of object being created. (default: alert)</td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 </tbody>
 </table>
 </TabItem>
-<TabItem value="list_incident_alerts">
+<TabItem value="list">
 
 A paginated array of the incident's alerts.
 
@@ -165,7 +166,7 @@ A paginated array of the incident's alerts.
 <tr>
     <td><CopyableCode code="first_trigger_log_entry" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="html_url" /></td>
@@ -175,12 +176,12 @@ A paginated array of the incident's alerts.
 <tr>
     <td><CopyableCode code="incident" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="integration" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="self" /></td>
@@ -190,17 +191,17 @@ A paginated array of the incident's alerts.
 <tr>
     <td><CopyableCode code="service" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="severity" /></td>
     <td><code>string</code></td>
-    <td>The magnitude of the problem as reported by the monitoring tool.</td>
+    <td>The magnitude of the problem as reported by the monitoring tool. (info, warning, error, critical)</td>
 </tr>
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>The current status of the alert.</td>
+    <td>The current status of the alert. (triggered, resolved)</td>
 </tr>
 <tr>
     <td><CopyableCode code="summary" /></td>
@@ -215,7 +216,7 @@ A paginated array of the incident's alerts.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of object being created. (default: alert)</td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 </tbody>
 </table>
@@ -238,46 +239,32 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_incident_alert"><CopyableCode code="get_incident_alert" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-alert_id"><code>alert_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Show detailed information about an alert. Accepts an alert id.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />When a service sends an event to PagerDuty, an alert and corresponding incident is triggered in PagerDuty.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.read`<br /></td>
+    <td></td>
+    <td>Show detailed information about an alert. Accepts an alert id.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;When a service sends an event to PagerDuty, an alert and corresponding incident is triggered in PagerDuty.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#list_incident_alerts"><CopyableCode code="list_incident_alerts" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-alert_key"><code>alert_key</code></a>, <a href="#parameter-statuses[]"><code>statuses[]</code></a>, <a href="#parameter-sort_by"><code>sort_by</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>List alerts for the specified incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.read`<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-alert_key"><code>alert_key</code></a>, <a href="#parameter-statuses[]"><code>statuses[]</code></a>, <a href="#parameter-sort_by"><code>sort_by</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
+    <td>List alerts for the specified incident.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#_list_incident_alerts"><CopyableCode code="_list_incident_alerts" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-alert_key"><code>alert_key</code></a>, <a href="#parameter-statuses[]"><code>statuses[]</code></a>, <a href="#parameter-sort_by"><code>sort_by</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>List alerts for the specified incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.read`<br /></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-alert_id"><code>alert_id</code></a>, <a href="#parameter-alert"><code>alert</code></a></td>
+    <td><a href="#parameter-From"><code>From</code></a></td>
+    <td>Resolve an alert or associate an alert with a new parent incident.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;When a service sends an event to PagerDuty, an alert and corresponding incident is triggered in PagerDuty.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#update_incident_alerts"><CopyableCode code="update_incident_alerts" /></a></td>
+    <td><a href="#update_bulk"><CopyableCode code="update_bulk" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-From"><code>From</code></a>, <a href="#parameter-alerts"><code>alerts</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a></td>
-    <td>Resolve multiple alerts or associate them with different incidents.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved. An alert represents a digital signal that was emitted to PagerDuty by the monitoring systems that detected or identified the issue.<br /><br />A maximum of 500 alerts may be updated at a time. If more than this number of alerts are given, the API will respond with status 413 (Request Entity Too Large).<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_incident_alert"><CopyableCode code="_get_incident_alert" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-alert_id"><code>alert_id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Show detailed information about an alert. Accepts an alert id.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />When a service sends an event to PagerDuty, an alert and corresponding incident is triggered in PagerDuty.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#update_incident_alert"><CopyableCode code="update_incident_alert" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-alert_id"><code>alert_id</code></a>, <a href="#parameter-From"><code>From</code></a>, <a href="#parameter-alert"><code>alert</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Resolve an alert or associate an alert with a new parent incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />When a service sends an event to PagerDuty, an alert and corresponding incident is triggered in PagerDuty.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-alerts"><code>alerts</code></a></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-From"><code>From</code></a></td>
+    <td>Resolve multiple alerts or associate them with different incidents.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved. An alert represents a digital signal that was emitted to PagerDuty by the monitoring systems that detected or identified the issue.&lt;br /&gt;&lt;br /&gt;A maximum of 250 alerts may be updated at a time. If more than this number of alerts are given, the API will respond with status 413 (Request Entity Too Large).&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -295,11 +282,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
-<tr id="parameter-From">
-    <td><CopyableCode code="From" /></td>
-    <td><code>string (email)</code></td>
-    <td>The email address of a valid user associated with the account making the request.</td>
-</tr>
 <tr id="parameter-alert_id">
     <td><CopyableCode code="alert_id" /></td>
     <td><code>string</code></td>
@@ -310,15 +292,10 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
+<tr id="parameter-From">
+    <td><CopyableCode code="From" /></td>
+    <td><code>string (email)</code></td>
+    <td>The email address of a valid user associated with the account making the request.</td>
 </tr>
 <tr id="parameter-alert_key">
     <td><CopyableCode code="alert_key" /></td>
@@ -353,7 +330,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-total">
     <td><CopyableCode code="total" /></td>
     <td><code>boolean</code></td>
-    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
+    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our &#91;Pagination Docs&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
 </tr>
 </tbody>
 </table>
@@ -361,15 +338,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_incident_alert"
+    defaultValue="get"
     values={[
-        { label: 'get_incident_alert', value: 'get_incident_alert' },
-        { label: 'list_incident_alerts', value: 'list_incident_alerts' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_incident_alert">
+<TabItem value="get">
 
-Show detailed information about an alert. Accepts an alert id.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />When a service sends an event to PagerDuty, an alert and corresponding incident is triggered in PagerDuty.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.read`<br />
+Show detailed information about an alert. Accepts an alert id.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;When a service sends an event to PagerDuty, an alert and corresponding incident is triggered in PagerDuty.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -391,14 +368,12 @@ type
 FROM pagerduty.incidents.alerts
 WHERE id = '{{ id }}' -- required
 AND alert_id = '{{ alert_id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
-<TabItem value="list_incident_alerts">
+<TabItem value="list">
 
-List alerts for the specified incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.read`<br />
+List alerts for the specified incident.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -419,8 +394,6 @@ suppressed,
 type
 FROM pagerduty.incidents.alerts
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 AND limit = '{{ limit }}'
 AND offset = '{{ offset }}'
 AND total = '{{ total }}'
@@ -434,83 +407,56 @@ AND include[] = '{{ include[] }}'
 </Tabs>
 
 
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Resolve an alert or associate an alert with a new parent incident.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved.&lt;br /&gt;&lt;br /&gt;When a service sends an event to PagerDuty, an alert and corresponding incident is triggered in PagerDuty.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.incidents.alerts
+SET 
+alert = '{{ alert }}'
+WHERE 
+id = '{{ id }}' --required
+AND alert_id = '{{ alert_id }}' --required
+AND alert = '{{ alert }}' --required
+AND From = '{{ From}}'
+RETURNING
+alert;
+```
+</TabItem>
+</Tabs>
+
+
 ## Lifecycle Methods
 
 <Tabs
-    defaultValue="_list_incident_alerts"
+    defaultValue="update_bulk"
     values={[
-        { label: '_list_incident_alerts', value: '_list_incident_alerts' },
-        { label: 'update_incident_alerts', value: 'update_incident_alerts' },
-        { label: '_get_incident_alert', value: '_get_incident_alert' },
-        { label: 'update_incident_alert', value: 'update_incident_alert' }
+        { label: 'update_bulk', value: 'update_bulk' }
     ]}
 >
-<TabItem value="_list_incident_alerts">
+<TabItem value="update_bulk">
 
-List alerts for the specified incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.read`<br />
+Resolve multiple alerts or associate them with different incidents.&lt;br /&gt;&lt;br /&gt;An incident represents a problem or an issue that needs to be addressed and resolved. An alert represents a digital signal that was emitted to PagerDuty by the monitoring systems that detected or identified the issue.&lt;br /&gt;&lt;br /&gt;A maximum of 250 alerts may be updated at a time. If more than this number of alerts are given, the API will respond with status 413 (Request Entity Too Large).&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incidents.write`&lt;br /&gt;
 
 ```sql
-EXEC pagerduty.incidents.alerts._list_incident_alerts 
+EXEC pagerduty.incidents.alerts.update_bulk 
 @id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
 @limit='{{ limit }}', 
 @offset='{{ offset }}', 
 @total={{ total }}, 
-@alert_key='{{ alert_key }}', 
-@statuses[]='{{ statuses[] }}', 
-@sort_by='{{ sort_by }}', 
-@include[]='{{ include[] }}'
-;
-```
-</TabItem>
-<TabItem value="update_incident_alerts">
-
-Resolve multiple alerts or associate them with different incidents.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved. An alert represents a digital signal that was emitted to PagerDuty by the monitoring systems that detected or identified the issue.<br /><br />A maximum of 500 alerts may be updated at a time. If more than this number of alerts are given, the API will respond with status 413 (Request Entity Too Large).<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br />
-
-```sql
-EXEC pagerduty.incidents.alerts.update_incident_alerts 
-@id='{{ id }}' --required, 
-@From='{{ From }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@limit='{{ limit }}', 
-@offset='{{ offset }}', 
-@total={{ total }} 
+@From='{{ From }}' 
 @@json=
 '{
 "alerts": "{{ alerts }}"
-}'
-;
-```
-</TabItem>
-<TabItem value="_get_incident_alert">
-
-Show detailed information about an alert. Accepts an alert id.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />When a service sends an event to PagerDuty, an alert and corresponding incident is triggered in PagerDuty.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.read`<br />
-
-```sql
-EXEC pagerduty.incidents.alerts._get_incident_alert 
-@id='{{ id }}' --required, 
-@alert_id='{{ alert_id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
-;
-```
-</TabItem>
-<TabItem value="update_incident_alert">
-
-Resolve an alert or associate an alert with a new parent incident.<br /><br />An incident represents a problem or an issue that needs to be addressed and resolved.<br /><br />When a service sends an event to PagerDuty, an alert and corresponding incident is triggered in PagerDuty.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#incidents)<br /><br />Scoped OAuth requires: `incidents.write`<br />
-
-```sql
-EXEC pagerduty.incidents.alerts.update_incident_alert 
-@id='{{ id }}' --required, 
-@alert_id='{{ alert_id }}' --required, 
-@From='{{ From }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"alert": "{{ alert }}"
 }'
 ;
 ```

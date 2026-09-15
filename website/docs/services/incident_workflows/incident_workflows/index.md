@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>incident_workflows</code> reso
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>incident_workflows</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="incident_workflows" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.incident_workflows.incident_workflows" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists an <code>incident_workflows</code> reso
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_incident_workflow"
+    defaultValue="get"
     values={[
-        { label: 'get_incident_workflow', value: 'get_incident_workflow' },
-        { label: 'list_incident_workflows', value: 'list_incident_workflows' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_incident_workflow">
+<TabItem value="get">
 
 The Incident Workflow
 
@@ -77,6 +78,11 @@ The Incident Workflow
     <td>a URL at which the entity is uniquely displayed in the Web app</td>
 </tr>
 <tr>
+    <td><CopyableCode code="is_enabled" /></td>
+    <td><code>boolean</code></td>
+    <td>Indicates whether the Incident Workflow is enabled or not. Disabled workflows will not be triggered, and will not count toward the account's enabled workflow limit. </td>
+</tr>
+<tr>
     <td><CopyableCode code="self" /></td>
     <td><code>string (url)</code></td>
     <td>the API show URL at which the object is accessible</td>
@@ -99,12 +105,12 @@ The Incident Workflow
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 </tbody>
 </table>
 </TabItem>
-<TabItem value="list_incident_workflows">
+<TabItem value="list">
 
 A paginated array of Incident Workflows.
 
@@ -143,6 +149,11 @@ A paginated array of Incident Workflows.
     <td>a URL at which the entity is uniquely displayed in the Web app</td>
 </tr>
 <tr>
+    <td><CopyableCode code="is_enabled" /></td>
+    <td><code>boolean</code></td>
+    <td>Indicates whether the Incident Workflow is enabled or not. Disabled workflows will not be triggered, and will not count toward the account's enabled workflow limit. </td>
+</tr>
+<tr>
     <td><CopyableCode code="self" /></td>
     <td><code>string (url)</code></td>
     <td>the API show URL at which the object is accessible</td>
@@ -165,7 +176,7 @@ A paginated array of Incident Workflows.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 </tbody>
 </table>
@@ -188,60 +199,39 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_incident_workflow"><CopyableCode code="get_incident_workflow" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get an existing Incident Workflow<br />An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.<br /><br />Scoped OAuth requires: `incident_workflows.read`<br /></td>
+    <td></td>
+    <td>Get an existing Incident Workflow&lt;br /&gt;&lt;br /&gt;An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incident_workflows.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#list_incident_workflows"><CopyableCode code="list_incident_workflows" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-query"><code>query</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>List existing Incident Workflows.<br /><br />This is the best method to use to list all Incident Workflows in your account. If your use case requires listing Incident Workflows associated with a particular Service, you can use the "listIncidentWorkflowsByService" endpoint.<br /><br />An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.<br /><br />Scoped OAuth requires: `incident_workflows.read`<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-query"><code>query</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
+    <td>List existing Incident Workflows.&lt;br /&gt;&lt;br /&gt;This is the best method to use to list all Incident Workflows in your account. If your use case requires listing Incident Workflows associated with a particular Service, you can use the "List Triggers" method to find Incident Workflows configured to start for Incidents in a given Service.&lt;br /&gt;&lt;br /&gt;An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incident_workflows.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_incident_workflow_instance"><CopyableCode code="create_incident_workflow_instance" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-data__incident_workflow_instance"><code>data__incident_workflow_instance</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Start an Instance of an Incident Workflow<br /><br />An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.<br /><br />Scoped OAuth requires: `incident_workflows:instances.write`<br /></td>
+    <td><a href="#parameter-incident_workflow"><code>incident_workflow</code></a></td>
+    <td></td>
+    <td>Create a new Incident Workflow&lt;br /&gt;&lt;br /&gt;An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incident_workflows.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#delete_incident_workflow"><CopyableCode code="delete_incident_workflow" /></a></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-incident_workflow"><code>incident_workflow</code></a></td>
+    <td></td>
+    <td>Update an Incident Workflow&lt;br /&gt;&lt;br /&gt;An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incident_workflows.write`&lt;br /&gt;</td>
+</tr>
+<tr>
+    <td><a href="#delete"><CopyableCode code="delete" /></a></td>
     <td><CopyableCode code="delete" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Delete an existing Incident Workflow<br /><br />An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.<br /><br />Scoped OAuth requires: `incident_workflows.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_incident_workflows"><CopyableCode code="_list_incident_workflows" /></a></td>
-    <td><CopyableCode code="exec" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-query"><code>query</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>List existing Incident Workflows.<br /><br />This is the best method to use to list all Incident Workflows in your account. If your use case requires listing Incident Workflows associated with a particular Service, you can use the "listIncidentWorkflowsByService" endpoint.<br /><br />An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.<br /><br />Scoped OAuth requires: `incident_workflows.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#post_incident_workflow"><CopyableCode code="post_incident_workflow" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-incident_workflow"><code>incident_workflow</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Create a new Incident Workflow<br /><br />An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.<br /><br />Scoped OAuth requires: `incident_workflows.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_get_incident_workflow"><CopyableCode code="_get_incident_workflow" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Get an existing Incident Workflow<br />An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.<br /><br />Scoped OAuth requires: `incident_workflows.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#put_incident_workflow"><CopyableCode code="put_incident_workflow" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-incident_workflow"><code>incident_workflow</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Update an Incident Workflow<br /><br />An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.<br /><br />Scoped OAuth requires: `incident_workflows.write`<br /></td>
+    <td>Delete an existing Incident Workflow&lt;br /&gt;&lt;br /&gt;An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incident_workflows.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -263,16 +253,6 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><CopyableCode code="id" /></td>
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
-</tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
 </tr>
 <tr id="parameter-include[]">
     <td><CopyableCode code="include[]" /></td>
@@ -297,7 +277,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-total">
     <td><CopyableCode code="total" /></td>
     <td><code>boolean</code></td>
-    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
+    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our &#91;Pagination Docs&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
 </tr>
 </tbody>
 </table>
@@ -305,15 +285,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_incident_workflow"
+    defaultValue="get"
     values={[
-        { label: 'get_incident_workflow', value: 'get_incident_workflow' },
-        { label: 'list_incident_workflows', value: 'list_incident_workflows' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_incident_workflow">
+<TabItem value="get">
 
-Get an existing Incident Workflow<br />An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.<br /><br />Scoped OAuth requires: `incident_workflows.read`<br />
+Get an existing Incident Workflow&lt;br /&gt;&lt;br /&gt;An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incident_workflows.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -322,6 +302,7 @@ name,
 created_at,
 description,
 html_url,
+is_enabled,
 self,
 steps,
 summary,
@@ -329,14 +310,12 @@ team,
 type
 FROM pagerduty.incident_workflows.incident_workflows
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
-<TabItem value="list_incident_workflows">
+<TabItem value="list">
 
-List existing Incident Workflows.<br /><br />This is the best method to use to list all Incident Workflows in your account. If your use case requires listing Incident Workflows associated with a particular Service, you can use the "listIncidentWorkflowsByService" endpoint.<br /><br />An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.<br /><br />Scoped OAuth requires: `incident_workflows.read`<br />
+List existing Incident Workflows.&lt;br /&gt;&lt;br /&gt;This is the best method to use to list all Incident Workflows in your account. If your use case requires listing Incident Workflows associated with a particular Service, you can use the "List Triggers" method to find Incident Workflows configured to start for Incidents in a given Service.&lt;br /&gt;&lt;br /&gt;An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incident_workflows.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -345,15 +324,14 @@ name,
 created_at,
 description,
 html_url,
+is_enabled,
 self,
 steps,
 summary,
 team,
 type
 FROM pagerduty.incident_workflows.incident_workflows
-WHERE Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-AND limit = '{{ limit }}'
+WHERE limit = '{{ limit }}'
 AND offset = '{{ offset }}'
 AND total = '{{ total }}'
 AND query = '{{ query }}'
@@ -367,49 +345,96 @@ AND include[] = '{{ include[] }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_incident_workflow_instance"
+    defaultValue="create"
     values={[
-        { label: 'create_incident_workflow_instance', value: 'create_incident_workflow_instance' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_incident_workflow_instance">
+<TabItem value="create">
 
-Start an Instance of an Incident Workflow<br /><br />An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.<br /><br />Scoped OAuth requires: `incident_workflows:instances.write`<br />
+Create a new Incident Workflow&lt;br /&gt;&lt;br /&gt;An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incident_workflows.write`&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.incident_workflows.incident_workflows (
-data__incident_workflow_instance,
-id,
-Accept,
-Content-Type
+incident_workflow
 )
 SELECT 
-'{{ incident_workflow_instance }}' /* required */,
-'{{ id }}',
-'{{ Accept }}',
-'{{ Content-Type }}'
+'{{ incident_workflow }}' /* required */
 RETURNING
-incident_workflow_instance
+incident_workflow
 ;
 ```
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: incident_workflows
   props:
-    - name: id
-      value: string
-      description: Required parameter for the incident_workflows resource.
-    - name: incident_workflow_instance
-      value: object
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-    - name: Content-Type
-      value: string
+    - name: incident_workflow
+      value:
+        id: "{{ id }}"
+        summary: "{{ summary }}"
+        type: "{{ type }}"
+        self: "{{ self }}"
+        html_url: "{{ html_url }}"
+        name: "{{ name }}"
+        description: "{{ description }}"
+        created_at: "{{ created_at }}"
+        team:
+          type: "{{ type }}"
+          id: "{{ id }}"
+        is_enabled: {{ is_enabled }}
+        steps:
+          - id: "{{ id }}"
+            summary: "{{ summary }}"
+            type: "{{ type }}"
+            self: "{{ self }}"
+            html_url: "{{ html_url }}"
+            name: "{{ name }}"
+            description: "{{ description }}"
+            action_configuration:
+              action_id: "{{ action_id }}"
+              description: "{{ description }}"
+              inputs:
+                - name: "{{ name }}"
+                  parameter_type: "{{ parameter_type }}"
+                  value: "{{ value }}"
+              inline_steps_inputs:
+                - name: "{{ name }}"
+                  value:
+                    steps: "{{ steps }}"
+              outputs:
+                - name: "{{ name }}"
+                  reference_name: "{{ reference_name }}"
+                  parameter_type: "{{ parameter_type }}"
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
+
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Update an Incident Workflow&lt;br /&gt;&lt;br /&gt;An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incident_workflows.write`&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.incident_workflows.incident_workflows
+SET 
+incident_workflow = '{{ incident_workflow }}'
+WHERE 
+id = '{{ id }}' --required
+AND incident_workflow = '{{ incident_workflow }}' --required
+RETURNING
+incident_workflow;
 ```
 </TabItem>
 </Tabs>
@@ -418,93 +443,18 @@ incident_workflow_instance
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="delete_incident_workflow"
+    defaultValue="delete"
     values={[
-        { label: 'delete_incident_workflow', value: 'delete_incident_workflow' }
+        { label: 'delete', value: 'delete' }
     ]}
 >
-<TabItem value="delete_incident_workflow">
+<TabItem value="delete">
 
-Delete an existing Incident Workflow<br /><br />An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.<br /><br />Scoped OAuth requires: `incident_workflows.write`<br />
+Delete an existing Incident Workflow&lt;br /&gt;&lt;br /&gt;An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `incident_workflows.write`&lt;br /&gt;
 
 ```sql
 DELETE FROM pagerduty.incident_workflows.incident_workflows
 WHERE id = '{{ id }}' --required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-;
-```
-</TabItem>
-</Tabs>
-
-
-## Lifecycle Methods
-
-<Tabs
-    defaultValue="_list_incident_workflows"
-    values={[
-        { label: '_list_incident_workflows', value: '_list_incident_workflows' },
-        { label: 'post_incident_workflow', value: 'post_incident_workflow' },
-        { label: '_get_incident_workflow', value: '_get_incident_workflow' },
-        { label: 'put_incident_workflow', value: 'put_incident_workflow' }
-    ]}
->
-<TabItem value="_list_incident_workflows">
-
-List existing Incident Workflows.<br /><br />This is the best method to use to list all Incident Workflows in your account. If your use case requires listing Incident Workflows associated with a particular Service, you can use the "listIncidentWorkflowsByService" endpoint.<br /><br />An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.<br /><br />Scoped OAuth requires: `incident_workflows.read`<br />
-
-```sql
-EXEC pagerduty.incident_workflows.incident_workflows._list_incident_workflows 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@limit='{{ limit }}', 
-@offset='{{ offset }}', 
-@total={{ total }}, 
-@query='{{ query }}', 
-@include[]='{{ include[] }}'
-;
-```
-</TabItem>
-<TabItem value="post_incident_workflow">
-
-Create a new Incident Workflow<br /><br />An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.<br /><br />Scoped OAuth requires: `incident_workflows.write`<br />
-
-```sql
-EXEC pagerduty.incident_workflows.incident_workflows.post_incident_workflow 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"incident_workflow": "{{ incident_workflow }}"
-}'
-;
-```
-</TabItem>
-<TabItem value="_get_incident_workflow">
-
-Get an existing Incident Workflow<br />An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.<br /><br />Scoped OAuth requires: `incident_workflows.read`<br />
-
-```sql
-EXEC pagerduty.incident_workflows.incident_workflows._get_incident_workflow 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}'
-;
-```
-</TabItem>
-<TabItem value="put_incident_workflow">
-
-Update an Incident Workflow<br /><br />An Incident Workflow is a sequence of configurable Steps and associated Triggers that can execute automated Actions for a given Incident.<br /><br />Scoped OAuth requires: `incident_workflows.write`<br />
-
-```sql
-EXEC pagerduty.incident_workflows.incident_workflows.put_incident_workflow 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}' 
-@@json=
-'{
-"incident_workflow": "{{ incident_workflow }}"
-}'
 ;
 ```
 </TabItem>

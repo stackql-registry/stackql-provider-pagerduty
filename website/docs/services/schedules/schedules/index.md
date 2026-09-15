@@ -15,6 +15,7 @@ image: /img/stackql-pagerduty-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>schedules</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>schedules</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="schedules" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="pagerduty.schedules.schedules" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>schedules</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="get_schedule"
+    defaultValue="get"
     values={[
-        { label: 'get_schedule', value: 'get_schedule' },
-        { label: 'list_schedules', value: 'list_schedules' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_schedule">
+<TabItem value="get">
 
 The schedule object.
 
@@ -82,6 +83,11 @@ The schedule object.
     <td>a URL at which the entity is uniquely displayed in the Web app</td>
 </tr>
 <tr>
+    <td><CopyableCode code="next_oncall_for_user" /></td>
+    <td><code>object</code></td>
+    <td></td>
+</tr>
+<tr>
     <td><CopyableCode code="overrides_subschedule" /></td>
     <td><code>object</code></td>
     <td></td>
@@ -114,7 +120,7 @@ The schedule object.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of object being created. (default: schedule)</td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 <tr>
     <td><CopyableCode code="users" /></td>
@@ -124,7 +130,7 @@ The schedule object.
 </tbody>
 </table>
 </TabItem>
-<TabItem value="list_schedules">
+<TabItem value="list">
 
 A paginated array of schedule objects.
 
@@ -168,6 +174,11 @@ A paginated array of schedule objects.
     <td>a URL at which the entity is uniquely displayed in the Web app</td>
 </tr>
 <tr>
+    <td><CopyableCode code="next_oncall_for_user" /></td>
+    <td><code>object</code></td>
+    <td></td>
+</tr>
+<tr>
     <td><CopyableCode code="overrides_subschedule" /></td>
     <td><code>object</code></td>
     <td></td>
@@ -200,7 +211,7 @@ A paginated array of schedule objects.
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of object being created. (default: schedule)</td>
+    <td>A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.</td>
 </tr>
 <tr>
     <td><CopyableCode code="users" /></td>
@@ -228,60 +239,46 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#get_schedule"><CopyableCode code="get_schedule" /></a></td>
+    <td><a href="#get"><CopyableCode code="get" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a></td>
-    <td>Show detailed information about a schedule, including entries for each layer and sub-schedule.<br />Scoped OAuth requires: `schedules.read`<br /></td>
+    <td><a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a>, <a href="#parameter-overflow"><code>overflow</code></a>, <a href="#parameter-include_next_oncall_for_user"><code>include_next_oncall_for_user</code></a></td>
+    <td>Show detailed information about a schedule, including entries for each layer.&lt;br /&gt;Scoped OAuth requires: `schedules.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#list_schedules"><CopyableCode code="list_schedules" /></a></td>
+    <td><a href="#list"><CopyableCode code="list" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-query"><code>query</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>List the on-call schedules.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.read`<br /></td>
+    <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-query"><code>query</code></a>, <a href="#parameter-include[]"><code>include[]</code></a>, <a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-include_next_oncall_for_user"><code>include_next_oncall_for_user</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a>, <a href="#parameter-team_ids[]"><code>team_ids[]</code></a></td>
+    <td>List the on-call schedules.&lt;br /&gt;&lt;br /&gt;A Schedule determines the time periods that users are On-Call.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `schedules.read`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_schedule"><CopyableCode code="create_schedule" /></a></td>
+    <td><a href="#create"><CopyableCode code="create" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-data__schedule"><code>data__schedule</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-overflow"><code>overflow</code></a></td>
-    <td>Create a new on-call schedule.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.write`<br /></td>
+    <td><a href="#parameter-schedule"><code>schedule</code></a></td>
+    <td><a href="#parameter-overflow"><code>overflow</code></a></td>
+    <td>Create a new on-call schedule.&lt;br /&gt;&lt;br /&gt;A Schedule determines the time periods that users are On-Call.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `schedules.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#create_schedule_preview"><CopyableCode code="create_schedule_preview" /></a></td>
-    <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-data__schedule"><code>data__schedule</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a>, <a href="#parameter-overflow"><code>overflow</code></a></td>
-    <td>Preview what an on-call schedule would look like without saving it.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.write`<br /></td>
+    <td><a href="#update"><CopyableCode code="update" /></a></td>
+    <td><CopyableCode code="update" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-schedule"><code>schedule</code></a></td>
+    <td><a href="#parameter-overflow"><code>overflow</code></a></td>
+    <td>Update an existing on-call schedule.&lt;br /&gt;&lt;br /&gt;A Schedule determines the time periods that users are On-Call.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `schedules.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#delete_schedule"><CopyableCode code="delete_schedule" /></a></td>
+    <td><a href="#delete"><CopyableCode code="delete" /></a></td>
     <td><CopyableCode code="delete" /></td>
     <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a></td>
-    <td>Delete an on-call schedule.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.write`<br /></td>
-</tr>
-<tr>
-    <td><a href="#_list_schedules"><CopyableCode code="_list_schedules" /></a></td>
-    <td><CopyableCode code="exec" /></td>
     <td></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-offset"><code>offset</code></a>, <a href="#parameter-total"><code>total</code></a>, <a href="#parameter-query"><code>query</code></a>, <a href="#parameter-include[]"><code>include[]</code></a></td>
-    <td>List the on-call schedules.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.read`<br /></td>
+    <td>Delete an on-call schedule.&lt;br /&gt;&lt;br /&gt;A Schedule determines the time periods that users are On-Call.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `schedules.write`&lt;br /&gt;</td>
 </tr>
 <tr>
-    <td><a href="#_get_schedule"><CopyableCode code="_get_schedule" /></a></td>
+    <td><a href="#preview"><CopyableCode code="preview" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-time_zone"><code>time_zone</code></a>, <a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a></td>
-    <td>Show detailed information about a schedule, including entries for each layer and sub-schedule.<br />Scoped OAuth requires: `schedules.read`<br /></td>
-</tr>
-<tr>
-    <td><a href="#update_schedule"><CopyableCode code="update_schedule" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-schedule"><code>schedule</code></a></td>
-    <td><a href="#parameter-Accept"><code>Accept</code></a>, <a href="#parameter-Content-Type"><code>Content-Type</code></a>, <a href="#parameter-overflow"><code>overflow</code></a></td>
-    <td>Update an existing on-call schedule.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.write`<br /></td>
+    <td><a href="#parameter-schedule"><code>schedule</code></a></td>
+    <td><a href="#parameter-since"><code>since</code></a>, <a href="#parameter-until"><code>until</code></a>, <a href="#parameter-overflow"><code>overflow</code></a></td>
+    <td>Preview what an on-call schedule would look like without saving it.&lt;br /&gt;&lt;br /&gt;A Schedule determines the time periods that users are On-Call.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `schedules.write`&lt;br /&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -304,20 +301,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The ID of the resource.</td>
 </tr>
-<tr id="parameter-Accept">
-    <td><CopyableCode code="Accept" /></td>
-    <td><code>string</code></td>
-    <td>The `Accept` header is used as a versioning header.</td>
-</tr>
-<tr id="parameter-Content-Type">
-    <td><CopyableCode code="Content-Type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
 <tr id="parameter-include[]">
     <td><CopyableCode code="include[]" /></td>
     <td><code>string</code></td>
     <td>Array of additional details to include.</td>
+</tr>
+<tr id="parameter-include_next_oncall_for_user">
+    <td><CopyableCode code="include_next_oncall_for_user" /></td>
+    <td><code>string</code></td>
+    <td>Specify an `user_id`, and the schedule list API will return information about this user's next on-call.</td>
 </tr>
 <tr id="parameter-limit">
     <td><CopyableCode code="limit" /></td>
@@ -342,22 +334,27 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-since">
     <td><CopyableCode code="since" /></td>
     <td><code>string (date-time)</code></td>
-    <td>The start of the date range over which you want to show schedule entries. Defaults to 2 weeks before until if an until is given.</td>
+    <td>The start of the date range over which you want to search.</td>
+</tr>
+<tr id="parameter-team_ids[]">
+    <td><CopyableCode code="team_ids[]" /></td>
+    <td><code>array</code></td>
+    <td>An array of team IDs. Only results related to these teams will be returned. Account must have the `teams` ability to use this parameter.</td>
 </tr>
 <tr id="parameter-time_zone">
     <td><CopyableCode code="time_zone" /></td>
     <td><code>string (tzinfo)</code></td>
-    <td>Time zone in which dates in the result will be rendered.</td>
+    <td>Time zone in which results will be rendered. This will default to the current user's time zone and then the account's time zone.</td>
 </tr>
 <tr id="parameter-total">
     <td><CopyableCode code="total" /></td>
     <td><code>boolean</code></td>
-    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
+    <td>By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.  See our &#91;Pagination Docs&#93;(https:​//developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information. </td>
 </tr>
 <tr id="parameter-until">
     <td><CopyableCode code="until" /></td>
     <td><code>string (date-time)</code></td>
-    <td>The end of the date range over which you want to show schedule entries. Defaults to 2 weeks after since if a since is given.</td>
+    <td>The end of the date range over which you want to search.</td>
 </tr>
 </tbody>
 </table>
@@ -365,15 +362,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="get_schedule"
+    defaultValue="get"
     values={[
-        { label: 'get_schedule', value: 'get_schedule' },
-        { label: 'list_schedules', value: 'list_schedules' }
+        { label: 'get', value: 'get' },
+        { label: 'list', value: 'list' }
     ]}
 >
-<TabItem value="get_schedule">
+<TabItem value="get">
 
-Show detailed information about a schedule, including entries for each layer and sub-schedule.<br />Scoped OAuth requires: `schedules.read`<br />
+Show detailed information about a schedule, including entries for each layer.&lt;br /&gt;Scoped OAuth requires: `schedules.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -383,6 +380,7 @@ description,
 escalation_policies,
 final_schedule,
 html_url,
+next_oncall_for_user,
 overrides_subschedule,
 schedule_layers,
 self,
@@ -393,17 +391,17 @@ type,
 users
 FROM pagerduty.schedules.schedules
 WHERE id = '{{ id }}' -- required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 AND time_zone = '{{ time_zone }}'
 AND since = '{{ since }}'
 AND until = '{{ until }}'
+AND overflow = '{{ overflow }}'
+AND include_next_oncall_for_user = '{{ include_next_oncall_for_user }}'
 ;
 ```
 </TabItem>
-<TabItem value="list_schedules">
+<TabItem value="list">
 
-List the on-call schedules.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.read`<br />
+List the on-call schedules.&lt;br /&gt;&lt;br /&gt;A Schedule determines the time periods that users are On-Call.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `schedules.read`&lt;br /&gt;
 
 ```sql
 SELECT
@@ -413,6 +411,7 @@ description,
 escalation_policies,
 final_schedule,
 html_url,
+next_oncall_for_user,
 overrides_subschedule,
 schedule_layers,
 self,
@@ -422,13 +421,16 @@ time_zone,
 type,
 users
 FROM pagerduty.schedules.schedules
-WHERE Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
-AND limit = '{{ limit }}'
+WHERE limit = '{{ limit }}'
 AND offset = '{{ offset }}'
 AND total = '{{ total }}'
 AND query = '{{ query }}'
 AND include[] = '{{ include[] }}'
+AND time_zone = '{{ time_zone }}'
+AND include_next_oncall_for_user = '{{ include_next_oncall_for_user }}'
+AND since = '{{ since }}'
+AND until = '{{ until }}'
+AND team_ids[] = '{{ team_ids[] }}'
 ;
 ```
 </TabItem>
@@ -438,53 +440,23 @@ AND include[] = '{{ include[] }}'
 ## `INSERT` examples
 
 <Tabs
-    defaultValue="create_schedule"
+    defaultValue="create"
     values={[
-        { label: 'create_schedule', value: 'create_schedule' },
-        { label: 'create_schedule_preview', value: 'create_schedule_preview' },
+        { label: 'create', value: 'create' },
         { label: 'Manifest', value: 'manifest' }
     ]}
 >
-<TabItem value="create_schedule">
+<TabItem value="create">
 
-Create a new on-call schedule.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.write`<br />
+Create a new on-call schedule.&lt;br /&gt;&lt;br /&gt;A Schedule determines the time periods that users are On-Call.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `schedules.write`&lt;br /&gt;
 
 ```sql
 INSERT INTO pagerduty.schedules.schedules (
-data__schedule,
-Accept,
-Content-Type,
+schedule,
 overflow
 )
 SELECT 
 '{{ schedule }}' /* required */,
-'{{ Accept }}',
-'{{ Content-Type }}',
-'{{ overflow }}'
-RETURNING
-schedule
-;
-```
-</TabItem>
-<TabItem value="create_schedule_preview">
-
-Preview what an on-call schedule would look like without saving it.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.write`<br />
-
-```sql
-INSERT INTO pagerduty.schedules.schedules (
-data__schedule,
-Accept,
-Content-Type,
-since,
-until,
-overflow
-)
-SELECT 
-'{{ schedule }}' /* required */,
-'{{ Accept }}',
-'{{ Content-Type }}',
-'{{ since }}',
-'{{ until }}',
 '{{ overflow }}'
 RETURNING
 schedule
@@ -493,26 +465,113 @@ schedule
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: schedules
   props:
     - name: schedule
-      value: object
-    - name: Accept
-      value: string
-      description: The `Accept` header is used as a versioning header.
-    - name: Content-Type
-      value: string
+      value:
+        id: "{{ id }}"
+        summary: "{{ summary }}"
+        type: "{{ type }}"
+        self: "{{ self }}"
+        html_url: "{{ html_url }}"
+        schedule_layers:
+          - id: "{{ id }}"
+            start: "{{ start }}"
+            end: "{{ end }}"
+            users: "{{ users }}"
+            restrictions: "{{ restrictions }}"
+            rotation_virtual_start: "{{ rotation_virtual_start }}"
+            rotation_turn_length_seconds: {{ rotation_turn_length_seconds }}
+            name: "{{ name }}"
+            rendered_schedule_entries: "{{ rendered_schedule_entries }}"
+            rendered_coverage_percentage: {{ rendered_coverage_percentage }}
+        time_zone: "{{ time_zone }}"
+        name: "{{ name }}"
+        description: "{{ description }}"
+        final_schedule:
+          name: "{{ name }}"
+          rendered_schedule_entries:
+            - user:
+                id: "{{ id }}"
+                summary: "{{ summary }}"
+                type: "{{ type }}"
+                self: "{{ self }}"
+                html_url: "{{ html_url }}"
+              start: "{{ start }}"
+              end: "{{ end }}"
+          rendered_coverage_percentage: {{ rendered_coverage_percentage }}
+        overrides_subschedule:
+          name: "{{ name }}"
+          rendered_schedule_entries:
+            - user:
+                id: "{{ id }}"
+                summary: "{{ summary }}"
+                type: "{{ type }}"
+                self: "{{ self }}"
+                html_url: "{{ html_url }}"
+              start: "{{ start }}"
+              end: "{{ end }}"
+          rendered_coverage_percentage: {{ rendered_coverage_percentage }}
+        escalation_policies:
+          - id: "{{ id }}"
+            summary: "{{ summary }}"
+            type: "{{ type }}"
+            self: "{{ self }}"
+            html_url: "{{ html_url }}"
+        users:
+          - id: "{{ id }}"
+            summary: "{{ summary }}"
+            type: "{{ type }}"
+            self: "{{ self }}"
+            html_url: "{{ html_url }}"
+        teams:
+          - id: "{{ id }}"
+            summary: "{{ summary }}"
+            type: "{{ type }}"
+            self: "{{ self }}"
+            html_url: "{{ html_url }}"
+        next_oncall_for_user:
+          start: "{{ start }}"
+          end: "{{ end }}"
+          user:
+            id: "{{ id }}"
+            summary: "{{ summary }}"
+            type: "{{ type }}"
+            self: "{{ self }}"
+            html_url: "{{ html_url }}"
     - name: overflow
-      value: boolean
-      description: Any on-call schedule entries that pass the date range bounds will be truncated at the bounds, unless the parameter `overflow=true` is passed. This parameter defaults to false. For instance, if your schedule is a rotation that changes daily at midnight UTC, and your date range is from `2011-06-01T10:00:00Z` to `2011-06-01T14:00:00Z`:   - If you don't pass the `overflow=true` parameter, you will get one schedule entry returned with a start of `2011-06-01T10:00:00Z` and end of `2011-06-01T14:00:00Z`. - If you do pass the `overflow=true` parameter, you will get one schedule entry returned with a start of `2011-06-01T00:00:00Z` and end of `2011-06-02T00:00:00Z`. 
-    - name: since
-      value: string (date-time)
-      description: The start of the date range over which you want to search.
-    - name: until
-      value: string (date-time)
-      description: The end of the date range over which you want to search.
+      value: {{ overflow }}
+      description: Any on-call schedule entries that pass the date range bounds will be truncated at the bounds, unless the parameter \`overflow=true\` is passed. This parameter defaults to false. For instance, if your schedule is a rotation that changes daily at midnight UTC, and your date range is from \`2011-06-01T10:00:00Z\` to \`2011-06-01T14:00:00Z\`:   - If you don't pass the \`overflow=true\` parameter, you will get one schedule entry returned with a start of \`2011-06-01T10:00:00Z\` and end of \`2011-06-01T14:00:00Z\`. - If you do pass the \`overflow=true\` parameter, you will get one schedule entry returned with a start of \`2011-06-01T00:00:00Z\` and end of \`2011-06-02T00:00:00Z\`. 
+      description: Any on-call schedule entries that pass the date range bounds will be truncated at the bounds, unless the parameter \`overflow=true\` is passed. This parameter defaults to false. For instance, if your schedule is a rotation that changes daily at midnight UTC, and your date range is from \`2011-06-01T10:00:00Z\` to \`2011-06-01T14:00:00Z\`:   - If you don't pass the \`overflow=true\` parameter, you will get one schedule entry returned with a start of \`2011-06-01T10:00:00Z\` and end of \`2011-06-01T14:00:00Z\`. - If you do pass the \`overflow=true\` parameter, you will get one schedule entry returned with a start of \`2011-06-01T00:00:00Z\` and end of \`2011-06-02T00:00:00Z\`. 
+`}</CodeBlock>
+
+</TabItem>
+</Tabs>
+
+
+## `UPDATE` examples
+
+<Tabs
+    defaultValue="update"
+    values={[
+        { label: 'update', value: 'update' }
+    ]}
+>
+<TabItem value="update">
+
+Update an existing on-call schedule.&lt;br /&gt;&lt;br /&gt;A Schedule determines the time periods that users are On-Call.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `schedules.write`&lt;br /&gt;
+
+```sql
+UPDATE pagerduty.schedules.schedules
+SET 
+schedule = '{{ schedule }}'
+WHERE 
+id = '{{ id }}' --required
+AND schedule = '{{ schedule }}' --required
+AND overflow = {{ overflow}}
+RETURNING
+schedule;
 ```
 </TabItem>
 </Tabs>
@@ -521,20 +580,18 @@ schedule
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="delete_schedule"
+    defaultValue="delete"
     values={[
-        { label: 'delete_schedule', value: 'delete_schedule' }
+        { label: 'delete', value: 'delete' }
     ]}
 >
-<TabItem value="delete_schedule">
+<TabItem value="delete">
 
-Delete an on-call schedule.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.write`<br />
+Delete an on-call schedule.&lt;br /&gt;&lt;br /&gt;A Schedule determines the time periods that users are On-Call.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `schedules.write`&lt;br /&gt;
 
 ```sql
 DELETE FROM pagerduty.schedules.schedules
 WHERE id = '{{ id }}' --required
-AND Accept = '{{ Accept }}'
-AND Content-Type = '{{ Content-Type }}'
 ;
 ```
 </TabItem>
@@ -544,53 +601,19 @@ AND Content-Type = '{{ Content-Type }}'
 ## Lifecycle Methods
 
 <Tabs
-    defaultValue="_list_schedules"
+    defaultValue="preview"
     values={[
-        { label: '_list_schedules', value: '_list_schedules' },
-        { label: '_get_schedule', value: '_get_schedule' },
-        { label: 'update_schedule', value: 'update_schedule' }
+        { label: 'preview', value: 'preview' }
     ]}
 >
-<TabItem value="_list_schedules">
+<TabItem value="preview">
 
-List the on-call schedules.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.read`<br />
-
-```sql
-EXEC pagerduty.schedules.schedules._list_schedules 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@limit='{{ limit }}', 
-@offset='{{ offset }}', 
-@total={{ total }}, 
-@query='{{ query }}', 
-@include[]='{{ include[] }}'
-;
-```
-</TabItem>
-<TabItem value="_get_schedule">
-
-Show detailed information about a schedule, including entries for each layer and sub-schedule.<br />Scoped OAuth requires: `schedules.read`<br />
+Preview what an on-call schedule would look like without saving it.&lt;br /&gt;&lt;br /&gt;A Schedule determines the time periods that users are On-Call.&lt;br /&gt;&lt;br /&gt;For more information see the &#91;API Concepts Document&#93;(https:​//developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)&lt;br /&gt;&lt;br /&gt;Scoped OAuth requires: `schedules.write`&lt;br /&gt;
 
 ```sql
-EXEC pagerduty.schedules.schedules._get_schedule 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
-@time_zone='{{ time_zone }}', 
+EXEC pagerduty.schedules.schedules.preview 
 @since='{{ since }}', 
-@until='{{ until }}'
-;
-```
-</TabItem>
-<TabItem value="update_schedule">
-
-Update an existing on-call schedule.<br /><br />A Schedule determines the time periods that users are On-Call.<br /><br />For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#schedules)<br /><br />Scoped OAuth requires: `schedules.write`<br />
-
-```sql
-EXEC pagerduty.schedules.schedules.update_schedule 
-@id='{{ id }}' --required, 
-@Accept='{{ Accept }}', 
-@Content-Type='{{ Content-Type }}', 
+@until='{{ until }}', 
 @overflow={{ overflow }} 
 @@json=
 '{

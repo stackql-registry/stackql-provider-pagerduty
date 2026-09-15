@@ -1,0 +1,2240 @@
+openapi: 3.0.2
+info:
+  title: PagerDuty API - Log Entries
+  description: Log entries record everything that happens to an incident.
+  version: 2.0.0
+paths:
+  /log_entries:
+    get:
+      x-pd-requires-scope: incidents.read
+      tags:
+        - Log Entries
+      operationId: listLogEntries
+      description: |
+        List all of the incident log entries across the entire account.
+
+        A log of all the events that happen to an Incident, and these are exposed as Log Entries.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)
+
+        Scoped OAuth requires: `incidents.read`
+      summary: List log entries
+      parameters:
+        - $ref: '#/components/parameters/offset_limit'
+        - $ref: '#/components/parameters/offset_offset'
+        - $ref: '#/components/parameters/offset_total'
+        - $ref: '#/components/parameters/time_zone'
+        - $ref: '#/components/parameters/since'
+        - $ref: '#/components/parameters/until'
+        - $ref: '#/components/parameters/log_entry_is_overview'
+        - $ref: '#/components/parameters/include_log_entry'
+        - $ref: '#/components/parameters/team_ids'
+      responses:
+        '200':
+          description: A paginated array of log entries.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                    description: Echoes offset pagination property.
+                    readOnly: true
+                  limit:
+                    type: integer
+                    description: Echoes limit pagination property.
+                    readOnly: true
+                  more:
+                    type: boolean
+                    description: Indicates if there are additional records to return
+                    readOnly: true
+                  total:
+                    type: integer
+                    description: The total number of records matching the given query.
+                    nullable: true
+                    readOnly: true
+                  log_entries:
+                    type: array
+                    items:
+                      oneOf:
+                        - $ref: '#/components/schemas/AcknowledgeLogEntry'
+                        - $ref: '#/components/schemas/AnnotateLogEntry'
+                        - $ref: '#/components/schemas/AssignLogEntry'
+                        - $ref: '#/components/schemas/DelegateLogEntry'
+                        - $ref: '#/components/schemas/EscalateLogEntry'
+                        - $ref: '#/components/schemas/ExhaustEscalationPathLogEntry'
+                        - $ref: '#/components/schemas/NotifyLogEntry'
+                        - $ref: '#/components/schemas/ReachAckLimitLogEntry'
+                        - $ref: '#/components/schemas/ReachTriggerLimitLogEntry'
+                        - $ref: '#/components/schemas/RepeatEscalationPathLogEntry'
+                        - $ref: '#/components/schemas/ResolveLogEntry'
+                        - $ref: '#/components/schemas/SnoozeLogEntry'
+                        - $ref: '#/components/schemas/TriggerLogEntry'
+                        - $ref: '#/components/schemas/UnacknowledgeLogEntry'
+                        - $ref: '#/components/schemas/UrgencyChangeLogEntry'
+                required:
+                  - log_entries
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    log_entries:
+                      - id: Q02JTSNZWHSEKV
+                        type: trigger_log_entry
+                        summary: Triggered through the API
+                        self: https://api.pagerduty.com/log_entries/Q02JTSNZWHSEKV?incident_id=PT4KHLK
+                        html_url: https://subdomain.pagerduty.com/incidents/PT4KHLK/log_entries/Q02JTSNZWHSEKV
+                        created_at: '2015-11-07T00:14:20Z'
+                        agent:
+                          id: PIJ90N7
+                          type: service_reference
+                          summary: My Mail Service
+                          self: https://api.pagerduty.com/services/PIJ90N7
+                          html_url: https://subdomain.pagerduty.com/service-directory/PIJ90N7
+                        channel:
+                          type: api
+                        incident:
+                          id: PT4KHLK
+                          type: incident_reference
+                          summary: '[#1234] The server is on fire.'
+                          self: https://api.pagerduty.com/incidents/PT4KHLK
+                          html_url: https://subdomain.pagerduty.com/incidents/PT4KHLK
+                        teams:
+                          - id: PQ9K7I8
+                            type: team_reference
+                            summary: Engineering
+                            self: https://api.pagerduty.com/teams/PQ9K7I8
+                            html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                        contexts: []
+                        event_details:
+                          description: Tasks::SFDCValidator - PD_Data__c - duplicates
+                    limit: 1
+                    offset: 0
+                    more: true
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: List all of the log entries across your account. These can be filtered (for instance, by time or by team), and the results will be paginated.
+  /log_entries/{id}:
+    get:
+      x-pd-requires-scope: incidents.read
+      tags:
+        - Log Entries
+      operationId: getLogEntry
+      description: |
+        Get details for a specific incident log entry. This method provides additional information you can use to get at raw event data.
+
+        A log of all the events that happen to an Incident, and these are exposed as Log Entries.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)
+
+        Scoped OAuth requires: `incidents.read`
+      summary: Get a log entry
+      parameters:
+        - $ref: '#/components/parameters/time_zone'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/include_log_entry'
+      responses:
+        '200':
+          description: A single log entry.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  log_entry:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        readOnly: true
+                      summary:
+                        type: string
+                        nullable: true
+                        readOnly: true
+                        description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+                      type:
+                        type: string
+                        readOnly: true
+                        description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+                      self:
+                        type: string
+                        nullable: true
+                        readOnly: true
+                        format: url
+                        description: the API show URL at which the object is accessible
+                      html_url:
+                        type: string
+                        nullable: true
+                        readOnly: true
+                        format: url
+                        description: a URL at which the entity is uniquely displayed in the Web app
+                      created_at:
+                        type: string
+                        format: date-time
+                        readOnly: true
+                        description: Time at which the log entry was created.
+                      channel:
+                        $ref: '#/components/schemas/Channel'
+                      agent:
+                        $ref: '#/components/schemas/AgentReference'
+                      note:
+                        type: string
+                        readOnly: true
+                        description: Optional field containing a note, if one was included with the log entry.
+                      contexts:
+                        type: array
+                        readOnly: true
+                        description: Contexts to be included with the trigger such as links to graphs or images.
+                        items:
+                          $ref: '#/components/schemas/Context'
+                      service:
+                        $ref: '#/components/schemas/ServiceReference'
+                      incident:
+                        $ref: '#/components/schemas/IncidentReference'
+                      teams:
+                        type: array
+                        readOnly: true
+                        description: Will consist of references unless included
+                        items:
+                          $ref: '#/components/schemas/TeamReference'
+                      event_details:
+                        type: object
+                        readOnly: true
+                        properties:
+                          description:
+                            type: string
+                            description: Additional details about the event.
+                      changeset:
+                        type: array
+                        description: String record of custom field updates
+                        items:
+                          type: string
+                        example:
+                          - Updated serial_number to 123
+                          - Updated affected_room to ["Queen West"]
+                      acknowledgement_timeout:
+                        type: integer
+                        description: Duration for which the acknowledgement lasts, in seconds. Services can contain an `acknowledgement_timeout` property, which specifies the length of time acknowledgements should last for. Each time an incident is acknowledged, this timeout is copied into the acknowledgement log entry. This property is optional, as older log entries may not contain it. It may also be `null`, as acknowledgements can be performed on incidents whose services have no `acknowledgement_timeout` set.
+                      assignees:
+                        type: array
+                        readOnly: true
+                        description: An array of assigned Users for this log entry
+                        items:
+                          $ref: '#/components/schemas/UserReference'
+                      user:
+                        $ref: '#/components/schemas/UserReference'
+                      changed_actions:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/IncidentAction'
+                required:
+                  - log_entry
+              examples:
+                response:
+                  summary: Response Example
+                  value:
+                    log_entry:
+                      id: Q02JTSNZWHSEKV
+                      type: trigger_log_entry
+                      summary: Triggered through the API
+                      self: https://api.pagerduty.com/log_entries/Q02JTSNZWHSEKV?incident_id=PT4KHLK
+                      html_url: https://subdomain.pagerduty.com/incidents/PT4KHLK/log_entries/Q02JTSNZWHSEKV
+                      created_at: '2015-11-07T00:14:20Z'
+                      agent:
+                        id: PIJ90N7
+                        type: service_reference
+                        summary: My Mail Service
+                        self: https://api.pagerduty.com/services/PIJ90N7
+                        html_url: https://subdomain.pagerduty.com/service-directory/PIJ90N7
+                      channel:
+                        type: api
+                      incident:
+                        id: PT4KHLK
+                        type: incident_reference
+                        summary: '[#1234] The server is on fire.'
+                        self: https://api.pagerduty.com/incidents/PT4KHLK
+                        html_url: https://subdomain.pagerduty.com/incidents/PT4KHLK
+                      teams:
+                        - id: PQ9K7I8
+                          type: team_reference
+                          summary: Engineering
+                          self: https://api.pagerduty.com/teams/PQ9K7I8
+                          html_url: https://subdomain.pagerduty.com/teams/PQ9K7I8
+                      contexts: []
+                      event_details:
+                        description: Tasks::SFDCValidator - PD_Data__c - duplicates
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: Get a single log entry by ID.
+  /log_entries/{id}/channel:
+    put:
+      x-pd-requires-scope: incidents.write
+      tags:
+        - Log Entries
+      operationId: updateLogEntryChannel
+      description: |
+        Update an existing incident log entry channel.
+
+        For more information see the [API Concepts Document](https://developer.pagerduty.com/api-reference/a47605517c19a-api-concepts#log-entries)
+
+        Scoped OAuth requires: `incidents.write`
+      summary: Update log entry channel information.
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/from_header'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                channel:
+                  type: object
+                  description: The parameters to update.
+                  properties:
+                    details:
+                      type: string
+                      description: New channel details
+                    type:
+                      type: string
+                      description: Channel type. Cannot be changed and must match the present value.
+                      enum:
+                        - web_trigger
+                        - mobile
+                  required:
+                    - type
+                    - details
+              required:
+                - channel
+            examples:
+              request:
+                summary: Request Example
+                value:
+                  channel:
+                    type: web_trigger
+                    details: New channel details
+        description: The log entry channel to be updated.
+      responses:
+        '202':
+          description: The channel information modification was accepted.
+        '400':
+          $ref: '#/components/responses/ArgumentError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    description: Log entry channel information.
+components:
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        offset:
+          type: integer
+          description: Echoes offset pagination property.
+          readOnly: true
+        limit:
+          type: integer
+          description: Echoes limit pagination property.
+          readOnly: true
+        more:
+          type: boolean
+          description: Indicates if there are additional records to return
+          readOnly: true
+        total:
+          type: integer
+          description: The total number of records matching the given query.
+          nullable: true
+          readOnly: true
+    AcknowledgeLogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Time at which the log entry was created.
+        channel:
+          $ref: '#/components/schemas/Channel'
+        agent:
+          $ref: '#/components/schemas/AgentReference'
+        note:
+          type: string
+          readOnly: true
+          description: Optional field containing a note, if one was included with the log entry.
+        contexts:
+          type: array
+          readOnly: true
+          description: Contexts to be included with the trigger such as links to graphs or images.
+          items:
+            $ref: '#/components/schemas/Context'
+        service:
+          $ref: '#/components/schemas/ServiceReference'
+        incident:
+          $ref: '#/components/schemas/IncidentReference'
+        teams:
+          type: array
+          readOnly: true
+          description: Will consist of references unless included
+          items:
+            $ref: '#/components/schemas/TeamReference'
+        event_details:
+          type: object
+          readOnly: true
+          properties:
+            description:
+              type: string
+              description: Additional details about the event.
+        changeset:
+          type: array
+          description: String record of custom field updates
+          items:
+            type: string
+          example:
+            - Updated serial_number to 123
+            - Updated affected_room to ["Queen West"]
+        acknowledgement_timeout:
+          type: integer
+          description: Duration for which the acknowledgement lasts, in seconds. Services can contain an `acknowledgement_timeout` property, which specifies the length of time acknowledgements should last for. Each time an incident is acknowledged, this timeout is copied into the acknowledgement log entry. This property is optional, as older log entries may not contain it. It may also be `null`, as acknowledgements can be performed on incidents whose services have no `acknowledgement_timeout` set.
+    AnnotateLogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Time at which the log entry was created.
+        channel:
+          $ref: '#/components/schemas/Channel'
+        agent:
+          $ref: '#/components/schemas/AgentReference'
+        note:
+          type: string
+          readOnly: true
+          description: Optional field containing a note, if one was included with the log entry.
+        contexts:
+          type: array
+          readOnly: true
+          description: Contexts to be included with the trigger such as links to graphs or images.
+          items:
+            $ref: '#/components/schemas/Context'
+        service:
+          $ref: '#/components/schemas/ServiceReference'
+        incident:
+          $ref: '#/components/schemas/IncidentReference'
+        teams:
+          type: array
+          readOnly: true
+          description: Will consist of references unless included
+          items:
+            $ref: '#/components/schemas/TeamReference'
+        event_details:
+          type: object
+          readOnly: true
+          properties:
+            description:
+              type: string
+              description: Additional details about the event.
+        changeset:
+          type: array
+          description: String record of custom field updates
+          items:
+            type: string
+          example:
+            - Updated serial_number to 123
+            - Updated affected_room to ["Queen West"]
+    AssignLogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Time at which the log entry was created.
+        channel:
+          $ref: '#/components/schemas/Channel'
+        agent:
+          $ref: '#/components/schemas/AgentReference'
+        note:
+          type: string
+          readOnly: true
+          description: Optional field containing a note, if one was included with the log entry.
+        contexts:
+          type: array
+          readOnly: true
+          description: Contexts to be included with the trigger such as links to graphs or images.
+          items:
+            $ref: '#/components/schemas/Context'
+        service:
+          $ref: '#/components/schemas/ServiceReference'
+        incident:
+          $ref: '#/components/schemas/IncidentReference'
+        teams:
+          type: array
+          readOnly: true
+          description: Will consist of references unless included
+          items:
+            $ref: '#/components/schemas/TeamReference'
+        event_details:
+          type: object
+          readOnly: true
+          properties:
+            description:
+              type: string
+              description: Additional details about the event.
+        changeset:
+          type: array
+          description: String record of custom field updates
+          items:
+            type: string
+          example:
+            - Updated serial_number to 123
+            - Updated affected_room to ["Queen West"]
+        assignees:
+          type: array
+          readOnly: true
+          description: An array of assigned Users for this log entry
+          items:
+            $ref: '#/components/schemas/UserReference'
+    DelegateLogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Time at which the log entry was created.
+        channel:
+          $ref: '#/components/schemas/Channel'
+        agent:
+          $ref: '#/components/schemas/AgentReference'
+        note:
+          type: string
+          readOnly: true
+          description: Optional field containing a note, if one was included with the log entry.
+        contexts:
+          type: array
+          readOnly: true
+          description: Contexts to be included with the trigger such as links to graphs or images.
+          items:
+            $ref: '#/components/schemas/Context'
+        service:
+          $ref: '#/components/schemas/ServiceReference'
+        incident:
+          $ref: '#/components/schemas/IncidentReference'
+        teams:
+          type: array
+          readOnly: true
+          description: Will consist of references unless included
+          items:
+            $ref: '#/components/schemas/TeamReference'
+        event_details:
+          type: object
+          readOnly: true
+          properties:
+            description:
+              type: string
+              description: Additional details about the event.
+        changeset:
+          type: array
+          description: String record of custom field updates
+          items:
+            type: string
+          example:
+            - Updated serial_number to 123
+            - Updated affected_room to ["Queen West"]
+        assignees:
+          type: array
+          readOnly: true
+          description: An array of assigned Users for this log entry
+          items:
+            $ref: '#/components/schemas/UserReference'
+    EscalateLogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Time at which the log entry was created.
+        channel:
+          $ref: '#/components/schemas/Channel'
+        agent:
+          $ref: '#/components/schemas/AgentReference'
+        note:
+          type: string
+          readOnly: true
+          description: Optional field containing a note, if one was included with the log entry.
+        contexts:
+          type: array
+          readOnly: true
+          description: Contexts to be included with the trigger such as links to graphs or images.
+          items:
+            $ref: '#/components/schemas/Context'
+        service:
+          $ref: '#/components/schemas/ServiceReference'
+        incident:
+          $ref: '#/components/schemas/IncidentReference'
+        teams:
+          type: array
+          readOnly: true
+          description: Will consist of references unless included
+          items:
+            $ref: '#/components/schemas/TeamReference'
+        event_details:
+          type: object
+          readOnly: true
+          properties:
+            description:
+              type: string
+              description: Additional details about the event.
+        changeset:
+          type: array
+          description: String record of custom field updates
+          items:
+            type: string
+          example:
+            - Updated serial_number to 123
+            - Updated affected_room to ["Queen West"]
+        assignees:
+          type: array
+          readOnly: true
+          description: An array of assigned Users for this log entry
+          items:
+            $ref: '#/components/schemas/UserReference'
+    ExhaustEscalationPathLogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Time at which the log entry was created.
+        channel:
+          $ref: '#/components/schemas/Channel'
+        agent:
+          $ref: '#/components/schemas/AgentReference'
+        note:
+          type: string
+          readOnly: true
+          description: Optional field containing a note, if one was included with the log entry.
+        contexts:
+          type: array
+          readOnly: true
+          description: Contexts to be included with the trigger such as links to graphs or images.
+          items:
+            $ref: '#/components/schemas/Context'
+        service:
+          $ref: '#/components/schemas/ServiceReference'
+        incident:
+          $ref: '#/components/schemas/IncidentReference'
+        teams:
+          type: array
+          readOnly: true
+          description: Will consist of references unless included
+          items:
+            $ref: '#/components/schemas/TeamReference'
+        event_details:
+          type: object
+          readOnly: true
+          properties:
+            description:
+              type: string
+              description: Additional details about the event.
+        changeset:
+          type: array
+          description: String record of custom field updates
+          items:
+            type: string
+          example:
+            - Updated serial_number to 123
+            - Updated affected_room to ["Queen West"]
+    NotifyLogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Time at which the log entry was created.
+        channel:
+          $ref: '#/components/schemas/Channel'
+        agent:
+          $ref: '#/components/schemas/AgentReference'
+        note:
+          type: string
+          readOnly: true
+          description: Optional field containing a note, if one was included with the log entry.
+        contexts:
+          type: array
+          readOnly: true
+          description: Contexts to be included with the trigger such as links to graphs or images.
+          items:
+            $ref: '#/components/schemas/Context'
+        service:
+          $ref: '#/components/schemas/ServiceReference'
+        incident:
+          $ref: '#/components/schemas/IncidentReference'
+        teams:
+          type: array
+          readOnly: true
+          description: Will consist of references unless included
+          items:
+            $ref: '#/components/schemas/TeamReference'
+        event_details:
+          type: object
+          readOnly: true
+          properties:
+            description:
+              type: string
+              description: Additional details about the event.
+        changeset:
+          type: array
+          description: String record of custom field updates
+          items:
+            type: string
+          example:
+            - Updated serial_number to 123
+            - Updated affected_room to ["Queen West"]
+        user:
+          $ref: '#/components/schemas/UserReference'
+    ReachAckLimitLogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Time at which the log entry was created.
+        channel:
+          $ref: '#/components/schemas/Channel'
+        agent:
+          $ref: '#/components/schemas/AgentReference'
+        note:
+          type: string
+          readOnly: true
+          description: Optional field containing a note, if one was included with the log entry.
+        contexts:
+          type: array
+          readOnly: true
+          description: Contexts to be included with the trigger such as links to graphs or images.
+          items:
+            $ref: '#/components/schemas/Context'
+        service:
+          $ref: '#/components/schemas/ServiceReference'
+        incident:
+          $ref: '#/components/schemas/IncidentReference'
+        teams:
+          type: array
+          readOnly: true
+          description: Will consist of references unless included
+          items:
+            $ref: '#/components/schemas/TeamReference'
+        event_details:
+          type: object
+          readOnly: true
+          properties:
+            description:
+              type: string
+              description: Additional details about the event.
+        changeset:
+          type: array
+          description: String record of custom field updates
+          items:
+            type: string
+          example:
+            - Updated serial_number to 123
+            - Updated affected_room to ["Queen West"]
+    ReachTriggerLimitLogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Time at which the log entry was created.
+        channel:
+          $ref: '#/components/schemas/Channel'
+        agent:
+          $ref: '#/components/schemas/AgentReference'
+        note:
+          type: string
+          readOnly: true
+          description: Optional field containing a note, if one was included with the log entry.
+        contexts:
+          type: array
+          readOnly: true
+          description: Contexts to be included with the trigger such as links to graphs or images.
+          items:
+            $ref: '#/components/schemas/Context'
+        service:
+          $ref: '#/components/schemas/ServiceReference'
+        incident:
+          $ref: '#/components/schemas/IncidentReference'
+        teams:
+          type: array
+          readOnly: true
+          description: Will consist of references unless included
+          items:
+            $ref: '#/components/schemas/TeamReference'
+        event_details:
+          type: object
+          readOnly: true
+          properties:
+            description:
+              type: string
+              description: Additional details about the event.
+        changeset:
+          type: array
+          description: String record of custom field updates
+          items:
+            type: string
+          example:
+            - Updated serial_number to 123
+            - Updated affected_room to ["Queen West"]
+    RepeatEscalationPathLogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Time at which the log entry was created.
+        channel:
+          $ref: '#/components/schemas/Channel'
+        agent:
+          $ref: '#/components/schemas/AgentReference'
+        note:
+          type: string
+          readOnly: true
+          description: Optional field containing a note, if one was included with the log entry.
+        contexts:
+          type: array
+          readOnly: true
+          description: Contexts to be included with the trigger such as links to graphs or images.
+          items:
+            $ref: '#/components/schemas/Context'
+        service:
+          $ref: '#/components/schemas/ServiceReference'
+        incident:
+          $ref: '#/components/schemas/IncidentReference'
+        teams:
+          type: array
+          readOnly: true
+          description: Will consist of references unless included
+          items:
+            $ref: '#/components/schemas/TeamReference'
+        event_details:
+          type: object
+          readOnly: true
+          properties:
+            description:
+              type: string
+              description: Additional details about the event.
+        changeset:
+          type: array
+          description: String record of custom field updates
+          items:
+            type: string
+          example:
+            - Updated serial_number to 123
+            - Updated affected_room to ["Queen West"]
+    ResolveLogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Time at which the log entry was created.
+        channel:
+          $ref: '#/components/schemas/Channel'
+        agent:
+          $ref: '#/components/schemas/AgentReference'
+        note:
+          type: string
+          readOnly: true
+          description: Optional field containing a note, if one was included with the log entry.
+        contexts:
+          type: array
+          readOnly: true
+          description: Contexts to be included with the trigger such as links to graphs or images.
+          items:
+            $ref: '#/components/schemas/Context'
+        service:
+          $ref: '#/components/schemas/ServiceReference'
+        incident:
+          $ref: '#/components/schemas/IncidentReference'
+        teams:
+          type: array
+          readOnly: true
+          description: Will consist of references unless included
+          items:
+            $ref: '#/components/schemas/TeamReference'
+        event_details:
+          type: object
+          readOnly: true
+          properties:
+            description:
+              type: string
+              description: Additional details about the event.
+        changeset:
+          type: array
+          description: String record of custom field updates
+          items:
+            type: string
+          example:
+            - Updated serial_number to 123
+            - Updated affected_room to ["Queen West"]
+    SnoozeLogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Time at which the log entry was created.
+        channel:
+          $ref: '#/components/schemas/Channel'
+        agent:
+          $ref: '#/components/schemas/AgentReference'
+        note:
+          type: string
+          readOnly: true
+          description: Optional field containing a note, if one was included with the log entry.
+        contexts:
+          type: array
+          readOnly: true
+          description: Contexts to be included with the trigger such as links to graphs or images.
+          items:
+            $ref: '#/components/schemas/Context'
+        service:
+          $ref: '#/components/schemas/ServiceReference'
+        incident:
+          $ref: '#/components/schemas/IncidentReference'
+        teams:
+          type: array
+          readOnly: true
+          description: Will consist of references unless included
+          items:
+            $ref: '#/components/schemas/TeamReference'
+        event_details:
+          type: object
+          readOnly: true
+          properties:
+            description:
+              type: string
+              description: Additional details about the event.
+        changeset:
+          type: array
+          description: String record of custom field updates
+          items:
+            type: string
+          example:
+            - Updated serial_number to 123
+            - Updated affected_room to ["Queen West"]
+        changed_actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/IncidentAction'
+    TriggerLogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Time at which the log entry was created.
+        channel:
+          $ref: '#/components/schemas/Channel'
+        agent:
+          $ref: '#/components/schemas/AgentReference'
+        note:
+          type: string
+          readOnly: true
+          description: Optional field containing a note, if one was included with the log entry.
+        contexts:
+          type: array
+          readOnly: true
+          description: Contexts to be included with the trigger such as links to graphs or images.
+          items:
+            $ref: '#/components/schemas/Context'
+        service:
+          $ref: '#/components/schemas/ServiceReference'
+        incident:
+          $ref: '#/components/schemas/IncidentReference'
+        teams:
+          type: array
+          readOnly: true
+          description: Will consist of references unless included
+          items:
+            $ref: '#/components/schemas/TeamReference'
+        event_details:
+          type: object
+          readOnly: true
+          properties:
+            description:
+              type: string
+              description: Additional details about the event.
+        changeset:
+          type: array
+          description: String record of custom field updates
+          items:
+            type: string
+          example:
+            - Updated serial_number to 123
+            - Updated affected_room to ["Queen West"]
+    UnacknowledgeLogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Time at which the log entry was created.
+        channel:
+          $ref: '#/components/schemas/Channel'
+        agent:
+          $ref: '#/components/schemas/AgentReference'
+        note:
+          type: string
+          readOnly: true
+          description: Optional field containing a note, if one was included with the log entry.
+        contexts:
+          type: array
+          readOnly: true
+          description: Contexts to be included with the trigger such as links to graphs or images.
+          items:
+            $ref: '#/components/schemas/Context'
+        service:
+          $ref: '#/components/schemas/ServiceReference'
+        incident:
+          $ref: '#/components/schemas/IncidentReference'
+        teams:
+          type: array
+          readOnly: true
+          description: Will consist of references unless included
+          items:
+            $ref: '#/components/schemas/TeamReference'
+        event_details:
+          type: object
+          readOnly: true
+          properties:
+            description:
+              type: string
+              description: Additional details about the event.
+        changeset:
+          type: array
+          description: String record of custom field updates
+          items:
+            type: string
+          example:
+            - Updated serial_number to 123
+            - Updated affected_room to ["Queen West"]
+    UrgencyChangeLogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Time at which the log entry was created.
+        channel:
+          $ref: '#/components/schemas/Channel'
+        agent:
+          $ref: '#/components/schemas/AgentReference'
+        note:
+          type: string
+          readOnly: true
+          description: Optional field containing a note, if one was included with the log entry.
+        contexts:
+          type: array
+          readOnly: true
+          description: Contexts to be included with the trigger such as links to graphs or images.
+          items:
+            $ref: '#/components/schemas/Context'
+        service:
+          $ref: '#/components/schemas/ServiceReference'
+        incident:
+          $ref: '#/components/schemas/IncidentReference'
+        teams:
+          type: array
+          readOnly: true
+          description: Will consist of references unless included
+          items:
+            $ref: '#/components/schemas/TeamReference'
+        event_details:
+          type: object
+          readOnly: true
+          properties:
+            description:
+              type: string
+              description: Additional details about the event.
+        changeset:
+          type: array
+          description: String record of custom field updates
+          items:
+            type: string
+          example:
+            - Updated serial_number to 123
+            - Updated affected_room to ["Queen West"]
+    LogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Time at which the log entry was created.
+        channel:
+          $ref: '#/components/schemas/Channel'
+        agent:
+          $ref: '#/components/schemas/AgentReference'
+        note:
+          type: string
+          readOnly: true
+          description: Optional field containing a note, if one was included with the log entry.
+        contexts:
+          type: array
+          readOnly: true
+          description: Contexts to be included with the trigger such as links to graphs or images.
+          items:
+            $ref: '#/components/schemas/Context'
+        service:
+          $ref: '#/components/schemas/ServiceReference'
+        incident:
+          $ref: '#/components/schemas/IncidentReference'
+        teams:
+          type: array
+          readOnly: true
+          description: Will consist of references unless included
+          items:
+            $ref: '#/components/schemas/TeamReference'
+        event_details:
+          type: object
+          readOnly: true
+          properties:
+            description:
+              type: string
+              description: Additional details about the event.
+        changeset:
+          type: array
+          description: String record of custom field updates
+          items:
+            type: string
+          example:
+            - Updated serial_number to 123
+            - Updated affected_room to ["Queen West"]
+    UserReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    IncidentAction:
+      description: An incident action is a pending change to an incident that will automatically happen at some future time.
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - unacknowledge
+            - escalate
+            - resolve
+            - urgency_change
+        at:
+          type: string
+          format: date-time
+        to:
+          description: The urgency that the incident will change to. This field is only present when the type is `urgency_change`.
+          type: string
+          enum:
+            - high
+      discriminator:
+        propertyName: type
+      required:
+        - type
+        - at
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+        label:
+          type: string
+          description: The label of the tag.
+          maxLength: 191
+      required:
+        - label
+        - type
+      example:
+        type: tag
+        label: Batman
+    Channel:
+      type: object
+      description: Polymorphic object representation of the means by which the action was channeled. Has different formats depending on type, indicated by channel[type]. Will be one of `auto`, `email`, `api`, `nagios`, or `timeout` if `agent[type]` is `service`. Will be one of `email`, `sms`, `website`, `web_trigger`, or `note` if `agent[type]` is `user`.
+      properties:
+        type:
+          type: string
+          description: type
+        user:
+          type: string
+          description: (opaque JSON object)
+        team:
+          type: string
+          description: (opaque JSON object)
+        notification:
+          $ref: '#/components/schemas/Notification'
+        channel:
+          type: string
+          description: channel (opaque JSON object)
+        changeset:
+          type: object
+          description: Changeset present in CustomFieldsValueChange and FieldValueChange log entries.
+          properties:
+            customer_fields:
+              type: array
+              description: Customer Fields present in CustomFieldsValueChange and FieldValueChange log entries.
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: PDB5RLI
+                  name:
+                    type: string
+                    example: serial_number_hardware
+                  value:
+                    oneOf:
+                      - type: integer
+                      - type: array
+                        items:
+                          type: string
+                  namespace:
+                    type: string
+                    example: incidents
+                  old_value:
+                    type: string
+                    nullable: true
+                    example: null
+            application_fields:
+              type: array
+              description: Application Fields present in CustomFieldsValueChange and FieldValueChange log entries.
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: PIJ90N7
+                  name:
+                    type: string
+                    example: service
+                  value:
+                    oneOf:
+                      - type: string
+                        example: PIZW265
+                      - type: integer
+                        example: 130
+                      - type: array
+                        items:
+                          type: string
+                  namespace:
+                    type: string
+                    example: incidents
+                  old_value:
+                    type: string
+                    nullable: true
+                    example: null
+            custom_attributes:
+              type: object
+              description: Custom attributes for the changeset.
+              additionalProperties:
+                type: string
+            customer_schema:
+              type: object
+              properties:
+                old_value:
+                  type: string
+                  nullable: true
+                  example: null
+        summary:
+          type: string
+          description: Same as `host`
+        host:
+          type: string
+          description: Nagios host
+        service:
+          type: string
+          description: Nagios service that created the event, if applicable
+        state:
+          type: string
+          description: State that caused the event
+        details:
+          type: string
+          description: Additional details of the incident (opaque JSON object)
+        service_key:
+          type: string
+          description: API service key
+        description:
+          type: string
+          description: Description of the event
+        incident_key:
+          type: string
+          description: Incident deduping string
+        to:
+          type: string
+          description: To address of the email
+        from:
+          type: string
+          description: From address of the email
+        subject:
+          type: string
+          description: Subject of the email
+        body:
+          type: string
+          description: Body of the email
+        body_content_type:
+          type: string
+          description: Content type of the email body. Will be `text/plain` or `text/html`
+        raw_url:
+          type: string
+          description: URL for raw text of email
+        html_url:
+          type: string
+          description: URL for html rendered version of the email. Only present if `content_type` is `text/html`
+        duration:
+          type: integer
+          description: For `snooze` log entries, this is the number of seconds that the incident was snoozed for.
+      required:
+        - type
+      title: NagiosChannel
+    AgentReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+      readOnly: true
+    Context:
+      type: object
+      discriminator:
+        propertyName: type
+      properties:
+        type:
+          type: string
+          description: The type of context being attached to the incident.
+          enum:
+            - link
+            - image
+        href:
+          type: string
+          description: The link's target url
+        src:
+          type: string
+          description: The image's source url
+        text:
+          type: string
+          description: The alternate display for an image
+      required:
+        - type
+    ServiceReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    IncidentReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    TeamReference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    Reference:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        summary:
+          type: string
+          nullable: true
+          readOnly: true
+          description: A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+        type:
+          type: string
+          readOnly: true
+          description: A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+        self:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: the API show URL at which the object is accessible
+        html_url:
+          type: string
+          nullable: true
+          readOnly: true
+          format: url
+          description: a URL at which the entity is uniquely displayed in the Web app
+      required:
+        - type
+        - id
+      description: (opaque JSON object)
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          description: The type of notification.
+          enum:
+            - sms_notification
+            - email_notification
+            - phone_notification
+            - push_notification
+          readOnly: true
+        started_at:
+          type: string
+          format: date-time
+          description: The time at which the notification was sent
+          readOnly: true
+        address:
+          type: string
+          description: The address where the notification was sent. This will be null for notification type `push_notification`.
+          readOnly: true
+        user:
+          $ref: '#/components/schemas/UserReference'
+        conferenceAddress:
+          type: string
+          description: The address of the conference bridge
+        status:
+          type: string
+        '':
+          type: string
+  responses:
+    ArgumentError:
+      description: Caller provided invalid arguments. Please review the response for error details. Retrying with the same arguments will *not* work.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Unauthorized:
+      description: |
+        Caller did not supply credentials or did not provide the correct credentials.
+        If you are using an API key, it may be invalid or your Authorization header may be malformed.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Forbidden:
+      description: |
+        Caller is not authorized to view the requested resource.
+        While your authentication is valid, the authenticated user or token does not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    TooManyRequests:
+      description: Too many requests have been made, the rate limit has been reached.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+    Conflict:
+      description: The request conflicts with the current state of the server.
+      content:
+        application/json:
+          schema:
+            description: Generic error response from the PagerDuty API
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    readOnly: true
+                  message:
+                    type: string
+                    readOnly: true
+                    description: Error message string
+                  errors:
+                    type: array
+                    readOnly: true
+                    items:
+                      type: string
+                      readOnly: true
+                      description: Human-readable error details
+                example:
+                  message: Not Found
+                  code: 2100
+  parameters:
+    offset_limit:
+      name: limit
+      in: query
+      required: false
+      description: The number of results per page.
+      schema:
+        type: integer
+    offset_offset:
+      name: offset
+      in: query
+      required: false
+      description: Offset to start pagination search results.
+      schema:
+        type: integer
+    offset_total:
+      name: total
+      in: query
+      required: false
+      description: |
+        By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.
+
+        See our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information.
+      schema:
+        default: false
+        type: boolean
+    time_zone:
+      name: time_zone
+      in: query
+      description: Time zone in which results will be rendered. This will default to the account time zone.
+      schema:
+        type: string
+        format: tzinfo
+    since:
+      name: since
+      in: query
+      description: The start of the date range over which you want to search.
+      schema:
+        type: string
+        format: date-time
+    until:
+      name: until
+      in: query
+      description: The end of the date range over which you want to search.
+      schema:
+        type: string
+        format: date-time
+    log_entry_is_overview:
+      name: is_overview
+      in: query
+      description: If `true`, will return a subset of log entries that show only the most important changes to the incident.
+      required: false
+      schema:
+        type: boolean
+        default: false
+    include_log_entry:
+      name: include[]
+      in: query
+      description: Array of additional Models to include in response.
+      explode: true
+      schema:
+        type: string
+        enum:
+          - incidents
+          - services
+          - channels
+          - teams
+        uniqueItems: true
+    team_ids:
+      name: team_ids[]
+      in: query
+      description: An array of team IDs. Only results related to these teams will be returned. Account must have the `teams` ability to use this parameter.
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+    id:
+      name: id
+      description: The ID of the resource.
+      in: path
+      required: true
+      schema:
+        type: string
+    from_header:
+      name: From
+      in: header
+      description: The email address of a valid user associated with the account making the request.
+      required: false
+      schema:
+        type: string
+        format: email
+servers:
+  - url: https://api.pagerduty.com
+    description: PagerDuty V2 API.
