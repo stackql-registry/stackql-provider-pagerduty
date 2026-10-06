@@ -25,6 +25,7 @@ Query, provision and operate PagerDuty using SQL - incidents (with their alerts,
 
 total services: __44__  
 total resources: __206__  
+source project: __[stackql-provider-pagerduty](https://github.com/stackql-registry/stackql-provider-pagerduty)__  
 
 :::
 

@@ -21,6 +21,7 @@ SHELL := bash
 .DEFAULT_GOAL := help
 
 PROVIDER := pagerduty
+SOURCE_PROJECT ?= https://github.com/stackql-registry/stackql-provider-$(PROVIDER)
 VERSION := v00.00.00000
 SERVICES_DIR := provider-dev/openapi/src/$(PROVIDER)
 PROVIDER_DIR := $(SERVICES_DIR)/$(VERSION)
@@ -132,7 +133,8 @@ docs: ## generate the website docs, then sanitize (MDX escaping, quoted "From" i
 	  --provider-name $(PROVIDER) \
 	  --provider-dir ./$(PROVIDER_DIR) \
 	  --output-dir ./website \
-	  --provider-data-dir ./provider-dev/docgen/provider-data
+	  --provider-data-dir ./provider-dev/docgen/provider-data \
+	  --source-project $(SOURCE_PROJECT)
 	node website/scripts/sanitize-docs.mjs
 
 website: ## build the docusaurus microsite (vendors shared config first)
